@@ -91,7 +91,7 @@
                         <option value="NDX.GI">NDX.GI</option>
                         <!-- 添加其他标的选项 -->
                     </select>
-                    <select id="start_date" @change="handleSelectChange1; sendSelectedTarget">
+                    <select id="start_date" @change="handleSelectChange1">
                         <option value="2023-1-1">2023-1-1</option>
                         <option value="2023-3-1">2023-3-1</option>
                         <!-- 添加其他标的选项 -->
@@ -105,14 +105,16 @@
             <!-- <div v-for="(chartID,index) in charts[2]" v-show="activeTab==2" :key="chartID">
                 <div v-show="activeTab==2" :id="chartID" style="width: 600px;height:400px;" class="item"></div>
 
-            </div> -->          
+            </div> -->
             <script src="https://unpkg.com/vue@3"></script>
             <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.1/dist/echarts.min.js"></script>
 
             <script>
+                const url = " https://wmrisk-8806-60067-10-1319347086.sh.run.tcloudbase.com"
+                // https://wmrisk-8806-60067-10-1319347086.sh.run.tcloudbase.com/fund_flow?tag=%E4%B8%AD%E8%AF%811000
                 // const url = "https://wmrisk-60067-10-1319347086.sh.run.tcloudbase.com"
-                const url = 'http://localhost'
+                // const url = 'http://localhost'
                 const socket = io(url + ':8801');
                 const app = Vue.createApp({
                     data() {
@@ -177,13 +179,15 @@
                             this.start_date = event.target.value;
                             this.getData_scores_short1(selectedTarget, start_date);
                             console.log("getData_scores_short1: ", this.dy_downside);
+                            this.sendSelectedTarget();
+
                         },
                         sendSelectedTarget() {
                             // 当下拉选项变化时，将选中的值发送给后端
                             socket.emit('start_date', this.start_date);
                         },
                         async getData() { //获取对应的数据
-                                fetch(url + ':8801/operation')
+                                fetch(url + '/operation')
                                 .then(response => {return response.json()})
                                 .then(data => {
                                     console.log(Object.keys(data.data));
@@ -192,7 +196,7 @@
                                 // 如果key等于'update_time'，直接返回null，跳过这个key
                                 return null;
                                 }
-                                        ItemData = Object.keys(data.data[key]).map(key1 => { 
+                                        ItemData = Object.keys(data.data[key]).map(key1 => {
                                             const date = data.data.发生日期[key1];
                                             const value = data.data[key][key1];
                                             return {value: [new Date(date), value]}
@@ -249,7 +253,7 @@
                                 })
                         },
                         async getData0() { //获取对应的数据
-                            fetch(url + ':8801/maro_rate')
+                            fetch(url + '/maro_rate')
                                 .then(response => { return response.json() })
                                 .then(data => {
                                     console.log("maro_rate:", Object.keys(data.data));
@@ -313,7 +317,7 @@
                                 });
                         },
                         async getData1() { //获取对应的数据
-                            fetch(url + ':8801/index_cnbd')
+                            fetch(url + '/index_cnbd')
                                 .then(response => { return response.json() })
                                 .then(data => {
                                     console.log(Object.keys(data.data));
@@ -383,7 +387,7 @@
                                 });
                         },
                         async getDataM2() { //获取对应的数据
-                            fetch(url + ':8801/m2')
+                            fetch(url + '/m2')
                                 .then(response => { return response.json() })
                                 .then(data => {
                                     console.log(Object.keys(data.data));
@@ -453,7 +457,7 @@
                                 });
                         },
                         async getData2() { //获取对应的数据
-                            fetch(url + ':8801/fund_flow?tag=沪深300')
+                            fetch(url + '/fund_flow?tag=沪深300')
                                 .then(response => { return response.json() })
                                 .then(data => {
                                     console.log(Object.keys(data.data));
@@ -522,7 +526,7 @@
                                 })
                         },
                         async getData_fundflow50() { //获取对应的数据
-                            fetch(url + ':8801/fund_flow?tag=上证50')
+                            fetch(url + '/fund_flow?tag=上证50')
                                 .then(response => { return response.json() })
                                 .then(data => {
                                     console.log(Object.keys(data.data));
@@ -591,7 +595,7 @@
                                 })
                         },
                         async getData_fundflow1000() { //获取对应的数据
-                            fetch(url + ':8801/fund_flow?tag=中证1000')
+                            fetch(url + '/fund_flow?tag=中证1000')
                                 .then(response => { return response.json() })
                                 .then(data => {
                                     console.log(Object.keys(data.data));
@@ -660,7 +664,7 @@
                                 })
                         },
                         async getData_new_fund_flow() { //获取对应的数据
-                            fetch(url + ':8801/new_fund_flow')
+                            fetch(url + '/new_fund_flow')
                                 .then(response => { return response.json() })
                                 .then(data => {
                                     console.log(Object.keys(data.data));
@@ -729,7 +733,7 @@
                                 })
                         },
                         async getData_north_flow() { //获取对应的数据
-                            fetch(url + ':8801/north_flow')
+                            fetch(url + '/north_flow')
                                 .then(response => { return response.json() })
                                 .then(data => {
                                     console.log(Object.keys(data.data));
@@ -798,7 +802,7 @@
                                 })
                         },
                         async getData_scores_short(selectedTarget) { //获取对应的数据
-                            fetch(url + ':8801/scores_short?target=' + selectedTarget)
+                            fetch(url + '/scores_short?target=' + selectedTarget)
                                 .then(response => { return response.json() })
                                 .then(data => {
                                     console.log("scores_short: ", Object.keys(data.data));
@@ -807,7 +811,7 @@
                                             // 如果key等于'update_time'，直接返回null，跳过这个key
                                             return null;
                                         }
-                                        ItemData = Object.keys(data.data[key]).map(key1 => { 
+                                        ItemData = Object.keys(data.data[key]).map(key1 => {
                                         const date = data.data.trade_date[key1];
                                         const value = data.data[key][key1];
                                         return {value: [new Date(date), value]}
@@ -859,7 +863,7 @@
                             type: 'value'
                         },
                         series: formattedData
-                        };     
+                        };
 
                                     // 使用刚指定的配置项和数据显示图表
                                     this.initEcharts('scores_short', option) //请求后端数据后，初始化echarts
@@ -867,13 +871,13 @@
                                 })
                         },
                         async getData_scores_short1(selectedTarget, start_date) { //获取对应的数据
-                            fetch(url + ':8801/scores_short1?target=' + selectedTarget + '&start_date=' + start_date)
+                            fetch(url + '/scores_short1?target=' + selectedTarget + '&start_date=' + start_date)
                                 .then(response => { return response.json() })
                                 .then(data => {
                                     console.log("scores_short: ", Object.keys(data.data));
                                     this.dy_downside = data.data
                                 })
-                        },                  
+                        },
                         initEcharts(name, option) {//通用方法名-初始化echarts
 
                             let myChart = echarts.init(document.getElementById(name));

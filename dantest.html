@@ -41,6 +41,7 @@
             padding: 20px;
             gap: 20px;
         }
+
         .grid-item {
             display: flex;
             flex-wrap: wrap;
@@ -57,8 +58,7 @@
             text-align: center;
         }
 
-        .chart-radio-container {
-        }
+        .chart-radio-container {}
 
         img {
             max-width: 100%;
@@ -85,21 +85,21 @@
             </div>
             <div v-show="activeTab==2" class="grid-item">
                 <div v-for="(chartID,index) in charts[2]" :key="chartID" v-show="activeTab==2" :id="chartID" style="width: 600px;height:400px;" class="item">
-                <div v-show="index==1" class="chart-radio-container">
-                    <select id="selectTarget" @change="handleSelectChange">
-                        <option value="600036.SH">600036.SH</option>
-                        <option value="NDX.GI">NDX.GI</option>
-                        <!-- 添加其他标的选项 -->
-                    </select>
-                    <select id="start_date" @change="handleSelectChange1">
-                        <option value="2023-1-1">2023-1-1</option>
-                        <option value="2023-3-1">2023-3-1</option>
-                        <!-- 添加其他标的选项 -->
-                    </select>
-                    <p>{{ this.dy_downside }}</p>
-                    <p>{{ "" }}</p>
-                    <p>{{ dataList[dataList.length - 1] }}</p>
-                </div>
+                    <div v-show="index==1" class="chart-radio-container">
+                        <select id="selectTarget" @change="handleSelectChange">
+                            <option value="600036.SH">600036.SH</option>
+                            <option value="NDX.GI">NDX.GI</option>
+                            <!-- 添加其他标的选项 -->
+                        </select>
+                        <select id="start_date" @change="handleSelectChange1">
+                            <option value="2023-1-1">2023-1-1</option>
+                            <option value="2023-3-1">2023-3-1</option>
+                            <!-- 添加其他标的选项 -->
+                        </select>
+                        <p>{{ this.dy_downside }}</p>
+                        <p>{{ "" }}</p>
+                        <p>{{ dataList[dataList.length - 1] }}</p>
+                    </div>
                 </div>
             </div>
             <!-- <div v-for="(chartID,index) in charts[2]" v-show="activeTab==2" :key="chartID">
@@ -136,15 +136,15 @@
                     mounted() {
                         //这里初始化的时候就要获取数据，可以新增
                         socket.on('connected', data => {
-                        this.message = data.message;
-                        console.log('Connected')
-                    });
+                            this.message = data.message;
+                            console.log('Connected')
+                        });
 
                         socket.on('data2', data => {
-                        console.log('data Connected')
-                        this.dataList.push(data);
-                        console.log(data);
-                    });
+                            console.log('data Connected')
+                            this.dataList.push(data);
+                            console.log(data);
+                        });
                         this.getData()
                         this.getData0() //获取数据第一个数据
                         this.getData1() //获取数据第二个数据
@@ -187,68 +187,70 @@
                             socket.emit('start_date', this.start_date);
                         },
                         async getData() { //获取对应的数据
-                                fetch(url + '/operation')
-                                .then(response => {return response.json()})
+                            fetch(url + '/operation')
+                                .then(response => { return response.json() })
                                 .then(data => {
                                     console.log(Object.keys(data.data));
+
+
                                     const formattedData = Object.keys(data.data).map(key => {
-                                        if (key === 'update_time'|| key == '发生日期') {
-                                // 如果key等于'update_time'，直接返回null，跳过这个key
-                                return null;
-                                }
+                                        if (key === 'update_time' || key == '发生日期') {
+                                            // 如果key等于'update_time'，直接返回null，跳过这个key
+                                            return null;
+                                        }
                                         ItemData = Object.keys(data.data[key]).map(key1 => {
                                             const date = data.data.发生日期[key1];
                                             const value = data.data[key][key1];
-                                            return {value: [new Date(date), value]}
+                                            return { value: [new Date(date), value] }
                                         })
-                                    return {name: key, type: 'bar', stack: 'stack', data: ItemData};
+                                        return { name: key, type: 'bar', stack: 'stack', data: ItemData };
                                     }).filter(item => item !== null);
                                     console.log(data.data);
-                                    console.log(formattedData);
-                                    stime='2020-01-01';
-                                    etime='2023-08-29';
+                                    console.log(1212121212,formattedData);
+                                    stime = '2020-01-01';
+                                    etime = '2023-08-29';
                                     option = {
-                                title: {
-                                text: '标题',
-                                },
-                                tooltip: {
-                                trigger: 'axis',
-                                axisPointer: {
-                                    type: 'shadow',
-                                },
-                                },
-                                legend: {
-                                data: Object.keys(data.data).sort()
-                                },
-                                grid: {
-                                left: '3%',
-                                right: '4%',
-                                bottom: '3%',
-                                containLabel: true,
-                                },
-                                xAxis: {
-                                type: 'time',
-                                //   min:'Thu, 02 Jan 2020 00:00:00 GMT',
-                                //   max:"Tue, 01 Sep 2020 00:00:00 GMT",
-                                min:new Date(stime.replace(/-/g,"/")),
-                                max:new Date(etime.replace(/-/g,"/")),
+                                        title: {
+                                            text: '标题',
+                                        },
+                                        tooltip: {
+                                            trigger: 'axis',
+                                            axisPointer: {
+                                                type: 'shadow',
+                                            },
+                                        },
+                                        legend: {
+                                            data: Object.keys(data.data).sort()
+                                        },
+                                        grid: {
+                                            left: '3%',
+                                            right: '4%',
+                                            bottom: '3%',
+                                            containLabel: true,
+                                        },
+                                        xAxis: {
+                                            type: 'time',
+                                            //   min:'Thu, 02 Jan 2020 00:00:00 GMT',
+                                            //   max:"Tue, 01 Sep 2020 00:00:00 GMT",
+                                            min: new Date(stime.replace(/-/g, "/")),
+                                            max: new Date(etime.replace(/-/g, "/")),
 
-                                },
-                                dataZoom: [ // 添加数据区域缩放组件，即滚动条
-                                {
-                                show: true,
-                                type: 'slider',
-                                top: '90%',
-                                bottom: '4%',
-                                start: 95,
-                                end: 100
-                                }
-                                ],
-                                yAxis: {
-                                type: 'value',
-                                },
-                                series: formattedData
-                                };
+                                        },
+                                        dataZoom: [ // 添加数据区域缩放组件，即滚动条
+                                            {
+                                                show: true,
+                                                type: 'slider',
+                                                top: '90%',
+                                                bottom: '4%',
+                                                start: 95,
+                                                end: 100
+                                            }
+                                        ],
+                                        yAxis: {
+                                            type: 'value',
+                                        },
+                                        series: formattedData
+                                    };
                                     this.initEcharts('chart0', option) //请求后端数据后，初始化echarts
                                 })
                         },
@@ -287,7 +289,7 @@
                                         },
                                         legend: {
                                             data: Object.keys(data.data).sort()
-                                            },
+                                        },
                                         toolbox: {
                                             feature: {
                                                 saveAsImage: {}
@@ -346,8 +348,8 @@
                                             trigger: 'axis'
                                         },
                                         legend: {
-                                        //   data: Object.keys(data.data).sort()
-                                        data: ['a']
+                                            //   data: Object.keys(data.data).sort()
+                                            data: ['a']
                                         },
                                         grid: {
                                             left: '3%',
@@ -416,8 +418,8 @@
                                             trigger: 'axis'
                                         },
                                         legend: {
-                                        //   data: Object.keys(data.data).sort()
-                                        data: ['a']
+                                            //   data: Object.keys(data.data).sort()
+                                            data: ['a']
                                         },
                                         grid: {
                                             left: '3%',
@@ -812,58 +814,58 @@
                                             return null;
                                         }
                                         ItemData = Object.keys(data.data[key]).map(key1 => {
-                                        const date = data.data.trade_date[key1];
-                                        const value = data.data[key][key1];
-                                        return {value: [new Date(date), value]}
-                                    })
-                                return {name: key, type: 'line', stack: 'Total', symbolSize: 5, data: ItemData};
-                                }).filter(item => item !== null);
-                                console.log(data.data);
-                                console.log(formattedData);
-                                stime='2023-01-01';
-                                // etime='2023-08-29';
-                                // 指定图表的配置项和数据
-                                option = {
-                        title: {
-                            text: '动态回撤'
-                        },
-                        tooltip: {
-                            trigger: 'axis'
-                        },
-                        legend: {
-                            data: ['dy_downside_2', 'dy_downside_5', 'dy_downside_20']
-                        },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '10%',
-                            containLabel: true
-                        },
-                        toolbox: {
-                            feature: {
-                            saveAsImage: {}
-                            }
-                        },
-                        dataZoom: [ // 添加数据区域缩放组件，即滚动条
-                            {
-                            show: true,
-                            type: 'slider',
-                            top: '90%',
-                            bottom: '4%',
-                            start: 90,
-                            end: 100
-                            }
-                            ],
-                        xAxis: {
-                            type: 'time',
-                            min:new Date(stime.replace(/-/g,"/")),
-                            // max:new Date(etime.replace(/-/g,"/")),
-                        },
-                        yAxis: {
-                            type: 'value'
-                        },
-                        series: formattedData
-                        };
+                                            const date = data.data.trade_date[key1];
+                                            const value = data.data[key][key1];
+                                            return { value: [new Date(date), value] }
+                                        })
+                                        return { name: key, type: 'line', stack: 'Total', symbolSize: 5, data: ItemData };
+                                    }).filter(item => item !== null);
+                                    console.log(data.data);
+                                    console.log(formattedData);
+                                    stime = '2023-01-01';
+                                    // etime='2023-08-29';
+                                    // 指定图表的配置项和数据
+                                    option = {
+                                        title: {
+                                            text: '动态回撤'
+                                        },
+                                        tooltip: {
+                                            trigger: 'axis'
+                                        },
+                                        legend: {
+                                            data: ['dy_downside_2', 'dy_downside_5', 'dy_downside_20']
+                                        },
+                                        grid: {
+                                            left: '3%',
+                                            right: '4%',
+                                            bottom: '10%',
+                                            containLabel: true
+                                        },
+                                        toolbox: {
+                                            feature: {
+                                                saveAsImage: {}
+                                            }
+                                        },
+                                        dataZoom: [ // 添加数据区域缩放组件，即滚动条
+                                            {
+                                                show: true,
+                                                type: 'slider',
+                                                top: '90%',
+                                                bottom: '4%',
+                                                start: 90,
+                                                end: 100
+                                            }
+                                        ],
+                                        xAxis: {
+                                            type: 'time',
+                                            min: new Date(stime.replace(/-/g, "/")),
+                                            // max:new Date(etime.replace(/-/g,"/")),
+                                        },
+                                        yAxis: {
+                                            type: 'value'
+                                        },
+                                        series: formattedData
+                                    };
 
                                     // 使用刚指定的配置项和数据显示图表
                                     this.initEcharts('scores_short', option) //请求后端数据后，初始化echarts
@@ -878,7 +880,7 @@
                                     this.dy_downside = data.data
                                 })
                         },
-                        initEcharts(name, option) {//通用方法名-初始化echarts
+                        initEcharts(name, option) { //通用方法名-初始化echarts
 
                             let myChart = echarts.init(document.getElementById(name));
                             // let option =this.option[activeTab]

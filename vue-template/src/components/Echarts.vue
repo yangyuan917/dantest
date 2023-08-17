@@ -1,13 +1,19 @@
 <template>
-  <div  class="echarts-box">
-  <div class="title-box">
-  <div>{{title}}</div>
-  <div class="line"></div>
-  </div>
+  <div class="echarts-box">
+    <div class="title-box">
+      <div>{{ title }}</div>
+      <div class="line"></div>
+
+    </div>
+    <div style="text-align: right;">
+        <el-select v-model="start_date" style="margin-right: 20px;width: 160px;" class="m-2" @change="handleSelectChange" placeholder="Select">
+      <el-option v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value" />
+    </el-select>
+    </div>
 
     <div :id="uid" :style="myStyle" class="echarts"></div>
   </div>
-     <!-- <div class="title-box">
+  <!-- <div class="title-box">
       <div class="title"> 标题 </div>
 
     </div> -->
@@ -15,7 +21,29 @@
 <script setup>
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue';
 import * as echarts from 'echarts';
+const emit = defineEmits(['timeChange']);
+let start_date = ref('2021-01-01');
+let timeOptions = ref([
+  {
+    value: '2023-1-1',
+    label: '2023-1-1',
+  },
+  {
+    value: '2023-3-1',
+    label: '2023-3-1',
+  },
+
+])
+const handleSelectChange = (value)=>{
+let obj = {
+value:value,
+name:props.title
+}
+  emit('timeChange',obj)
+
+}
 // 因为是封装的组件，会多次调用，id不能重复，要在初始化之前写，不然会报错dom为定义
+
 let uid = ref('');
 onBeforeMount(() => {
   uid.value = `echarts-uid-${parseInt((Math.random() * 1000000).toString())}`;
@@ -47,10 +75,10 @@ const props = defineProps({
       height: '400px',
     }),
   },
-  title:{
+  title: {
     type: String,
     default: '标题',
-    },
+  },
   myOption: {
     type: Object,
     default: () => ({}),
@@ -73,21 +101,23 @@ watch(
 </script>
 
 <style scoped>
-.echarts-box{
+.echarts-box {
   background-color: #ffffff;
   border-radius: 8px;
 
 }
-.title-box{
-padding: 20px;
-padding-bottom: 4px;
-font-size: 20px;
-    font-family: PingFang SC;
-font-weight: bold;
-color: #262626;
+
+.title-box {
+  padding: 20px;
+  padding-bottom: 4px;
+  font-size: 20px;
+  font-family: PingFang SC;
+  font-weight: bold;
+  color: #262626;
 }
+
 /* 一条灰色的线，高1px */
-.line{
+.line {
   height: 1px;
   background-color: #E5E5E5;
   margin-top: 10px;
@@ -96,6 +126,7 @@ color: #262626;
 
 
 }
+
 .echarts {
   padding: 20px;
   padding-bottom: 6px;
@@ -114,5 +145,4 @@ color: #262626;
   padding: 20px;
   box-sizing: border-box;
   text-align: center;
-}
-</style>
+}</style>

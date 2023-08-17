@@ -7,7 +7,7 @@
     <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="总量-宏观利率" name="first">
         <div class="grid-item">
-          <Echarts v-for="item in chartsObjList0" :key="item.name" :title="item.title" :myOption="item.options" />
+          <Echarts v-for="item in chartsObjList0" :key="item.name" @timeChange="timeChange" :title="item.title"  :myOption="item.options" />
         </div>
       </el-tab-pane>
       <el-tab-pane label="总量-资金流向" name="second">
@@ -21,9 +21,9 @@
             placeholder="Select">
             <el-option v-for="item in targetOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-          <el-select v-model="start_date" class="m-2" @change="handleSelectChange1" placeholder="Select">
+          <!-- <el-select v-model="start_date" class="m-2" @change="handleSelectChange1" placeholder="Select">
             <el-option v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
+          </el-select> -->
           <!-- <div style="width: 220px; margin-left: 12px;">
                     <el-date-picker v-model="timeValue" type="daterange" range-separator="To" start-placeholder="开始时间"
             end-placeholder="结束时间" style="width: 220px;" />
@@ -83,7 +83,10 @@ export default {
         ['scores_short', 'f', 'fund_flow_300', 'h', 'g', 'g'],
       ],
       chartsObjList0: [
-        { name: 'chart0', title: '标题', options: {} },
+        { name: 'chart0', title: '标题',
+        msg:{
+        name: 'chart0', title: '标题',
+        }, options: {} },
         { name: 'maro_rate', title: '利率变动', options: {} },
         { name: 'index_cnbd', title: '固定/浮息强弱', options: {} },
         { name: 'm2', title: 'M2/社融', options: {} },
@@ -154,6 +157,11 @@ this.socket = io('http://localhost:3003', {
       this.getData_scores_short(this.selectedTarget)
       this.getData_scores_short1(this.selectedTarget, this.start_date)
 
+    },
+    timeChange(value) {
+      console.log('父组件timeChange', value)
+      // this.start_date = value;
+      // this.getData_scores_short1(this.selectedTarget, this.start_date)
     },
     handleSelectChange(value) {
     console.log('发送信息', )

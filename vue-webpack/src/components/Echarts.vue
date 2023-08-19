@@ -1,15 +1,20 @@
 <template>
   <div class="echarts-box">
     <div class="title-box">
-      <div>{{ title }}</div>
+      <div class="time-title">
+        <div>
+          {{ title }}
+        </div>
+        <div class="time">
+          <el-date-picker v-model="timeValue" type="daterange" @change="changeTime" value-format="YYYY-MM-DD"
+            range-separator="-" start-placeholder="请选择开始日" end-placeholder="请选择结束日" style="max-width: 240px;" />
+        </div>
+
+      </div>
       <div class="line"></div>
 
     </div>
-    <div style="text-align: right;">
-        <el-select v-model="start_date" style="margin-right: 20px;width: 160px;" class="m-2" @change="handleSelectChange" placeholder="Select">
-      <el-option v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value" />
-    </el-select>
-    </div>
+
 
     <div :id="uid" :style="myStyle" class="echarts"></div>
   </div>
@@ -22,6 +27,14 @@
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue';
 import * as echarts from 'echarts';
 const emit = defineEmits(['timeChange']);
+let timeValue = ref([
+  "2020-01-01",
+  "2023-08-29"
+]);
+
+
+
+
 let start_date = ref('2021-01-01');
 let timeOptions = ref([
   {
@@ -34,14 +47,42 @@ let timeOptions = ref([
   },
 
 ])
-const handleSelectChange = (value)=>{
-let obj = {
-value:value,
-name:props.title
-}
-  emit('timeChange',obj)
+const handleSelectChange = (value) => {
+  let obj = {
+    value: value,
+    name: props.title
+  }
+  emit('timeChange', obj)
 
 }
+
+// xAxis: {
+//         type: 'time',
+//         //   min:'Thu, 02 Jan 2020 00:00:00 GMT',
+//         //   max:"Tue, 01 Sep 2020 00:00:00 GMT",
+//         min: new Date(stime.replace(/-/g, "/")),
+//         max: new Date(etime.replace(/-/g, "/")),
+
+//       },
+
+const changeTime = (value) => {//当时间改变时，myOption中的xAxis的min和max也要改变，重新渲染echarts
+  console.log('timeValue :>> ', timeValue);
+  let stime = value[0];
+  let etime = value[1];
+  let myOption = props.myOption;
+  console.log('stime :>> ', stime);
+  console.log('etime :>> ', etime);
+  myOption.xAxis.min = new Date(stime.replace(/-/g, "/"));
+  myOption.xAxis.max = new Date(etime.replace(/-/g, "/"));
+  let myChart = echarts.init(document.getElementById(uid.value));
+  myChart.setOption(myOption, {
+    notMerge: true, //不和之前的option合并
+  });
+
+
+}
+
+
 // 因为是封装的组件，会多次调用，id不能重复，要在初始化之前写，不然会报错dom为定义
 
 let uid = ref('');
@@ -52,6 +93,7 @@ onBeforeMount(() => {
 onMounted(() => {
   let myChart = echarts.init(document.getElementById(uid.value));
   // 在template中可以直接取props中的值，但是在script中不行，因为script是在挂载之前执行的
+
   myChart.setOption(props.myOption, {
     notMerge: true, //不和之前的option合并
   });
@@ -71,8 +113,8 @@ const props = defineProps({
   myStyle: {
     type: Object,
     default: () => ({
-      width: '600px',
-      height: '400px',
+      // width: '600px',
+      // height: '400px',
     }),
   },
   title: {
@@ -91,7 +133,15 @@ watch(
   () => props.myOption,
   (newVal, oldVal) => {
     let myChart = echarts.init(document.getElementById(uid.value));
-    myChart.setOption(newVal, {
+
+  let myOption = newVal;
+let stime = timeValue.value[0];
+  let etime = timeValue.value[1];
+  console.log('props.myOption :>> ', props.myOption);
+   myOption.xAxis.min = new Date(stime.replace(/-/g, "/"));
+  myOption.xAxis.max = new Date(etime.replace(/-/g, "/"));
+
+    myChart.setOption(myOption, {
       notMerge: true, //不和之前的option合并
     });
   }
@@ -104,16 +154,27 @@ watch(
 .echarts-box {
   background-color: #ffffff;
   border-radius: 8px;
-
+  width: 32%;
 }
 
 .title-box {
   padding: 20px;
   padding-bottom: 4px;
-  font-size: 20px;
+  /* font-size: 20px; */
+  font-size: 1vw;
   font-family: PingFang SC;
   font-weight: bold;
-  color: #262626;
+  /* color: #262626; */
+
+  color: red;
+
+}
+
+.time-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
 }
 
 /* 一条灰色的线，高1px */
@@ -132,6 +193,10 @@ watch(
   padding-bottom: 6px;
   box-sizing: border-box;
   text-align: center;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  /* 设置宽高比为16:9 */
   /* min-width: calc(33.33% - 20px); */
 
   /* width: 580px; */
@@ -145,4 +210,5 @@ watch(
   padding: 20px;
   box-sizing: border-box;
   text-align: center;
-}</style>
+}
+</style>

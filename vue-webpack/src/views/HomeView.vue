@@ -255,7 +255,7 @@ this.socket.emit('message', 'Hello, server!');
           const value = data.data[key][key1];
           return { value: [new Date(date), value] }
         })
-        return { name: key, type: 'line', stack: 'Total', data: ItemData };
+        return { name: key, type: 'line',  symbol: 'none',stack: 'Total', data: ItemData };
       }).filter(item => item !== null);
 
       let stime = '2023-01-01';
@@ -316,7 +316,9 @@ this.socket.emit('message', 'Hello, server!');
           const value = data.data[key][key1];
           return { value: [new Date(date), value] }
         })
-        return { name: key, type: 'line', stack: 'Total', data: ItemData };
+        return { name: key, type: 'line', stack: 'Total',  symbol: 'none', // 禁止显示圆点
+
+         data: ItemData };
       }).filter(item => item !== null);
       console.log(data.data);
       console.log(formattedData);
@@ -382,7 +384,7 @@ this.socket.emit('message', 'Hello, server!');
           const value = data.data[key][key1];
           return { value: [new Date(date), value] }
         })
-        return { name: key, type: 'line', stack: 'Total', data: ItemData };
+        return { name: key, type: 'line',  symbol: 'none',stack: 'Total', data: ItemData };
       }).filter(item => item !== null);
       console.log(data.data);
       console.log(formattedData);
@@ -781,7 +783,7 @@ this.socket.emit('message', 'Hello, server!');
           const value = data.data[key][key1];
           return { value: [new Date(date), value] }
         })
-        return { name: key, type: 'line', stack: 'Total', symbolSize: 5, data: ItemData };
+        return { name: key, type: 'line', stack: 'Total', symbol: 'none', symbolSize: 5, data: ItemData };
       }).filter(item => item !== null);
       console.log(data.data);
       console.log(formattedData);

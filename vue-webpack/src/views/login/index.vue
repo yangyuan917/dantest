@@ -7,7 +7,8 @@
     <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="总量-宏观利率" name="first">
         <div class="grid-item">
-          <Echarts v-for="item in chartsObjList0" :key="item.name" @timeChange="timeChange" :title="item.title"  :myOption="item.options" />
+          <Echarts v-for="item in chartsObjList0" :key="item.name" @timeChange="timeChange" :title="item.title"
+            :myOption="item.options" />
         </div>
       </el-tab-pane>
       <el-tab-pane label="总量-资金流向" name="second">
@@ -84,12 +85,14 @@ export default {
         ['scores_short', 'f', 'fund_flow_300', 'h', 'g', 'g'],
       ],
       chartsObjList0: [
-        { name: 'chart0', title: '标题',
-        msg:{
-        name: 'chart0', title: '标题',
-        }, options: {} },
+        {
+          name: 'chart0', title: '标题',
+          msg: {
+            name: 'chart0', title: '标题',
+          }, options: {}
+        },
         { name: 'maro_rate', title: '利率变动', options: {} },
-        { name: 'index_cnbd', title: '固定/浮息强弱', options: {} },
+        { name: 'index_cnbd', title: '固定/浮息强弱11', options: {} },
         { name: 'm2', title: 'M2/社融', options: {} },
         { name: 'a', title: '', options: {} },
         { name: 'b', title: '', options: {} },
@@ -121,15 +124,15 @@ export default {
     };
   },
   created() {
-this.socket = io('http://localhost:3003', {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
-  }
-});
+    this.socket = io('http://localhost:3003', {
+      cors: {
+        origin: '*',
+        methods: ['GET', 'POST']
+      }
+    });
   },
   mounted() {
-        this.socket.on('message', (data) => {
+    this.socket.on('message', (data) => {
       console.log('44444444444444444444Received message:', data);
     });
 
@@ -165,8 +168,8 @@ this.socket = io('http://localhost:3003', {
       // this.getData_scores_short1(this.selectedTarget, this.start_date)
     },
     handleSelectChange(value) {
-    console.log('发送信息', )
-this.socket.emit('message', 'Hello, server!');
+      console.log('发送信息',)
+      this.socket.emit('message', 'Hello, server!');
       this.getData_scores_short(value);
       this.getData_scores_short1(value, this.start_date);
     },
@@ -255,7 +258,11 @@ this.socket.emit('message', 'Hello, server!');
           const value = data.data[key][key1];
           return { value: [new Date(date), value] }
         })
-        return { name: key, type: 'line', stack: 'Total', data: ItemData };
+        return {
+          name: key, type: 'line', stack: 'Total', data: ItemData,
+           symbol: 'none', // 禁止显示圆点
+
+        };
       }).filter(item => item !== null);
 
       let stime = '2023-01-01';
@@ -316,7 +323,13 @@ this.socket.emit('message', 'Hello, server!');
           const value = data.data[key][key1];
           return { value: [new Date(date), value] }
         })
-        return { name: key, type: 'line', stack: 'Total', data: ItemData };
+        return {
+          name: key, type: 'line',
+
+           symbol: 'none', // 禁止显示圆点
+           data: ItemData,
+
+        };
       }).filter(item => item !== null);
       console.log(data.data);
       console.log(formattedData);
@@ -325,24 +338,24 @@ this.socket.emit('message', 'Hello, server!');
       // 指定图表的配置项和数据
       let option = {
 
-        tooltip: {
-          trigger: 'axis'
-        },
-        legend: {
-          //   data: Object.keys(data.data).sort()
-          data: ['a']
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '10%',
-          containLabel: true
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
-        },
+        // tooltip: {
+        //   trigger: 'axis'
+        // },
+        // legend: {
+        //   //   data: Object.keys(data.data).sort()
+        //   data: ['a']
+        // },
+        // grid: {
+        //   left: '3%',
+        //   right: '4%',
+        //   bottom: '10%',
+        //   containLabel: true
+        // },
+        // toolbox: {
+        //   feature: {
+        //     saveAsImage: {}
+        //   }
+        // },
         dataZoom: [ // 添加数据区域缩放组件，即滚动条
           {
             show: true,
@@ -361,7 +374,8 @@ this.socket.emit('message', 'Hello, server!');
         yAxis: {
           type: 'value'
         },
-        series: formattedData
+        // series: formattedData
+        series: []
       };
 
       // 使用刚指定的配置项和数据显示图表。
@@ -382,7 +396,10 @@ this.socket.emit('message', 'Hello, server!');
           const value = data.data[key][key1];
           return { value: [new Date(date), value] }
         })
-        return { name: key, type: 'line', stack: 'Total', data: ItemData };
+        return {
+          name: key, type: 'line', stack: 'Total', data: ItemData, showSymbol: false, // 设置为false，不显示圆点
+
+        };
       }).filter(item => item !== null);
       console.log(data.data);
       console.log(formattedData);
@@ -781,7 +798,12 @@ this.socket.emit('message', 'Hello, server!');
           const value = data.data[key][key1];
           return { value: [new Date(date), value] }
         })
-        return { name: key, type: 'line', stack: 'Total', symbolSize: 5, data: ItemData };
+        return {
+          name: key, type: 'line', stack: 'Total', symbolSize: 5, data: ItemData,
+
+          showSymbol: false, // 设置为false，不显示圆点
+
+        };
       }).filter(item => item !== null);
       console.log(data.data);
       console.log(formattedData);
@@ -886,6 +908,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   padding: 20px;
+  width: 100%;
   gap: 20px;
   background-color: #EFF1F6;
 

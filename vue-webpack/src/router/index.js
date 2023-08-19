@@ -33,14 +33,14 @@ export const constantRoutes = [
   {
     path: '/',
     component: () => import('@/layout/index.vue'),
-    redirect: '/homeview',
+    redirect: '/home',
     children: [
-      {
-        path: '/homeview',
-        component: () => import('@/views/HomeView.vue'),
-        name: 'Home',
-        meta: { title: 'SS首页', icon: 'HomeFilled', affix: true }
-      },
+      // {
+      //   path: '/homeview',
+      //   component: () => import('@/views/HomeView.vue'),
+      //   name: 'Home',
+      //   meta: { title: 'SS首页', icon: 'HomeFilled', affix: true }
+      // },
       {
         path: '/home',
         component: () => import('@/views/home/index.vue'),

@@ -1,6 +1,9 @@
 import { createApp, createVNode } from 'vue'
 
 import ElementPlus, { ElIcon } from 'element-plus'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+
+
 import 'element-plus/dist/index.css'
 import * as Icons from '@element-plus/icons-vue'
 
@@ -32,9 +35,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const app = createApp(App)
-
 app
-  .use(ElementPlus)
+  .use(ElementPlus, {
+  locale: zhCn,
+})
   .use(Directives)
   .use(router)
   .use(store)

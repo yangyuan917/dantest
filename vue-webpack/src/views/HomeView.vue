@@ -7,7 +7,8 @@
     <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="总量-宏观利率" name="first">
         <div class="grid-item">
-          <Echarts v-for="item in chartsObjList0" :key="item.name" @timeChange="timeChange" :title="item.title"  :myOption="item.options" />
+          <Echarts v-for="item in chartsObjList0" :key="item.name" @timeChange="timeChange" :title="item.title"
+            :myOption="item.options" />
         </div>
       </el-tab-pane>
       <el-tab-pane label="总量-资金流向" name="second">
@@ -17,10 +18,10 @@
       </el-tab-pane>
       <el-tab-pane label="监测标的池" name="third">
         <div class="select-box">
-          <el-select v-model="selectedTarget" class="m-2" @change="handleSelectChange" style="margin-right: 12px;"
+          <!-- <el-select v-model="selectedTarget" class="m-2" @change="handleSelectChange" style="margin-right: 12px;"
             placeholder="Select">
             <el-option v-for="item in targetOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
+          </el-select> -->
           <!-- <el-select v-model="start_date" class="m-2" @change="handleSelectChange1" placeholder="Select">
             <el-option v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select> -->
@@ -30,8 +31,16 @@
           </div> -->
 
         </div>
+        <div class="switch">
+          <el-switch v-model="switchVale" @change="switchChage"></el-switch>
+
+        </div>
+
         <div class="grid-item">
-          <Echarts v-for="item in chartsObjList2" :key="item.name" :title="item.title" :myOption="item.options" />
+
+          <Echarts1 v-for="item in chartsObjList2" :key="item.name" :isOpen="switchVale" :title="item.title" :myOption="item.options" />
+          <Etable></Etable>
+
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -41,15 +50,20 @@
 <script>
 // import Echarts from '../components/Echarts.vue';
 import Echarts from '@/components/Echarts.vue';
+import Echarts1 from '@/components/Echarts1.vue';
+import Etable from '@/components/Etable.vue';
 import api from '../utils/api';
 import io from 'socket.io-client';
 export default {
   name: 'AboutView',
   components: {
-    Echarts
+    Echarts,
+    Echarts1,
+    Etable
   },
   data() {
     return {
+      switchVale: false,
       selectedTarget: '600036.SH',//下拉框值
       start_date: '2023-1-1',//下拉框值
       targetOptions: [
@@ -81,13 +95,16 @@ export default {
       charts: [
         ['chart0', 'maro_rate', 'index_cnbd', 'm2', 'a', 'b'],
         ['fund_flow_50', 'fund_flow_300', 'fund_flow_1000', 'new_fund_flow', 'north_flow', 'tmp'],
-        ['scores_short', 'f', 'fund_flow_300', 'h', 'g', 'g'],
+        ['scores_short'],
+        // ['scores_short', 'f', 'fund_flow_300', 'h', 'g', 'g'],
       ],
       chartsObjList0: [
-        { name: 'chart0', title: '标题',
-        msg:{
-        name: 'chart0', title: '标题',
-        }, options: {} },
+        {
+          name: 'chart0', title: '标题',
+          msg: {
+            name: 'chart0', title: '标题',
+          }, options: {}
+        },
         { name: 'maro_rate', title: '利率变动', options: {} },
         { name: 'index_cnbd', title: '固定/浮息强弱', options: {} },
         { name: 'm2', title: 'M2/社融', options: {} },
@@ -104,11 +121,11 @@ export default {
       ],
       chartsObjList2: [
         { name: 'scores_short', title: '动态回撤', options: {} },
-        { name: 'f', options: {} },
-        { name: 'fund_flow_300', options: {} },
-        { name: 'h', options: {} },
-        { name: 'g', options: {} },
-        { name: 'g', options: {} },
+        // { name: 'f', options: {} },
+        // { name: 'fund_flow_300', options: {} },
+        // { name: 'h', options: {} },
+        // { name: 'g', options: {} },
+        // { name: 'g', options: {} },
       ],
 
 
@@ -121,15 +138,15 @@ export default {
     };
   },
   created() {
-this.socket = io('http://localhost:3003', {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
-  }
-});
+    this.socket = io('http://localhost:3003', {
+      cors: {
+        origin: '*',
+        methods: ['GET', 'POST']
+      }
+    });
   },
   mounted() {
-        this.socket.on('message', (data) => {
+    this.socket.on('message', (data) => {
       console.log('44444444444444444444Received message:', data);
     });
 
@@ -139,6 +156,23 @@ this.socket = io('http://localhost:3003', {
 
   },
   methods: {
+    switchChage(value) {//开关变化
+      //这里写逻辑。。。。
+
+      //如果value为true，打开socket连接，否则关闭
+      if (value) {
+        this.socket = io('http://localhost:3003', {
+          cors: {
+            origin: '*',
+            methods: ['GET', 'POST']
+          }
+        });
+      } else {
+        this.socket.close();
+      }
+
+
+    },
     changeTable(index) {
       this.activeTab = index;
       this.getData();
@@ -165,8 +199,8 @@ this.socket = io('http://localhost:3003', {
       // this.getData_scores_short1(this.selectedTarget, this.start_date)
     },
     handleSelectChange(value) {
-    console.log('发送信息', )
-this.socket.emit('message', 'Hello, server!');
+      console.log('发送信息',)
+      this.socket.emit('message', 'Hello, server!');
       this.getData_scores_short(value);
       this.getData_scores_short1(value, this.start_date);
     },
@@ -192,7 +226,7 @@ this.socket.emit('message', 'Hello, server!');
         let ItemData = Object.keys(data.data[key]).map(key1 => {
           const date = data.data.发生日期[key1];
           const value = data.data[key][key1];
-          return { value: [new Date(date), value] }
+          return [new Date(date), value]
         })
         return { name: key, type: 'bar', stack: 'stack', data: ItemData };
       }).filter(item => item !== null);
@@ -253,9 +287,9 @@ this.socket.emit('message', 'Hello, server!');
         let ItemData = Object.keys(data.data[key]).map(key1 => {
           const date = data.data.指标ID[key1];
           const value = data.data[key][key1];
-          return { value: [new Date(date), value] }
+          return [new Date(date), value]
         })
-        return { name: key, type: 'line',  symbol: 'none',stack: 'Total', data: ItemData };
+        return { name: key, type: 'line', symbol: 'none', stack: 'Total', data: ItemData };
       }).filter(item => item !== null);
 
       let stime = '2023-01-01';
@@ -314,14 +348,23 @@ this.socket.emit('message', 'Hello, server!');
         let ItemData = Object.keys(data.data[key]).map(key1 => {
           const date = data.data.指标ID[key1];
           const value = data.data[key][key1];
-          return { value: [new Date(date), value] }
+          // return value
+          //return   [new Date(date), value]
+          return [new Date(date), value]
         })
-        return { name: key, type: 'line', stack: 'Total',  symbol: 'none', // 禁止显示圆点
+        return {
+          name: key, type: 'line', stack: 'Total', symbol: 'none', // 禁止显示圆点
 
-         data: ItemData };
+          data: ItemData
+        };
       }).filter(item => item !== null);
+
       console.log(data.data);
-      console.log(formattedData);
+      // formattedData[0].data[246][1] = null;
+      // formattedData[0].data[244][1] = null;
+      // formattedData[0].data[241][1] = null;
+      console.log('9999999999index_cnbdformattedData', formattedData);
+      console.log(data.data);
       let stime = '2023-01-01';
       // etime='2023-08-29';
       // 指定图表的配置项和数据
@@ -381,13 +424,12 @@ this.socket.emit('message', 'Hello, server!');
         }
         let ItemData = Object.keys(data.data[key]).map(key1 => {
           const date = data.data.指标ID[key1];
-          const value = data.data[key][key1];
-          return { value: [new Date(date), value] }
+          const value = data.data[key][key1] || null;
+          return [new Date(date), value]
         })
-        return { name: key, type: 'line',  symbol: 'none',stack: 'Total', data: ItemData };
+        return { name: key, type: 'line', symbol: 'none', stack: 'Total', data: ItemData };
       }).filter(item => item !== null);
-      console.log(data.data);
-      console.log(formattedData);
+
       let stime = '2023-01-01';
       // etime='2023-08-29';
       // 指定图表的配置项和数据
@@ -448,8 +490,10 @@ this.socket.emit('message', 'Hello, server!');
         let ItemData = Object.keys(data.data[key]).map(key1 => {
           const date = data.data.trade_date[key1];
           const value = data.data[key][key1];
-          return { value: [new Date(date), value] }
+          return [new Date(date), value]
         })
+
+        console.log('社融 ItemData :>> ', ItemData);
         return { name: key, type: 'bar', stack: 'stack', data: ItemData };
       }).filter(item => item !== null);
       console.log(data.data);
@@ -514,7 +558,7 @@ this.socket.emit('message', 'Hello, server!');
         let ItemData = Object.keys(data.data[key]).map(key1 => {
           const date = data.data.trade_date[key1];
           const value = data.data[key][key1];
-          return { value: [new Date(date), value] }
+          return [new Date(date), value]
         })
         return { name: key, type: 'bar', stack: 'stack', data: ItemData };
       }).filter(item => item !== null);
@@ -582,7 +626,7 @@ this.socket.emit('message', 'Hello, server!');
         let ItemData = Object.keys(data.data[key]).map(key1 => {
           const date = data.data.trade_date[key1];
           const value = data.data[key][key1];
-          return { value: [new Date(date), value] }
+          return [new Date(date), value]
         })
         return { name: key, type: 'bar', stack: 'stack', data: ItemData };
       }).filter(item => item !== null);
@@ -649,7 +693,7 @@ this.socket.emit('message', 'Hello, server!');
         let ItemData = Object.keys(data.data[key]).map(key1 => {
           const date = data.data.认购截止日期[key1];
           const value = data.data[key][key1];
-          return { value: [new Date(date), value] }
+          return [new Date(date), value]
         })
         return { name: key, type: 'bar', data: ItemData };
       }).filter(item => item !== null);
@@ -715,7 +759,7 @@ this.socket.emit('message', 'Hello, server!');
         let ItemData = Object.keys(data.data[key]).map(key1 => {
           const date = data.data.trade_date[key1];
           const value = data.data[key][key1];
-          return { value: [new Date(date), value] }
+          return [new Date(date), value]
         })
         return { name: key, type: 'bar', data: ItemData };
       }).filter(item => item !== null);
@@ -772,7 +816,7 @@ this.socket.emit('message', 'Hello, server!');
       let data = await api.get('/scores_short?target=' + selectedTarget)
       data = data.data;
 
-      console.log("scores_short: ", Object.keys(data.data));
+      console.log("1111111111scores_short: ", data.data);
       const formattedData = Object.keys(data.data).map(key => {
         if (key === 'update_time' || key == 'trade_date' || key == 'symbol') {
           // 如果key等于'update_time'，直接返回null，跳过这个key
@@ -781,7 +825,7 @@ this.socket.emit('message', 'Hello, server!');
         let ItemData = Object.keys(data.data[key]).map(key1 => {
           const date = data.data.trade_date[key1];
           const value = data.data[key][key1];
-          return { value: [new Date(date), value] }
+          return [new Date(date), value]
         })
         return { name: key, type: 'line', stack: 'Total', symbol: 'none', symbolSize: 5, data: ItemData };
       }).filter(item => item !== null);
@@ -838,6 +882,7 @@ this.socket.emit('message', 'Hello, server!');
       let data = await api.get('/scores_short1?target=' + selectedTarget + '&start_date=' + start_date)
       data = data.data;
       this.dy_downside = data.data
+      console.log(' 333333333333this.dy_downside :>> ', this.dy_downside);
 
     },
 
@@ -916,6 +961,11 @@ img {
   max-width: 100%;
   height: auto;
 }
-</style>
+
+.switch {
+  width: 100px;
+  margin: auto;
+
+}</style>
 
 

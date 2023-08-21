@@ -32,8 +32,8 @@ const emit = defineEmits(['timeChange']);
 //   "2023-08-29"
 // ]);
 let timeValue = ref([
-  "2023-07-19",
-  "2023-07-25",
+  "2023-07-01",
+  "2023-08-21",
 ]);
 
 

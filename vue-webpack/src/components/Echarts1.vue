@@ -1,7 +1,7 @@
 <template>
   <div class="echarts-box">
     <div class="table">
-      <!-- <el-switch v-model="switchVale" style="float: right;"></el-switch> -->
+      <el-switch v-model="switchVale" style="float: right;"></el-switch>
       <el-table :data="tableData" style="width: 100%">
         <el-table-column v-for="item in columns" :prop="item.props" :label="item.label" />
       </el-table>
@@ -9,12 +9,12 @@
     <div class="title-box">
       <div class="time-title">
         <div>
-          {{ title }}
+          <!-- {{ title }} -->
         </div>
-        <div class="time">
+        <!-- <div class="time">
           <el-date-picker v-model="timeValue" type="daterange" @change="changeTime" value-format="YYYY-MM-DD"
             range-separator="-" start-placeholder="请选择开始日" end-placeholder="请选择结束日" style="max-width: 240px;" />
-        </div>
+        </div> -->
 
       </div>
       <div class="line"></div>
@@ -287,7 +287,7 @@ watch(
 }
 
 .table {
-  height: 200px;
+  height: 143px;
 
 }
 
@@ -329,7 +329,7 @@ watch(
   text-align: center;
   width: 100%;
   height: auto;
-  aspect-ratio: 16/9;
+  aspect-ratio: 26/9;
   /* 设置宽高比为16:9 */
   /* min-width: calc(33.33% - 20px); */
 

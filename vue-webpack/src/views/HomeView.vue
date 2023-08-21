@@ -31,13 +31,14 @@
           </div> -->
 
         </div>
-        <div class="switch">
+        <!-- <div class="switch">
           <el-switch v-model="switchVale" @change="switchChage"></el-switch>
 
-        </div>
+        </div> -->
 
         <div class="grid-item">
 
+          <Echarts v-for="item in chartsObjList2" :key="item.name" :isOpen="switchVale" :title="item.title" :myOption="item.options" />
           <Echarts1 v-for="item in chartsObjList2" :key="item.name" :isOpen="switchVale" :title="item.title" :myOption="item.options" />
           <Etable></Etable>
 

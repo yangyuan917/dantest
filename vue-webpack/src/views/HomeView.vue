@@ -229,7 +229,7 @@ export default {
           const value = data.data[key][key1];
           return [new Date(date), value]
         })
-        return { name: key, type: 'bar', stack: 'stack', data: ItemData };
+        return { name: key, type: 'bar',  data: ItemData };
       }).filter(item => item !== null);
       let stime = '2020-01-01';
       let etime = '2023-08-29';
@@ -290,7 +290,7 @@ export default {
           const value = data.data[key][key1];
           return [new Date(date), value]
         })
-        return { name: key, type: 'line', symbol: 'none', stack: 'Total', data: ItemData };
+        return { name: key, type: 'line', symbol: 'none',  data: ItemData };
       }).filter(item => item !== null);
 
       let stime = '2023-01-01';
@@ -330,7 +330,9 @@ export default {
           // max:new Date(etime.replace(/-/g,"/")),
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+      // formatter: '{value}%' // 设置单位
+
         },
         series: formattedData
       };
@@ -410,7 +412,9 @@ console.log('77777777777777series', formattedData)
           // max:new Date(etime.replace(/-/g,"/")),
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          axisLabel: {
+    }
         },
         series: formattedData
       };
@@ -500,7 +504,7 @@ console.log('77777777777777series', formattedData)
         })
 
         console.log('社融 ItemData :>> ', ItemData);
-        return { name: key, type: 'bar', stack: 'stack', data: ItemData };
+        return { name: key, type: 'bar',  data: ItemData };
       }).filter(item => item !== null);
       console.log(data.data);
       console.log(formattedData);
@@ -566,7 +570,7 @@ console.log('77777777777777series', formattedData)
           const value = data.data[key][key1];
           return [new Date(date), value]
         })
-        return { name: key, type: 'bar', stack: 'stack', data: ItemData };
+        return { name: key, type: 'bar',  data: ItemData };
       }).filter(item => item !== null);
       console.log(data.data);
       console.log(formattedData);
@@ -634,7 +638,7 @@ console.log('77777777777777series', formattedData)
           const value = data.data[key][key1];
           return [new Date(date), value]
         })
-        return { name: key, type: 'bar', stack: 'stack', data: ItemData };
+        return { name: key, type: 'bar',  data: ItemData };
       }).filter(item => item !== null);
       console.log(data.data);
       console.log(formattedData);

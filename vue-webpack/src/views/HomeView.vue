@@ -1,50 +1,45 @@
 <template>
   <div>
-    <!-- <div class="tabs">
+    <div class="tabs">
       <div v-for="(tab, index) in tabs" :key="index" :class="{ 'tab': true, 'active': activeTab === index }"
         @click="changeTable(index)">{{ tab }}</div>
-    </div> -->
-    <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-click="handleClick">
+    </div>
+    <div class="grid-item" v-if="activeTab==0">
+      <Echarts v-for="item in chartsObjList0" :key="item.name" @timeChange="timeChange" :title="item.title"
+        :myOption="item.options" />
+    </div>
+    <div class="grid-item" v-if="activeTab==1">
+      <Echarts v-for="item in chartsObjList1" :key="item.name" :title="item.title" :myOption="item.options" />
+    </div>
+    <div class="grid-item"  v-if="activeTab==2">
+      <Echarts v-for="item in chartsObjList2" :key="item.name" :isOpen="switchVale" :title="item.title"
+        :myOption="item.options" />
+      <Echarts1 v-for="item in chartsObjList2" :key="item.name" :isOpen="switchVale" :title="item.title"
+        :myOption="item.options" />
+      <Etable></Etable>
+
+    </div>
+    <!-- <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-change="handleClick">
       <el-tab-pane label="总量-宏观利率" name="first">
-        <div class="grid-item">
-          <Echarts v-for="item in chartsObjList0" :key="item.name" @timeChange="timeChange" :title="item.title"
+        <div class="grid-item" >
+          <Echarts v-for="item in chartsObjList0"  :key="item.name" @timeChange="timeChange" :title="item.title"
             :myOption="item.options" />
         </div>
       </el-tab-pane>
-      <el-tab-pane label="总量-资金流向" name="second">
+      <el-tab-pane label="总量-资金流向" name="second" >
         <div class="grid-item">
-          <Echarts v-for="item in chartsObjList1" :key="item.name" :title="item.title" :myOption="item.options" />
+          <Echarts v-for="item in chartsObjList1"  :key="item.name" :title="item.title" :myOption="item.options" />
         </div>
       </el-tab-pane>
       <el-tab-pane label="监测标的池" name="third">
-        <div class="select-box">
-          <!-- <el-select v-model="selectedTarget" class="m-2" @change="handleSelectChange" style="margin-right: 12px;"
-            placeholder="Select">
-            <el-option v-for="item in targetOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select> -->
-          <!-- <el-select v-model="start_date" class="m-2" @change="handleSelectChange1" placeholder="Select">
-            <el-option v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select> -->
-          <!-- <div style="width: 220px; margin-left: 12px;">
-                    <el-date-picker v-model="timeValue" type="daterange" range-separator="To" start-placeholder="开始时间"
-            end-placeholder="结束时间" style="width: 220px;" />
-          </div> -->
-
-        </div>
-        <!-- <div class="switch">
-          <el-switch v-model="switchVale" @change="switchChage"></el-switch>
-
-        </div> -->
-
         <div class="grid-item">
-
           <Echarts v-for="item in chartsObjList2" :key="item.name" :isOpen="switchVale" :title="item.title" :myOption="item.options" />
           <Echarts1 v-for="item in chartsObjList2" :key="item.name" :isOpen="switchVale" :title="item.title" :myOption="item.options" />
           <Etable></Etable>
 
         </div>
       </el-tab-pane>
-    </el-tabs>
+    </el-tabs> -->
   </div>
 </template>
 
@@ -157,6 +152,11 @@ export default {
 
   },
   methods: {
+    handleClick(value) {
+
+      console.log('activeName', this.activeName)
+
+    },
     switchChage(value) {//开关变化
       //这里写逻辑。。。。
 
@@ -306,7 +306,8 @@ export default {
           containLabel: true
         },
         legend: {
-          data: Object.keys(data.data).sort()
+          // data:  Object.keys(data.data).sort()
+          data:  ['M0017138', 'M0017142', 'M0329546', 'M0329547', 'M1004263', 'M1004271', 'S0059744', 'S0059749']
         },
         toolbox: {
           feature: {
@@ -333,6 +334,10 @@ export default {
         },
         series: formattedData
       };
+
+console.log('77777777777777data.data', Object.keys(data.data).sort())
+console.log('77777777777777series', formattedData)
+
       this.chartsObjList0[1].options = option;
 
     },
@@ -967,6 +972,7 @@ img {
   width: 100px;
   margin: auto;
 
-}</style>
+}
+</style>
 
 

@@ -93,10 +93,11 @@ onBeforeMount(() => {
   uid.value = `echarts-uid-${parseInt((Math.random() * 1000000).toString())}`;
 });
 
+
+
 onMounted(() => {
   let myChart = echarts.init(document.getElementById(uid.value));
   // 在template中可以直接取props中的值，但是在script中不行，因为script是在挂载之前执行的
-
   myChart.setOption(props.myOption, {
     notMerge: true, //不和之前的option合并
   });

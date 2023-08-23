@@ -134,7 +134,7 @@ export default {
     };
   },
   created() {
-    this.socket = io('http://localhost:3003', {
+    this.socket = io('http://localhost:8801', {
       cors: {
         origin: '*',
         methods: ['GET', 'POST']
@@ -162,7 +162,7 @@ export default {
 
       //如果value为true，打开socket连接，否则关闭
       if (value) {
-        this.socket = io('http://localhost:3003', {
+        this.socket = io('http://localhost:8801', {
           cors: {
             origin: '*',
             methods: ['GET', 'POST']

@@ -9,10 +9,17 @@
           <el-date-picker v-model="timeValue" type="daterange" @change="changeTime" value-format="YYYY-MM-DD"
             range-separator="-" start-placeholder="请选择开始日" end-placeholder="请选择结束日" style="max-width: 240px;" />
         </div>
-        <div class="time" v-if="timeType=='date'">
-          <el-date-picker v-model="timeValue" type="date"  @change="changeTime" value-format="YYYY-MM-DD" placeholder="请选择日期"  />
-        </div>
-
+        <!-- <div class="time" v-if="timeType=='date'">
+          <el-date-picker v-model="datetimeValue" type="date"  @change="changeDateTime" value-format="YYYY-MM-DD" placeholder="请选择日期"  />
+        </div> -->
+      <div class="time" v-if="timeType=='date'">
+        <el-select v-model="selectedTarget" class="m-2" placeholder="Select" @change="changeSelectedTarget" style="max-width: 120px;">
+          <el-option value="600036.SH">600036.SH</el-option>
+          <el-option value="NDX.GI">NDX.GI</el-option>
+        </el-select>
+        <el-date-picker v-model="start_date" type="date" @change="changeDateTime" value-format="YYYY-MM-DD" style="max-width: 240px;"
+          placeholder="请选择日期" />
+      </div>
       </div>
       <div class="line"></div>
 
@@ -52,6 +59,10 @@ const props = defineProps({
     required: true,
   },
 });
+
+const selectedTarget = ref('');
+const start_date = ref('');
+
 // let timeValue = ref([
 //   "2020-01-01",
 //   "2023-08-29"
@@ -61,29 +72,6 @@ let timeValue = ref([
   "2023-08-21",
 ]);
 
-
-
-
-let start_date = ref('2021-01-01');
-let timeOptions = ref([
-  {
-    value: '2023-1-1',
-    label: '2023-1-1',
-  },
-  {
-    value: '2023-3-1',
-    label: '2023-3-1',
-  },
-
-])
-const handleSelectChange = (value) => {
-  let obj = {
-    value: value,
-    name: props.title
-  }
-  emit('timeChange', obj)
-
-}
 
 const changeTime = (value) => {//当时间改变时，myOption中的xAxis的min和max也要改变，重新渲染echarts
   console.log('timeValue :>> ', timeValue);
@@ -101,6 +89,27 @@ const changeTime = (value) => {//当时间改变时，myOption中的xAxis的min�
 
 }
 
+const changeSelectedTarget = (value) => {//下拉选框改变,向父组件传事件
+console.log('子组件 :>> ', );
+  selectedTarget.value = value;
+  let obj = {
+    selectedTarget: value,
+    start_date: start_date.value,
+  }
+  emit('timeChange', obj)
+}
+
+
+const changeDateTime = (value)=>{//选择时间改变时，向父组件传事件
+
+  let obj = {
+    selectedTarget: selectedTarget.value,
+    start_date: start_date.value,
+  }
+  emit('timeChange', obj)
+
+
+}
 
 // 因为是封装的组件，会多次调用，id不能重复，要在初始化之前写，不然会报错dom为定义
 
@@ -212,5 +221,10 @@ watch(
   padding: 20px;
   box-sizing: border-box;
   text-align: center;
+}
+
+.time{
+display: flex;
+justify-content: center;
 }
 </style>

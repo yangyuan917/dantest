@@ -1,7 +1,7 @@
 <template>
   <div class="echarts-box">
     <div class="table">
-      <el-switch v-model="switchVale" style="float: right;"></el-switch>
+      <el-switch v-model="switchVale" @change="switchValeChange" style="float: right;"></el-switch>
       <el-table :data="tableData" style="width: 100%">
         <el-table-column v-for="item in columns" :prop="item.props" :label="item.label" />
       </el-table>
@@ -9,13 +9,7 @@
     <div class="title-box">
       <div class="time-title">
         <div>
-          <!-- {{ title }} -->
         </div>
-        <!-- <div class="time">
-          <el-date-picker v-model="timeValue" type="daterange" @change="changeTime" value-format="YYYY-MM-DD"
-            range-separator="-" start-placeholder="请选择开始日" end-placeholder="请选择结束日" style="max-width: 240px;" />
-        </div> -->
-
       </div>
       <div class="line"></div>
 
@@ -83,7 +77,6 @@ let timeValue = ref([
 
 
 
-let start_date = ref('2021-01-01');
 let timeOptions = ref([
   {
     value: '2023-1-1',
@@ -95,24 +88,32 @@ let timeOptions = ref([
   },
 
 ])
+const selectedTarget = props.selectedTarget
+let start_date = props.start_date;
 
-const selectedTarget = "600036.SH"
-
-const handleSelectChange = (value) => {
-  let obj = {
-    value: value,
-    name: props.title
-  }
-  getData_scores_short1(selectedTarget, timeValue.value[1])
-  emit('timeChange', obj)
-
-}
 function getLastValue(obj) {
   var keys = Object.keys(obj);
   var lastKey = keys[keys.length - 1];
   var lastValue = obj[lastKey];
   return lastValue;
 }
+//监听props中selectedTarget和start_date的变化，变化的话去请求数据
+watch(
+  () => props.selectedTarget,
+  (newVal, oldVal) => {
+  console.log('监听props中selectedTarget :>> ', );
+    getData_scores_short1(newVal,props.start_date)
+  }
+);
+watch(
+  () => props.start_date,
+  (newVal, oldVal) => {
+    getData_scores_short1(props.selectedTarget, newVal)
+  }
+);
+
+
+
 const getData_scores_short1 = async (selectedTarget, start_date) => { //获取对应的数据-获取第一排数据
 
   let res = await api.get('/scores_short?target=' + selectedTarget)
@@ -163,11 +164,28 @@ const ioMsg = () => {//这边获取第二排数据
 }
 
 ioMsg()
-//监听props中isOpen的值，来决定socken的打开与关闭
-watch(
-  () => props.isOpen,
-  (newVal) => {
 
+const switchValeChange = (value) => {//开关改变时，
+  console.log('switchValeChange :>> ', value);
+  // emit('switchValeChange', value)
+   if (value) {
+      socket = io('http://localhost:8801', {
+        cors: {
+          origin: '*',
+          methods: ['GET', 'POST']
+        }
+      });
+    } else {
+    console.log('关闭socket :>> ', );
+      socket.close();
+    }
+}
+
+//监听switchVale的值，来决定socken的打开与关闭
+watch(
+  () => switchVale,
+  (newVal) => {
+    console.log('switchVale的值newVal :>> ', newVal);
     if (newVal) {
       socket = io('http://localhost:8801', {
         cors: {
@@ -185,14 +203,7 @@ watch(
 
 
 
-// xAxis: {
-//         type: 'time',
-//         //   min:'Thu, 02 Jan 2020 00:00:00 GMT',
-//         //   max:"Tue, 01 Sep 2020 00:00:00 GMT",
-//         min: new Date(stime.replace(/-/g, "/")),
-//         max: new Date(etime.replace(/-/g, "/")),
 
-//       },
 
 const changeTime = (value) => {//当时间改变时，myOption中的xAxis的min和max也要改变，重新渲染echarts
   let stime = value[0];
@@ -236,6 +247,14 @@ onMounted(() => {
   });
 });
 const props = defineProps({
+selectedTarget: {
+  type: String,
+  default: '',
+},
+start_date: {
+  type: String,
+  default: '',
+},
   myStyle: {
     type: Object,
     default: () => ({

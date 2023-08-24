@@ -4,17 +4,22 @@
       <div v-for="(tab, index) in tabs" :key="index" :class="{ 'tab': true, 'active': activeTab === index }"
         @click="changeTable(index)">{{ tab }}</div>
     </div>
-    <div class="grid-item" v-if="activeTab==0">
-      <Echarts v-for="item in chartsObjList0" :key="item.name" @timeChange="timeChange" :title="item.title"
-        :myOption="item.options" />
+    <div class="grid-item" v-if="activeTab == 0">
+      <Echarts v-for="item in chartsObjList0" :key="item.name" :title="item.title" :myOption="item.options" />
     </div>
-    <div class="grid-item" v-if="activeTab==1">
+    <div class="grid-item" v-if="activeTab == 1">
       <Echarts v-for="item in chartsObjList1" :key="item.name" :title="item.title" :myOption="item.options" />
     </div>
-    <div class="grid-item"  v-if="activeTab==2">
-      <Echarts v-for="item in chartsObjList2" timeType="date" :key="item.name" :isOpen="switchVale" :title="item.title"
-        :myOption="item.options" />
-      <Echarts1 v-for="item in chartsObjList2" :key="item.name" :isOpen="switchVale" :title="item.title"
+    <div class="grid-item" v-if="activeTab == 2">
+
+
+
+
+      <Echarts v-for="item in chartsObjList2" timeType="date" @timeChange="timeChange" :key="item.name"
+        :isOpen="switchVale" :title="item.title" :myOption="item.options" />
+      <Echarts1 v-for="item in chartsObjList2" :key="item.name" :selectedTarget="selectedTarget"
+      :start_date="start_date"
+      :isOpen="switchVale" :title="item.title"
         :myOption="item.options" />
       <Etable></Etable>
 
@@ -59,9 +64,10 @@ export default {
   },
   data() {
     return {
+
       switchVale: false,
-      selectedTarget: '600036.SH',//下拉框值
-      start_date: '2023-1-1',//下拉框值
+      selectedTarget: '',//下拉框值
+      start_date: '',//下拉框值
       targetOptions: [
         {
           value: '600036.SH',
@@ -128,49 +134,46 @@ export default {
       dy_downside: '',
       message: '',
       dataList: [],
-      start_date: '2023-1-1',
       chartOptions: {},
       socket: null,
     };
   },
   created() {
-    this.socket = io('http://localhost:8801', {
-      cors: {
-        origin: '*',
-        methods: ['GET', 'POST']
-      }
-    });
+    // this.socket = io('http://localhost:8801', {
+    //   cors: {
+    //     origin: '*',
+    //     methods: ['GET', 'POST']
+    //   }
+    // });
   },
   mounted() {
-    this.socket.on('message', (data) => {
-      console.log('44444444444444444444Received message:', data);
-    });
+    // this.socket.on('message', (data) => {
+    //   console.log('44444444444444444444Received message:', data);
+    // });
 
     // 发送消息到服务器
-    this.socket.emit('chatMessage', 'Hello, server!');
     this.init()
 
   },
   methods: {
     handleClick(value) {
 
-      console.log('activeName', this.activeName)
 
     },
     switchChage(value) {//开关变化
       //这里写逻辑。。。。
 
       //如果value为true，打开socket连接，否则关闭
-      if (value) {
-        this.socket = io('http://localhost:8801', {
-          cors: {
-            origin: '*',
-            methods: ['GET', 'POST']
-          }
-        });
-      } else {
-        this.socket.close();
-      }
+      // if (value) {
+      //   this.socket = io('http://localhost:8801', {
+      //     cors: {
+      //       origin: '*',
+      //       methods: ['GET', 'POST']
+      //     }
+      //   });
+      // } else {
+      //   this.socket.close();
+      // }
 
 
     },
@@ -188,37 +191,46 @@ export default {
       this.getData_fundflow1000()
       this.getData_new_fund_flow()
       this.getData_north_flow()
-      let selectedTarget = "600036.SH"
+      let selectedTarget = ""
       // start_date = '2023-1-1'
-      this.getData_scores_short(this.selectedTarget)
-      this.getData_scores_short1(this.selectedTarget, this.start_date)
+      this.getData_scores_short(selectedTarget,this.start_date)
+      this.getData_scores_short1(selectedTarget, this.start_date)
 
     },
-    timeChange(value) {
-      console.log('父组件timeChange', value)
+    timeChange(obj) {//这是子组件改变,触发的方法
+      console.log('obj :>> ', obj);
       // this.start_date = value;
+
+      let selectedTarget = obj.selectedTarget
+      let start_date = obj.start_date
+      this.selectedTarget = selectedTarget
+      this.start_date = start_date
+      this.getData_scores_short(selectedTarget,start_date)
+      this.getData_scores_short1(selectedTarget, start_date)
+
       // this.getData_scores_short1(this.selectedTarget, this.start_date)
     },
-    handleSelectChange(value) {
-      console.log('发送信息',)
-      this.socket.emit('message', 'Hello, server!');
-      this.getData_scores_short(value);
-      this.getData_scores_short1(value, this.start_date);
-    },
-    handleSelectChange1(value) {
-      // start_date = event.target.value;
-      // this.start_date = event.target.value;
-      this.getData_scores_short1(this.selectedTarget, value);
-      this.sendSelectedTarget();
+    // handleSelectChange(value) {
+    //   this.socket.emit('message', 'Hello, server!');
+    //   this.getData_scores_short(value);
+    //   this.getData_scores_short1(value, this.start_date);
+    // },
+    // handleSelectChange1(value) {
+    //   // start_date = event.target.value;
+    //   // this.start_date = event.target.value;
+    //   this.getData_scores_short1(this.selectedTarget, value);
+    //   this.sendSelectedTarget();
 
-    }, sendSelectedTarget() {
+    // },
+
+
+     sendSelectedTarget() {
       // 当下拉选项变化时，将选中的值发送给后端
       // socket.emit('start_date', this.start_date);
     },
     async getData() {
       let data = await api.get('/operation')
       data = data.data;
-      console.log('data.data ', data.data)
       const formattedData = Object.keys(data.data).map(key => {
         if (key === 'update_time' || key == '发生日期') {
           // 如果key等于'update_time'，直接返回null，跳过这个key
@@ -229,7 +241,7 @@ export default {
           const value = data.data[key][key1];
           return [new Date(date), value]
         })
-        return { name: key, type: 'bar',  data: ItemData };
+        return { name: key, type: 'bar', data: ItemData };
       }).filter(item => item !== null);
       let stime = '2020-01-01';
       let etime = '2023-08-29';
@@ -276,10 +288,8 @@ export default {
       this.chartsObjList0[0].options = option;
     },
     async getData0() { //获取对应的数据
-      console.log('getData0')
       let data = await api.get('/maro_rate')
       data = data.data;
-      console.log("maro_rate:", Object.keys(data.data));
       const formattedData = Object.keys(data.data).map(key => {
         if (key === 'update_time' || key == 'trade_date' || key == '指标ID') {
           // 如果key等于'update_time'，直接返回null，跳过这个key
@@ -290,7 +300,7 @@ export default {
           const value = data.data[key][key1];
           return [new Date(date), value]
         })
-        return { name: key, type: 'line', symbol: 'none',  data: ItemData };
+        return { name: key, type: 'line', symbol: 'none', data: ItemData };
       }).filter(item => item !== null);
 
       let stime = '2023-01-01';
@@ -307,7 +317,7 @@ export default {
         },
         legend: {
           // data:  Object.keys(data.data).sort()
-          data:  ['M0017138', 'M0017142', 'M0329546', 'M0329547', 'M1004263', 'M1004271', 'S0059744', 'S0059749']
+          data: ['M0017138', 'M0017142', 'M0329546', 'M0329547', 'M1004263', 'M1004271', 'S0059744', 'S0059749']
         },
         toolbox: {
           feature: {
@@ -331,14 +341,12 @@ export default {
         },
         yAxis: {
           type: 'value',
-      // formatter: '{value}%' // 设置单位
+          // formatter: '{value}%' // 设置单位
 
         },
         series: formattedData
       };
 
-console.log('77777777777777data.data', Object.keys(data.data).sort())
-console.log('77777777777777series', formattedData)
 
       this.chartsObjList0[1].options = option;
 
@@ -347,7 +355,6 @@ console.log('77777777777777series', formattedData)
     async getData1() { //获取对应的数据
       let data = await api.get('/index_cnbd')
       data = data.data;
-      console.log(Object.keys(data.data));
       const formattedData = Object.keys(data.data).map(key => {
         if (key === 'update_time' || key == 'trade_date' || key == '指标ID' || key == 'tag') {
           // 如果key等于'update_time'，直接返回null，跳过这个key
@@ -367,12 +374,7 @@ console.log('77777777777777series', formattedData)
         };
       }).filter(item => item !== null);
 
-      console.log(data.data);
-      // formattedData[0].data[246][1] = null;
-      // formattedData[0].data[244][1] = null;
-      // formattedData[0].data[241][1] = null;
-      console.log('9999999999index_cnbdformattedData', formattedData);
-      console.log(data.data);
+
       let stime = '2023-01-01';
       // etime='2023-08-29';
       // 指定图表的配置项和数据
@@ -414,7 +416,7 @@ console.log('77777777777777series', formattedData)
         yAxis: {
           type: 'value',
           axisLabel: {
-    }
+          }
         },
         series: formattedData
       };
@@ -426,7 +428,6 @@ console.log('77777777777777series', formattedData)
     async getDataM2() { //获取对应的数据
       let data = await api.get('/index_cnbd')
       data = data.data;
-      console.log(Object.keys(data.data));
       const formattedData = Object.keys(data.data).map(key => {
         if (key === 'update_time' || key == 'trade_date' || key == '指标ID' || key == 'tag') {
           // 如果key等于'update_time'，直接返回null，跳过这个key
@@ -491,7 +492,6 @@ console.log('77777777777777series', formattedData)
     async getData_fundflow50() { //获取对应的数据
       let data = await api.get('/fund_flow?tag=上证50')
       data = data.data;
-      console.log(Object.keys(data.data));
       const formattedData = Object.keys(data.data).map(key => {
         if (key === 'update_time' || key == 'trade_date' || key == 'tag') {
           // 如果key等于'update_time'，直接返回null，跳过这个key
@@ -503,11 +503,9 @@ console.log('77777777777777series', formattedData)
           return [new Date(date), value]
         })
 
-        console.log('社融 ItemData :>> ', ItemData);
-        return { name: key, type: 'bar',  data: ItemData };
+        return { name: key, type: 'bar', data: ItemData };
       }).filter(item => item !== null);
-      console.log(data.data);
-      console.log(formattedData);
+
       let stime = '2020-01-01';
       let etime = '2023-08-29';
       let option = {
@@ -570,10 +568,9 @@ console.log('77777777777777series', formattedData)
           const value = data.data[key][key1];
           return [new Date(date), value]
         })
-        return { name: key, type: 'bar',  data: ItemData };
+        return { name: key, type: 'bar', data: ItemData };
       }).filter(item => item !== null);
-      console.log(data.data);
-      console.log(formattedData);
+
       let stime = '2020-01-01';
       let etime = '2023-08-29';
       let option = {
@@ -627,7 +624,6 @@ console.log('77777777777777series', formattedData)
       let data = await api.get('/fund_flow?tag=中证1000')
       data = data.data;
 
-      console.log(Object.keys(data.data));
       const formattedData = Object.keys(data.data).map(key => {
         if (key === 'update_time' || key == 'trade_date' || key == 'tag') {
           // 如果key等于'update_time'，直接返回null，跳过这个key
@@ -638,10 +634,9 @@ console.log('77777777777777series', formattedData)
           const value = data.data[key][key1];
           return [new Date(date), value]
         })
-        return { name: key, type: 'bar',  data: ItemData };
+        return { name: key, type: 'bar', data: ItemData };
       }).filter(item => item !== null);
-      console.log(data.data);
-      console.log(formattedData);
+
       let stime = '2020-01-01';
       let etime = '2023-08-29';
       let option = {
@@ -694,7 +689,6 @@ console.log('77777777777777series', formattedData)
       data = data.data;
 
 
-      console.log(Object.keys(data.data));
       const formattedData = Object.keys(data.data).map(key => {
         if (key === 'update_time' || key == '认购截止日期' || key == 'sale_rate') {
           // 如果key等于'update_time'，直接返回null，跳过这个key
@@ -707,8 +701,7 @@ console.log('77777777777777series', formattedData)
         })
         return { name: key, type: 'bar', data: ItemData };
       }).filter(item => item !== null);
-      console.log(data.data);
-      console.log(formattedData);
+
       let stime = '2020-01-01';
       let etime = '2023-08-29';
       let option = {
@@ -760,7 +753,6 @@ console.log('77777777777777series', formattedData)
       let data = await api.get('/north_flow')
       data = data.data;
 
-      console.log(Object.keys(data.data));
       const formattedData = Object.keys(data.data).map(key => {
         if (key === 'update_time' || key == 'trade_date' || key == 'sale_rate') {
           // 如果key等于'update_time'，直接返回null，跳过这个key
@@ -773,8 +765,7 @@ console.log('77777777777777series', formattedData)
         })
         return { name: key, type: 'bar', data: ItemData };
       }).filter(item => item !== null);
-      console.log(data.data);
-      console.log(formattedData);
+
       let stime = '2020-01-01';
       let etime = '2023-08-29';
       let option = {
@@ -822,7 +813,7 @@ console.log('77777777777777series', formattedData)
       this.chartsObjList1[4].options = option;
 
     },
-    async getData_scores_short(selectedTarget) { //获取对应的数据
+    async getData_scores_short(selectedTarget,start_date) { //获取对应的数据
       let data = await api.get('/scores_short?target=' + selectedTarget)
       data = data.data;
 
@@ -839,9 +830,9 @@ console.log('77777777777777series', formattedData)
         })
         return { name: key, type: 'line', stack: 'Total', symbol: 'none', symbolSize: 5, data: ItemData };
       }).filter(item => item !== null);
-      console.log(data.data);
+      // console.log(4444444444444, data.data);
       console.log(formattedData);
-      let stime = '2023-01-01';
+      let stime = start_date;
       // etime='2023-08-29';
       // 指定图表的配置项和数据
       let option = {
@@ -869,7 +860,7 @@ console.log('77777777777777series', formattedData)
             type: 'slider',
             top: '90%',
             bottom: '4%',
-            start: 90,
+            start: 10,
             end: 100
           }
         ],
@@ -975,6 +966,15 @@ img {
 .switch {
   width: 100px;
   margin: auto;
+
+}
+
+.time-box {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 136px;
+  top: 36px;
 
 }
 </style>

@@ -137,7 +137,8 @@ const getData_scores_short1 = async (selectedTarget, start_date) => { //获取�
 }
 getData_scores_short1(selectedTarget, timeValue.value[1])
 
-let url = 'https://wmrisk-8806-60067-10-1319347086.sh.run.tcloudbase.com'
+// let url = 'https://wmrisk-8806-60067-10-1319347086.sh.run.tcloudbase.com'
+let url = 'http://localhost'
 const socket = io(url + ':8801');
 let dataList = ref([])
 const ioMsg = () => {//这边获取第二排数据
@@ -148,13 +149,16 @@ const ioMsg = () => {//这边获取第二排数据
 
   socket.on('data2', data => {
     dataList.value.push(data);
+    console.log('testres :>> ', data)
+    tableData.value[1].data4 = data.dy_downside_2['0']
+    tableData.value[1].data5 = data.dy_downside_5['0']
+    tableData.value[1].data6 = data.dy_downside_20['0']
   });
   //把获取到的数据进行赋值，按以下格式就行
-  //  tableData.value[1].data1 =
-  //   tableData.value[1].data2 =
-  //   tableData.value[1].data3 =
 
-
+  //  tableData.value[1].data4 = dataList.value[dataList.value.length - 1].dy_downside_2
+  //  tableData.value[1].data5 = dataList.value[dataList.value.length - 1].dy_downside_5
+  //  tableData.value[1].data6 = dataList.value[dataList.value.length - 1].dy_downside_20
 
 }
 
@@ -165,7 +169,7 @@ watch(
   (newVal) => {
 
     if (newVal) {
-      socket = io('http://localhost:3003', {
+      socket = io('http://localhost:8801', {
         cors: {
           origin: '*',
           methods: ['GET', 'POST']

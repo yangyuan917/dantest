@@ -12,7 +12,7 @@
       <Echarts v-for="item in chartsObjList1" :key="item.name" :title="item.title" :myOption="item.options" />
     </div>
     <div class="grid-item"  v-if="activeTab==2">
-      <Echarts v-for="item in chartsObjList2" :key="item.name" :isOpen="switchVale" :title="item.title"
+      <Echarts v-for="item in chartsObjList2" timeType="date" :key="item.name" :isOpen="switchVale" :title="item.title"
         :myOption="item.options" />
       <Echarts1 v-for="item in chartsObjList2" :key="item.name" :isOpen="switchVale" :title="item.title"
         :myOption="item.options" />

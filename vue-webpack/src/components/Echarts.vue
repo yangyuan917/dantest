@@ -5,9 +5,12 @@
         <div>
           {{ title }}
         </div>
-        <div class="time">
+        <div class="time" v-if="timeType=='daterange'">
           <el-date-picker v-model="timeValue" type="daterange" @change="changeTime" value-format="YYYY-MM-DD"
             range-separator="-" start-placeholder="请选择开始日" end-placeholder="请选择结束日" style="max-width: 240px;" />
+        </div>
+        <div class="time" v-if="timeType=='date'">
+          <el-date-picker v-model="timeValue" type="date"  @change="changeTime" value-format="YYYY-MM-DD" placeholder="请选择日期"  />
         </div>
 
       </div>
@@ -27,6 +30,28 @@
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue';
 import * as echarts from 'echarts';
 const emit = defineEmits(['timeChange']);
+const props = defineProps({
+  myStyle: {
+    type: Object,
+    default: () => ({
+      // width: '600px',
+      // height: '400px',
+    }),
+  },
+  timeType: {
+    type: String,
+    default: 'daterange',
+  },
+  title: {
+    type: String,
+    default: '标题',
+  },
+  myOption: {
+    type: Object,
+    default: () => ({}),
+    required: true,
+  },
+});
 // let timeValue = ref([
 //   "2020-01-01",
 //   "2023-08-29"
@@ -59,15 +84,6 @@ const handleSelectChange = (value) => {
   emit('timeChange', obj)
 
 }
-
-// xAxis: {
-//         type: 'time',
-//         //   min:'Thu, 02 Jan 2020 00:00:00 GMT',
-//         //   max:"Tue, 01 Sep 2020 00:00:00 GMT",
-//         min: new Date(stime.replace(/-/g, "/")),
-//         max: new Date(etime.replace(/-/g, "/")),
-
-//       },
 
 const changeTime = (value) => {//当时间改变时，myOption中的xAxis的min和max也要改变，重新渲染echarts
   console.log('timeValue :>> ', timeValue);
@@ -113,24 +129,7 @@ onMounted(() => {
     }, 300);
   });
 });
-const props = defineProps({
-  myStyle: {
-    type: Object,
-    default: () => ({
-      // width: '600px',
-      // height: '400px',
-    }),
-  },
-  title: {
-    type: String,
-    default: '标题',
-  },
-  myOption: {
-    type: Object,
-    default: () => ({}),
-    required: true,
-  },
-});
+
 
 //监听props中myOption的变化，变化的话重新渲染echarts
 watch(
@@ -138,11 +137,11 @@ watch(
   (newVal, oldVal) => {
     let myChart = echarts.init(document.getElementById(uid.value));
 
-  let myOption = newVal;
-let stime = timeValue.value[0];
-  let etime = timeValue.value[1];
-   myOption.xAxis.min = new Date(stime.replace(/-/g, "/"));
-  myOption.xAxis.max = new Date(etime.replace(/-/g, "/"));
+    let myOption = newVal;
+    let stime = timeValue.value[0];
+    let etime = timeValue.value[1];
+    myOption.xAxis.min = new Date(stime.replace(/-/g, "/"));
+    myOption.xAxis.max = new Date(etime.replace(/-/g, "/"));
 
     myChart.setOption(myOption, {
       notMerge: true, //不和之前的option合并

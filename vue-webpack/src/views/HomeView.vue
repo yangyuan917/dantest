@@ -66,8 +66,8 @@ export default {
     return {
 
       switchVale: false,
-      selectedTarget: '',//下拉框值
-      start_date: '',//下拉框值
+      selectedTarget: '600036.SH',//下拉框值
+      start_date: '2023-1-1',//下拉框值
       targetOptions: [
         {
           value: '600036.SH',
@@ -102,14 +102,14 @@ export default {
       ],
       chartsObjList0: [
         {
-          name: 'chart0', title: '标题',
+          name: 'chart0', title: '公开市场操作',
           msg: {
             name: 'chart0', title: '标题',
           }, options: {}
         },
         { name: 'maro_rate', title: '利率变动', options: {} },
-        { name: 'index_cnbd', title: '固定/浮息强弱', options: {} },
-        { name: 'm2', title: 'M2/社融', options: {} },
+        { name: 'index_cnbd', title: '固定-浮息 强弱', options: {} },
+        { name: 'm2', title: 'M2-社融', options: {} },
         { name: 'a', title: '', options: {} },
         { name: 'b', title: '', options: {} },
       ],
@@ -179,7 +179,7 @@ export default {
     },
     changeTable(index) {
       this.activeTab = index;
-      this.getData();
+      // this.getData();
     },
     init() {//初始化
       this.getData()
@@ -191,8 +191,8 @@ export default {
       this.getData_fundflow1000()
       this.getData_new_fund_flow()
       this.getData_north_flow()
-      let selectedTarget = ""
-      // start_date = '2023-1-1'
+      let selectedTarget = "600036.SH"
+      let start_date = '2023-1-1'
       this.getData_scores_short(selectedTarget,this.start_date)
       this.getData_scores_short1(selectedTarget, this.start_date)
 
@@ -241,10 +241,10 @@ export default {
           const value = data.data[key][key1];
           return [new Date(date), value]
         })
-        return { name: key, type: 'bar', data: ItemData };
+        return { name: key, type: 'bar', stack: 'stack', data: ItemData };
       }).filter(item => item !== null);
       let stime = '2020-01-01';
-      let etime = '2023-08-29';
+      // let etime = '2023-08-29';
       let option = {
 
         tooltip: {
@@ -267,7 +267,7 @@ export default {
           //   min:'Thu, 02 Jan 2020 00:00:00 GMT',
           //   max:"Tue, 01 Sep 2020 00:00:00 GMT",
           min: new Date(stime.replace(/-/g, "/")),
-          max: new Date(etime.replace(/-/g, "/")),
+          // max: new Date(etime.replace(/-/g, "/")),
 
         },
         dataZoom: [ // 添加数据区域缩放组件，即滚动条
@@ -276,7 +276,7 @@ export default {
             type: 'slider',
             top: '90%',
             bottom: '4%',
-            start: 95,
+            start: 90,
             end: 100
           }
         ],
@@ -368,7 +368,7 @@ export default {
           return [new Date(date), value]
         })
         return {
-          name: key, type: 'line', stack: 'Total', symbol: 'none', // 禁止显示圆点
+          name: key, type: 'line', symbol: 'none', // 禁止显示圆点
 
           data: ItemData
         };
@@ -426,7 +426,7 @@ export default {
 
     },
     async getDataM2() { //获取对应的数据
-      let data = await api.get('/index_cnbd')
+      let data = await api.get('/m2')
       data = data.data;
       const formattedData = Object.keys(data.data).map(key => {
         if (key === 'update_time' || key == 'trade_date' || key == '指标ID' || key == 'tag') {
@@ -438,7 +438,7 @@ export default {
           const value = data.data[key][key1] || null;
           return [new Date(date), value]
         })
-        return { name: key, type: 'line', symbol: 'none', stack: 'Total', data: ItemData };
+        return { name: key, type: 'line', symbol: 'none', data: ItemData };
       }).filter(item => item !== null);
 
       let stime = '2023-01-01';
@@ -828,7 +828,7 @@ export default {
           const value = data.data[key][key1];
           return [new Date(date), value]
         })
-        return { name: key, type: 'line', stack: 'Total', symbol: 'none', symbolSize: 5, data: ItemData };
+        return { name: key, type: 'line', symbol: 'none', symbolSize: 5, data: ItemData };
       }).filter(item => item !== null);
       // console.log(4444444444444, data.data);
       console.log(formattedData);
@@ -860,7 +860,7 @@ export default {
             type: 'slider',
             top: '90%',
             bottom: '4%',
-            start: 10,
+            start: 0,
             end: 100
           }
         ],

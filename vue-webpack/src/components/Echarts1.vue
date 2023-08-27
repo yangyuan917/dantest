@@ -65,13 +65,9 @@ const columns = [
   { props: 'data6', label: '20日分位' },
 ]
 const emit = defineEmits(['timeChange']);
-// let timeValue = ref([
-//   "2020-01-01",
-//   "2023-08-29"
-// ]);
 let timeValue = ref([
-  "2023-07-19",
-  "2023-07-25",
+  "2023-01-01",
+  "2023-08-25",
 ]);
 
 
@@ -97,6 +93,28 @@ function getLastValue(obj) {
   var lastValue = obj[lastKey];
   return lastValue;
 }
+
+// let url = 'https://wmrisk-8806-60067-10-1319347086.sh.run.tcloudbase.com'
+let url = 'http://localhost:8801'
+const socket = io(url);
+let dataList = ref([])
+const ioMsg = () => {//这边获取第二排数据
+  socket.on('connected', data => {
+    // this.message = data.message;
+    console.log('Connected')
+  });
+
+  socket.on('data2', data => {
+    dataList.value.push(data);
+    console.log('testres :>> ', data)
+    tableData.value[1].data4 = data.dy_downside_2['0']
+    tableData.value[1].data5 = data.dy_downside_5['0']
+    tableData.value[1].data6 = data.dy_downside_20['0']
+  });
+}
+
+ioMsg()
+
 //监听props中selectedTarget和start_date的变化，变化的话去请求数据
 watch(
   () => props.selectedTarget,
@@ -108,7 +126,8 @@ watch(
 watch(
   () => props.start_date,
   (newVal, oldVal) => {
-    getData_scores_short1(props.selectedTarget, newVal)
+    getData_scores_short1(props.selectedTarget, newVal);
+    socket.emit('selectedTarget', props.start_date);
   }
 );
 
@@ -138,32 +157,6 @@ const getData_scores_short1 = async (selectedTarget, start_date) => { //获取�
 }
 getData_scores_short1(selectedTarget, timeValue.value[1])
 
-// let url = 'https://wmrisk-8806-60067-10-1319347086.sh.run.tcloudbase.com'
-let url = 'http://localhost'
-const socket = io(url + ':8801');
-let dataList = ref([])
-const ioMsg = () => {//这边获取第二排数据
-  socket.on('connected', data => {
-    // this.message = data.message;
-    console.log('Connected')
-  });
-
-  socket.on('data2', data => {
-    dataList.value.push(data);
-    console.log('testres :>> ', data)
-    tableData.value[1].data4 = data.dy_downside_2['0']
-    tableData.value[1].data5 = data.dy_downside_5['0']
-    tableData.value[1].data6 = data.dy_downside_20['0']
-  });
-  //把获取到的数据进行赋值，按以下格式就行
-
-  //  tableData.value[1].data4 = dataList.value[dataList.value.length - 1].dy_downside_2
-  //  tableData.value[1].data5 = dataList.value[dataList.value.length - 1].dy_downside_5
-  //  tableData.value[1].data6 = dataList.value[dataList.value.length - 1].dy_downside_20
-
-}
-
-ioMsg()
 
 const switchValeChange = (value) => {//开关改变时，
   console.log('switchValeChange :>> ', value);

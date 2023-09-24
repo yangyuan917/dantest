@@ -9,6 +9,14 @@ export const constantRoutes = [
       title: '登录'
     }
   },
+
+  {
+      path: '/allocation',
+    component: () => import('@/views/allocation/index.vue'),
+    meta: {
+      title: '资产配置'
+    }
+  },
   // {
   //   path: '/login',
   //   component: () => import('@/views/login/index.vue'),
@@ -33,7 +41,8 @@ export const constantRoutes = [
   {
     path: '/',
     component: () => import('@/layout/index.vue'),
-    redirect: '/home',
+    // redirect: '/home',
+    redirect: '/login',
     children: [
       // {
       //   path: '/homeview',

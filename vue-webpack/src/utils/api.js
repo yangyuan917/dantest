@@ -1,5 +1,6 @@
 import axios from 'axios';
-let url = 'https://wmrisk-8806-60067-10-1319347086.sh.run.tcloudbase.com'//这里写请求的基本URL
+// let url = 'https://wmrisk-8806-60067-10-1319347086.sh.run.tcloudbase.com'//这里写请求的基本URL
+let url = 'https://wmrisk8803-holding1-60067-10-1319347086.sh.run.tcloudbase.com'//这里写请求的基本URL
 let url_local = 'http://localhost:8801'//这里写请求的基本URL
 const api = axios.create({
   // baseURL: url, // 设置基本的请求URL

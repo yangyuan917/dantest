@@ -74,7 +74,6 @@ let timeValue = ref([
 
 
 const changeTime = (value) => {//当时间改变时，myOption中的xAxis的min和max也要改变，重新渲染echarts
-  console.log('timeValue :>> ', timeValue);
   let stime = value[0];
   let etime = value[1];
   let myOption = props.myOption;

@@ -109,7 +109,7 @@ const checkChange = (val) => {
 
 const start_date = ref('')
 const end_date = ref('2023-09-23')
-let timeValue = ref(['2020-01-01', '2023-08-25'])
+let timeValue = ref(['2023-01-01', '2023-09-27'])
 
 
 // 指标

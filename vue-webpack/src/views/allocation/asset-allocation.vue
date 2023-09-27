@@ -1,27 +1,37 @@
 <template>
+<div style="width: 100%;">
+  <el-input v-model="separate_name" style="width: 200px;" placeholder="输入separate_name" ></el-input>
+
+</div>
+<!-- 第一排 -->
   <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
   <Linechart :mySeries="lineSeries" @allParamChange="linetimeChange"></Linechart>
-  <Linechart
-    :mySeries="lineSeriestow"
-    @allParamChange="linetimeChangetow"
-    :showTarget="true"
-  ></Linechart>
+  <Linechart :mySeries="lineSeriestow" @allParamChange="linetimeChangetow" :showTarget="true"></Linechart>
+<!-- 第二排 -->
+
+  <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
+  <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
+  <Linechart :mySeries="lineSeries" @allParamChange="linetimeChange"></Linechart>
+<!-- 第三排 -->
+
+   <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
+  <Linechart :mySeries="lineSeries" @allParamChange="linetimeChange"></Linechart>
 </template>
 <script setup>
 import { reactive, ref } from 'vue'
 import Barchart from './components/Barchart'
 import Linechart from './components/Linechart'
 import api from '@/utils/api'
-
+const separate_name = ref('fg')
 //柱状图
 const series = ref([])
 const barXdata = ref([])
-const getXdata = async () => {
-  let res = await api.get('/catergory_list') //这边写获取x轴坐标的数据
-  barXdata.value = res.data.data // x 轴的数据
-}
+// const getXdata = async () => {
+//   let res = await api.get('/catergory_list') //这边写获取x轴坐标的数据
+//   barXdata.value = res.data.data // x 轴的数据
+// }
 
-getXdata()
+// getXdata()
 
 const resultFmoadata = ref([]) //处理过后的数据
 
@@ -29,39 +39,48 @@ const timeChange = (val) => {
   console.log('val :>> ', val)
   getBarchartData(val.start_date, val.end_date)
 }
-const getBarchartData = async (start_date, end_date) => {
-  let data1 = []
-  let data2 = []
-  resultFmoadata.value.map((item) => {
-    if (start_date) {
-      if (item.name == start_date) {
-        data1 = item.data
-      }
-    }
-    if (end_date) {
-      if (item.name == end_date) {
-        data2 = item.data
-      }
-    }
-  })
-  if (!start_date) {
-    series.value[0] = {}
+const getBarchartData = async (start_date, end_date) => {//柱状图
+  let params = {
+    start_date,
+    end_date,
+    separate_name: separate_name.value
   }
-  if (!end_date) {
-    series.value[1] = {}
-  }
+  let res = await api.get('/asset_concentrate_separate', { params })
+
+if (!res.data.data) {
+series.value = {}
+  return
+}
+  console.log('res111111 :>> ', res);
+  //  `${dateString}T00:00:00.000000000`;
+  let start_date_data1 = res.data.data[`${start_date}T00:00:00.000000000`]
+  let end_date_data1 = res.data.data[`${end_date}T00:00:00.000000000`]
+   let valuesArray1 = []
+   let valuesArray2 = []
+if (start_date_data1) {
+  barXdata.value = Object.keys(start_date_data1) ;//轴的值
+   valuesArray1 = Object.values(start_date_data1);
+
+
+}
+if (end_date_data1) {
+  barXdata.value = Object.keys(end_date_data1) ;//轴的值
+
+   valuesArray2 = Object.values(end_date_data1);
+
+}
   series.value = [
     {
       name: start_date,
 
       type: 'bar',
 
-      data: data1 // 蓝色柱状图的数据
+      data: valuesArray1 // 蓝色柱状图的数据
     },
     {
       name: end_date,
       type: 'bar',
-      data: data2 // 蓝色柱状图的数据
+      data: valuesArray2 // 蓝色柱状图的数据
     }
   ]
 
@@ -80,35 +99,55 @@ const lineSeries = ref([
     ] //
   }
 ])
-const linetimeChange = (val) => {
+const linetimeChange =async (val) => {
   console.log('父组件val :>> ', val)
   let selectedOptions = val.selectedOptions
+
   let arr = []
-  selectedOptions.map((item, index) => {
-    let randomInt = Math.floor(Math.random() * 10) + index
-    let obj = {
-      name: '',
-      type: 'line',
-      data: [
-        ['2020-01-01', randomInt - 1],
-        ['2020-01-02', randomInt - 1],
-        ['2021-01-03', randomInt + 5]
-      ] //
-    }
-    obj.name = item
-    arr.push(obj)
-  })
+  let target = ''
+arr = await getLineData(val,target)
+console.log('arr111 :>> ', arr);
+  // selectedOptions.map((item, index) => {
+  //   let randomInt = Math.floor(Math.random() * 10) + index
+  //   let obj = {
+  //     name: '',
+  //     type: 'line',
+  //     data: [
+  //       ['2020-01-01', randomInt - 1],
+  //       ['2020-01-02', randomInt - 1],
+  //       ['2021-01-03', randomInt + 5]
+  //     ] //
+  //   }
+  //   obj.name = item
+  //   arr.push(obj)
+  // })
   lineSeries.value = arr
 }
 
-// [
-//  {
-//   name: '',
-//     type: 'line',
-//     data: [['2020-01-01',randomInt-1],['2020-01-02',randomInt-1],['2021-01-03',randomInt+5], ] //
-// }
-// ]
+const  getLineData = async(val,target)=>{
+let catergory = '金融债'
+let params = {
+  separate_name:'zxzq安心1',
+  catergory:catergory
+  // separate_name:separate_name.value,
+}
+if (target) {
+params.target = target
+}
 
+let res = await api.get('/asset_concentrate_timeseries_separate',{params})
+let data = res.data.data
+
+const transformedObj = {
+  name: catergory,
+  type: 'line',
+  data:Object.entries(data[catergory]).map(([date, value]) => [date, value])
+};
+let arr = []
+arr.push(transformedObj)
+return arr
+
+}
 //折线图2
 const lineSeriestow = ref([
   {
@@ -121,32 +160,22 @@ const lineSeriestow = ref([
     ] //
   }
 ])
-const linetimeChangetow = (val) => {
-  console.log('父组件val :>> ', val)
+
+const linetimeChangetow =async (val) => {//这是有指标的
+  console.log('父组件val111 :>> ', val)
   let selectedOptions = val.selectedOptions
+  let target = val.target
   let arr = []
-  selectedOptions.map((item, index) => {
-    let randomInt = Math.floor(Math.random() * 10) + index
-    let obj = {
-      name: '',
-      type: 'line',
-      data: [
-        ['2020-01-01', randomInt - 1],
-        ['2020-01-02', randomInt - 1],
-        ['2021-01-03', randomInt + 5]
-      ] //
-    }
-    obj.name = item
-    arr.push(obj)
-  })
+  arr =    await  getLineData(val,target)
+
   lineSeriestow.value = arr
 }
-
 const getCatergoryList = async () => {
   let res = await api.get('/catergory_list')
   console.log('类别res :>> ', res)
 }
 getCatergoryList()
+
 
 const getAssetConcentrate = async () => {//这是获取总数据的地方
   let res = await api.get('/asset_concentrate')
@@ -156,7 +185,7 @@ const getAssetConcentrate = async () => {//这是获取总数据的地方
   resultFmoadata.value = result
   console.log('总res :>> ', res)
 }
-getAssetConcentrate()
+// getAssetConcentrate()
 
 //参数处理方法
 function transformData(arrlist) {
@@ -194,62 +223,6 @@ function transformData(arrlist) {
   return result
 }
 
-// let arrlist = {
-//   time: {
-//     0: 'Fri, 08 Sep 2023 00:00:00 GMT',
-//     1: 'Fri, 08 Sep 2023 00:00:00 GMT',
-//     2: 'Mon, 11 Sep 2023 00:00:00 GMT',
-//     3: 'Mon, 11 Sep 2023 00:00:00 GMT',
-//     4: 'Mon, 11 Sep 2023 00:00:00 GMT',
-//     5: 'Fri, 08 Sep 2023 00:00:00 GMT',
-//     6: 'Fri, 08 Sep 2023 00:00:00 GMT',
-//     7: 'Mon, 11 Sep 2023 00:00:00 GMT',
-//     8: 'Mon, 11 Sep 2023 00:00:00 GMT',
-//     9: 'Mon, 11 Sep 2023 00:00:00 GMT'
-//   },
-//   shizhi: {
-//     0: 18316497.49,
-//     1: 1981794376.46,
-//     2: 9948.63,
-//     3: 6339483.62,
-//     4: 18316497.49,
-//     5: 1981794376.46,
-//     6: 9948.63,
-//     7: 6339483.62,
-//     8: 18316497.49,
-//     9: 1981794376.46
-//   },
-
-//   leibie: {
-//     0: '城投债券',
-//     1: '同业存单',
-//     2: '金融债',
-//     3: '利率债',
-//     4: '非标',
-//     5: '城投债券',
-//     6: '同业存单',
-//     7: '金融债',
-//     8: '利率债',
-//     9: '非标'
-//   }
-// }
-
-// let obj = {
-//   城投债券: [['2020-08-01', 18316497.49]],
-//   同业存单: [['2020-08-01', 18316497.49]]
-//   //
-// }
-
-// let arr1 = [
-//   {
-//     name: '2023-09-08',
-//     data: [18316497.49, 1981794376.46] //
-//   },
-//   {
-//     name: '2023-09-08',
-//     data: [9948.63, 6339483.62] //
-//   }
-// ]
 </script>
 
 <style scoped></style>

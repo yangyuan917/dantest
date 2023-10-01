@@ -11,7 +11,7 @@ export const constantRoutes = [
   },
 
   {
-      path: '/allocation',
+      path: '',
     component: () => import('@/views/allocation/index.vue'),
     meta: {
       title: '资产配置'

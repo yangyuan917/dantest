@@ -22,7 +22,7 @@ import { reactive, ref } from 'vue'
 import Barchart from './components/Barchart'
 import Linechart from './components/Linechart'
 import api from '@/utils/api'
-const separate_name = ref('fg')
+const separate_name = ref('中信证券增盈1号集合资产管理计划')
 //柱状图
 const series = ref([])
 const barXdata = ref([])
@@ -101,7 +101,7 @@ const lineSeries = ref([
 ])
 const linetimeChange =async (val) => {
   console.log('父组件val :>> ', val)
-  let selectedOptions = val.selectedOptions
+  let selectedOptions = val.selectedOptions[0]
 
   let arr = []
   let target = ''
@@ -125,9 +125,9 @@ console.log('arr111 :>> ', arr);
 }
 
 const  getLineData = async(val,target)=>{
-let catergory = '金融债'
+let catergory = val.selectedOptions[0]
 let params = {
-  separate_name:'zxzq安心1',
+  separate_name: separate_name.value,
   catergory:catergory
   // separate_name:separate_name.value,
 }

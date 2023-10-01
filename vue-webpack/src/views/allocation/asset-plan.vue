@@ -22,7 +22,7 @@ import { reactive, ref } from 'vue'
 import Barchart from './components/Barchart'
 import Linechart from './components/Linechart'
 import api from '@/utils/api'
-const separate_name = ref('fg')
+const separate_name = ref('中信证券增盈1号集合资产管理计划')
 //柱状图
 const series = ref([])
 const barXdata = ref([])
@@ -102,6 +102,7 @@ const lineSeries = ref([
 const linetimeChange =async (val) => {
   console.log('父组件val :>> ', val)
   let selectedOptions = val.selectedOptions
+  console.log('selectedOptions :>> ', selectedOptions)
 
   let arr = []
   let target = ''
@@ -125,10 +126,10 @@ console.log('arr111 :>> ', arr);
 }
 
 const  getLineData = async(val,target)=>{
-let catergory = '金融债'
+let catergory = val.selectedOptions;
 let params = {
-  separate_name:'zxzq安心1',
-  catergory:catergory
+  separate_name: separate_name.value,
+  catergory:catergory.join("','")
   // separate_name:separate_name.value,
 }
 if (target) {
@@ -138,13 +139,23 @@ params.target = target
 let res = await api.get('/asset_concentrate_timeseries_separate',{params})
 let data = res.data.data
 
-const transformedObj = {
-  name: catergory,
-  type: 'line',
-  data:Object.entries(data[catergory]).map(([date, value]) => [date, value])
-};
-let arr = []
-arr.push(transformedObj)
+console.log('catergory :>> ', catergory);
+let arr = catergory.map(category => {
+    const transformedObj = {
+      name: category,
+      type: 'line',
+      data: Object.entries(data[category]).map(([date, value]) => [date, value])
+    };
+    return transformedObj;
+  });
+
+// const transformedObj = {
+//   name: catergory,
+//   type: 'line',
+//   data:Object.entries(data[catergory]).map(([date, value]) => [date, value])
+// };
+// let arr = []
+// arr.push(transformedObj)
 return arr
 
 }

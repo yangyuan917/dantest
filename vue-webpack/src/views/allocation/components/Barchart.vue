@@ -66,7 +66,7 @@ const props = defineProps({
 })
 
 const start_date = ref('')
-const end_date = ref('2023-09-23')
+const end_date = ref('2023-09-22')
 
 const xData =ref([])
 const  getXdata = async()=>{

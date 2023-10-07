@@ -5,23 +5,24 @@
         <div>
           {{ title }}
         </div>
-        <div class="time">
-          <el-date-picker
-            v-model="start_date"
-            type="date"
-            @change="changeDateTime"
-            value-format="YYYY-MM-DD"
-            style="max-width: 240px"
-            placeholder="请选择开始日期"
-          />
-          <el-date-picker
-            v-model="end_date"
-            type="date"
-            @change="changeDateTime"
-            value-format="YYYY-MM-DD"
-            style="max-width: 240px"
-            placeholder="请选择结束日期"
-          />
+        <!-- 改一下class -->
+        <div class="time">  
+          <el-select v-model="start_date" @change="targetChange" v-if="showTarget" placeholder="请选择行业">
+              <el-option
+                v-for="item in targetList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          <el-select v-model="end_date" @change="targetChange" v-if="showTarget" placeholder="请选择行业">
+            <el-option
+              v-for="item in targetList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </div>
       </div>
       <div class="line"></div>
@@ -65,12 +66,25 @@ const props = defineProps({
   // },
 })
 
-const start_date = ref('')
-const end_date = ref('2023-09-28')
+const target = ref('')
+  let targetList = ref([
+    {
+      label: '全部',
+      value: '全部'
+    },
+    {
+      label: '银行',
+      value: '银行'
+    },
+  ])
+
+
+const start_date = ref('全部')
+const end_date = ref('银行')
 
 const xData =ref([])
 const  getXdata = async()=>{
-let res = await api.get('/catergory_list')//这边写获取x轴坐标的数据
+let res = await api.get('/industry_list')//这边写获取x轴坐标的数据
 // let res = await api.get('/catergory_list')
   xData.value =res.data.data // x 轴的数据
   console.log('xData.value :>> ', xData.value);

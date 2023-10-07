@@ -97,7 +97,7 @@ label:item,value:item
 }
 checkboxOptions.value.push(obj)
 })
-selectedOptions.value = res.data.data.slice(0,5)
+selectedOptions.value = res.data.data.slice(0,4)
 }
 getCheckboxOptions()
 
@@ -108,29 +108,35 @@ const checkChange = (val) => {
 }
 
 const start_date = ref('')
-const end_date = ref('2023-09-22')
-let timeValue = ref(['2023-09-01', '2023-09-22'])
+const end_date = ref('2023-09-28')
+let timeValue = ref(['2023-09-01', '2023-09-28'])
 
 
 // 指标
 const target = ref('')
-const targetList = ref([
+let targetList = ref([
   {
-    value: '指标1',
-    label: '指标1'
+    label: '到期收益率',
+    value: 'yield'
   },
   {
-    value: '指标2',
-    label: '指标2'
+    label: '债券修正久期',
+    value: 'duration'
+  },
+  {
+    label: '基金久期',
+    value: 'fund_duration'
   }
 ])
 
 const getTargetList = async()=>{
 let params = {}
-let res  =   await api.get('/operation',{params})
+// let res  =   await api.get('/operation',{params})
 // targetList.value = res.xxx 这里获取数据
+
 }
 
+getTargetList()
 
 
 const targetChange  = (val)=>{//指标改变

@@ -9,23 +9,32 @@
   <Linechart :mySeries="lineSeriestow" @allParamChange="linetimeChangetow" :showTarget="true"></Linechart>
 <!-- 第二排 -->
 
-  <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
-  <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
-  <Linechart :mySeries="lineSeries" @allParamChange="linetimeChange"></Linechart>
+  <Barchart :mySeries="series2_1" :xData="barXdata2_1" @timeChange="timeChange"></Barchart>
+  <Barchart :mySeries="series2_2" :xData="barXdata2_2" @timeChange="timeChange"></Barchart>
+  <Linechart2 :mySeries="series2_3" @allParamChange="linetimeChange2"></Linechart2>
 <!-- 第三排 -->
 
-   <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
-  <Linechart :mySeries="lineSeries" @allParamChange="linetimeChange"></Linechart>
+   <Barchart :mySeries="series3_1" :xData="barXdata3_1" @timeChange="timeChange"></Barchart>
+  <Linechart2 :mySeries="series3_2" @allParamChange="linetimeChange3"></Linechart2>
 </template>
 <script setup>
 import { reactive, ref } from 'vue'
 import Barchart from './components/Barchart'
 import Linechart from './components/Linechart'
+import Linechart2 from './components/Linechart2'
 import api from '@/utils/api'
-const separate_name = ref('中信证券增盈1号集合资产管理计划')
+// const separate_name = ref('中信证券增盈1号集合资产管理计划')
+const separate_name = ref('gz')
 //柱状图
 const series = ref([])
 const barXdata = ref([])
+let barXdata2_1 = ref([])
+let series2_1 = ref([])
+let barXdata2_2 = ref([])
+let series2_2 = ref([])
+let series3_1 = ref([])
+let barXdata3_1 = ref([])
+
 // const getXdata = async () => {
 //   let res = await api.get('/catergory_list') //这边写获取x轴坐标的数据
 //   barXdata.value = res.data.data // x 轴的数据
@@ -46,20 +55,86 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
     separate_name: separate_name.value
   }
   let res = await api.get('/asset_concentrate_separate', { params })
+  let res2_1 = await api.get('/separate_prtindustry', { params })
+  let res2_2 = await api.get('/separate_prtindex', { params })
+  let res3_1 = await api.get('/separate_fundprtindustry', { params })
 
 if (!res.data.data) {
 series.value = {}
   return
 }
-  console.log('res111111 :>> ', res);
+if (!res2_1.data.data) {
+series2_1.value = {}
+  return
+}
+if (!res2_2.data.data) {
+series2_2.value = {}
+  return
+}
+if (!res3_1.data.data) {
+series3_1.value = {}
+  return
+}
+
+const processBarData = (res) => {
+  let start_date_data = res.data.data[`${start_date}`];
+  let end_date_data = res.data.data[`${end_date}`];
+  let valuesArray1 = [];
+  let valuesArray2 = [];
+  let series = ref([])
+  let barXdata = ref([])
+  
+  console.log('start_date_data: ', start_date_data);
+
+  if (start_date_data) {
+    barXdata.value = Object.keys(start_date_data); // X 轴的值
+    valuesArray1 = Object.values(start_date_data);
+  }
+  
+  if (end_date_data) {
+    valuesArray2 = Object.values(end_date_data);
+  }
+  
+  series.value = [
+    {
+      name: start_date,
+      type: 'bar',
+      data: valuesArray1 // 蓝色柱状图的数据
+    },
+    {
+      name: end_date,
+      type: 'bar',
+      data: valuesArray2 // 蓝色柱状图的数据
+    }
+  ];
+console.log('start_date_data: ', start_date_data);
+console.log('end_date_data: ', end_date_data);
+console.log('valuesArray1: ', valuesArray1);
+console.log('valuesArray2: ', valuesArray2);
+console.log('series: ', series.value);
+console.log('barXdata: ', barXdata.value);
+
+  return [series, barXdata]
+};
+
+// todo: 这个processBarData函数为什么不行?
+// [series2_1, barXdata2_1] = processBarData(res2_1);
+// console.log('res2_1 :>> ', res2_1);
+// console.log('series2_1 :>> ', series2_1);
+// console.log('barXdata2_1 :>> ', barXdata2_1.value);
+
+  console.log('res :>> ', res);
   //  `${dateString}T00:00:00.000000000`;
   let start_date_data1 = res.data.data[`${start_date}T00:00:00.000000000`]
   let end_date_data1 = res.data.data[`${end_date}T00:00:00.000000000`]
    let valuesArray1 = []
    let valuesArray2 = []
+   console.log('start_date_data1 :>> ', start_date_data1); 
 if (start_date_data1) {
   barXdata.value = Object.keys(start_date_data1) ;//轴的值
    valuesArray1 = Object.values(start_date_data1);
+
+
 
 
 }
@@ -83,9 +158,107 @@ if (end_date_data1) {
       data: valuesArray2 // 蓝色柱状图的数据
     }
   ]
+  console.log('series :>> ', series);
+  console.log('barXdata :>> ', barXdata.value);
+
+  // 第二排第一个图
+  let start_date_data2_1 = res2_1.data.data[`${start_date}`]
+  let end_date_data2_1 = res2_1.data.data[`${end_date}`]
+  console.log('start_date_data2_1 :>> ', start_date_data2_1); 
+   let valuesArray2_1_1 = []
+   let valuesArray2_1_2 = []
+if (start_date_data2_1) {
+  barXdata2_1.value = Object.keys(start_date_data2_1) ;//轴的值
+  valuesArray2_1_1 = Object.values(start_date_data2_1);
+  console.log('barXdata2_1 :>> ', barXdata2_1.value);
+}
+if (end_date_data2_1) {
+  barXdata2_1.value = Object.keys(end_date_data2_1) ;//轴的值
+
+  valuesArray2_1_2 = Object.values(end_date_data2_1);
+
+}
+  series2_1.value = [
+    {
+      name: start_date,
+
+      type: 'bar',
+
+      data: valuesArray2_1_1 // 蓝色柱状图的数据
+    },
+    {
+      name: end_date,
+      type: 'bar',
+      data: valuesArray2_1_2 // 蓝色柱状图的数据
+    }
+  ]
+
+
+  
+  // 第二排第二个图
+  let start_date_data2_2 = res2_2.data.data[`${start_date}`]
+  let end_date_data2_2 = res2_2.data.data[`${end_date}`]
+  let valuesArray2_2_1 = []
+  let valuesArray2_2_2 = []
+if (start_date_data2_2) {
+  barXdata2_2.value = Object.keys(start_date_data2_2) ;//轴的值
+  valuesArray2_2_1 = Object.values(start_date_data2_2);
+}
+if (end_date_data2_2) {
+  barXdata2_2.value = Object.keys(end_date_data2_2) ;//轴的值
+
+  valuesArray2_2_2 = Object.values(end_date_data2_2);
+
+}
+  series2_2.value = [
+    {
+      name: start_date,
+
+      type: 'bar',
+
+      data: valuesArray2_2_1 // 蓝色柱状图的数据
+    },
+    {
+      name: end_date,
+      type: 'bar',
+      data: valuesArray2_2_2 // 蓝色柱状图的数据
+    }
+  ]
+
+ // 第三排第一个图
+ let start_date_data3_1 = res3_1.data.data[`${start_date}`]
+  let end_date_data3_1 = res3_1.data.data[`${end_date}`]
+  let valuesArray3_1_1 = []
+  let valuesArray3_1_2 = []
+if (start_date_data3_1) {
+  barXdata3_1.value = Object.keys(start_date_data3_1) ;//轴的值
+  valuesArray3_1_1 = Object.values(start_date_data3_1);
+}
+if (end_date_data3_1) {
+  barXdata3_1.value = Object.keys(end_date_data3_1) ;//轴的值
+
+  valuesArray3_1_2 = Object.values(end_date_data3_1);
+
+}
+  series3_1.value = [
+    {
+      name: start_date,
+
+      type: 'bar',
+
+      data: valuesArray3_1_1 // 蓝色柱状图的数据
+    },
+    {
+      name: end_date,
+      type: 'bar',
+      data: valuesArray3_1_2 // 蓝色柱状图的数据
+    }
+  ]
 
   // let res = await api.get('/operation')
-}
+  }
+
+
 
 //折线图1
 const lineSeries = ref([
@@ -172,15 +345,154 @@ const lineSeriestow = ref([
   }
 ])
 
+
 const linetimeChangetow =async (val) => {//这是有指标的
   console.log('父组件val111 :>> ', val)
-  let selectedOptions = val.selectedOptions
-  let target = val.target
+  // let selectedOptions = val.selectedOptions
   let arr = []
-  arr =    await  getLineData(val,target)
-
+  let target = ''
+  arr =    await  getLineData2(val,target)
   lineSeriestow.value = arr
 }
+
+const  getLineData2 = async(val,target)=>{
+let catergory = val.selectedOptions
+let indicator = val.target
+console.log('indicator :>> ', indicator)
+let params = {
+  separate_name: separate_name.value,
+  catergory:catergory.join("','"),
+  indicator: indicator
+  // separate_name:separate_name.value,
+}
+if (target) {
+params.target = target
+}
+let res = await api.get('/asset_indicator_separate',{params})
+console.log('/asset_indicator_separate    res :>> ', res)
+let data = res.data.data
+let arr = catergory.map(category => {
+      const transformedObj = {
+        name: category,
+        type: 'line',
+        data: Object.entries(data[category]).map(([date, value]) => [date, value])
+      };
+      return transformedObj;
+    });
+
+return arr
+}
+
+
+// const linetimeChangetow =async (val) => {//这是有指标的
+//   console.log('父组件val111 :>> ', val)
+//   let selectedOptions = val.selectedOptions
+//   let target = val.target
+//   let arr = []
+//   arr =    await  getLineData(val,target)
+
+//   lineSeriestow.value = arr
+// }
+
+
+const series2_3 = ref([
+  {
+    name: '线段1',
+    type: 'line',
+    data: [
+      ['2023-09-01', 20],
+      ['2023-09-02', 40],
+      ['2023-09-03', 50]
+    ] //
+  }
+])
+const linetimeChange2 =async (val) => {
+  console.log('父组件val :>> ', val)
+  let selectedOptions = val.selectedOptions
+  console.log('selectedOptions :>> ', selectedOptions)
+
+  let arr = []
+  let target = ''
+arr = await getLineData3(val,target)
+console.log('arr111 :>> ', arr);
+series2_3.value = arr
+}
+
+const  getLineData3 = async(val,target)=>{
+let sector = val.selectedOptions;
+let params = {
+  separate_name: separate_name.value,
+  sector: sector.join("','")
+  // separate_name:separate_name.value,
+}
+if (target) {
+params.target = target
+}
+
+let res = await api.get('/separate_prtindustry_timeseries',{params})
+let data = res.data.data
+
+let arr = sector.map(sector => {
+    const transformedObj = {
+      name: sector,
+      type: 'line',
+      data: Object.entries(data[sector]).map(([date, value]) => [date, value])
+    };
+    return transformedObj;
+  });
+  return arr
+}
+
+
+const series3_2 = ref([
+  {
+    name: '线段1',
+    type: 'line',
+    data: [
+      ['2023-09-01', 20],
+      ['2023-09-02', 40],
+      ['2023-09-03', 50]
+    ] //
+  }
+])
+const linetimeChange3 =async (val) => {
+  console.log('父组件val :>> ', val)
+  let selectedOptions = val.selectedOptions
+  console.log('selectedOptions :>> ', selectedOptions)
+
+  let arr = []
+  let target = ''
+arr = await getLineData4(val,target)
+console.log('arr111 :>> ', arr);
+series3_2.value = arr
+}
+
+const  getLineData4 = async(val,target)=>{
+let sector = val.selectedOptions;
+let params = {
+  separate_name: separate_name.value,
+  sector: sector.join("','")
+  // separate_name:separate_name.value,
+}
+if (target) {
+params.target = target
+}
+
+let res = await api.get('/separate_fundprtindustry_timeseries',{params})
+let data = res.data.data
+
+let arr = sector.map(sector => {
+    const transformedObj = {
+      name: sector,
+      type: 'line',
+      data: Object.entries(data[sector]).map(([date, value]) => [date, value])
+    };
+    return transformedObj;
+  });
+  return arr
+}
+
+
 const getCatergoryList = async () => {
   let res = await api.get('/catergory_list')
   console.log('类别res :>> ', res)
@@ -189,7 +501,7 @@ getCatergoryList()
 
 
 const getAssetConcentrate = async () => {//这是获取总数据的地方
-  let res = await api.get('/asset_concentrate')
+  let res = await api.get('/asset_indicator_separate')
   let data = res.data.data
 
   let result = transformData(data)

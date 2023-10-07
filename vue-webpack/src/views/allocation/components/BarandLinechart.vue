@@ -40,7 +40,7 @@
             v-for="option in checkboxOptions"
             :key="option.value"
             :label="option.value"
-            :disabled="selectedOptions.length === 5 && !selectedOptions.includes(option.value)"
+            :disabled="selectedOptions.length === 1 && !selectedOptions.includes(option.value)"
           >
             {{ option.label }}
           </el-checkbox>
@@ -84,14 +84,14 @@ const props = defineProps({
   //   required: true,
   // },
 })
-const selectedOptions = ref(['金融债', '债券型基金', '非标', '货币市场工具', '货币市场型基金']) // 保存被选中的选项的数组
+const selectedOptions = ref(['同业存单']) // 保存被选中的选项的数组
 const checkboxOptions = ref([
   { label: '金融债', value: '金融债' },
   { label: '债券型基金', value: '债券型基金' },
   { label: '非标', value: '非标' },
   { label: '货币市场工具', value: '货币市场工具' },
   { label: '货币市场型基金', value: '货币市场型基金' },
-  { label: '选项6', value: '选项6' },
+  { label: '同业存单', value: '同业存单' },
   { label: '选项7', value: '选项7' },
   { label: '选项8', value: 'option8' },
   { label: '选项9', value: 'option9' },
@@ -105,19 +105,23 @@ const checkChange = (val) => {
 }
 
 const start_date = ref('')
-const end_date = ref('2023-09-22')
-let timeValue = ref(['2023-09-01', '2023-09-22'])
+const end_date = ref('2023-09-28')
+let timeValue = ref(['2023-09-01', '2023-09-28'])
 
 // 指标
 const target = ref('')
 const targetList = ref([
-  {
-    value: '指标1',
-    label: '指标1'
+{
+    label: '到期收益率',
+    value: 'yield'
   },
   {
-    value: '指标2',
-    label: '指标2'
+    label: '债券修正久期',
+    value: 'duaration'
+  },
+  {
+    label: '基金久期',
+    value: 'fund_duaration'
   }
 ])
 const targetChange = (val) => {
@@ -169,11 +173,11 @@ const myOption = ref({
   yAxis: [
     {
       type: 'value',
-      name: ''
+      name: '1'
     },
     {
       type: 'value',
-      name: ''
+      name: '2'
     }
   ],
   series: props.mySeries

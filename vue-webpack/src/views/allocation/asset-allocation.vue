@@ -1,6 +1,6 @@
 <template>
   <!-- 第一排 -->
-    <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
+    <Barchart :mySeries="series"  @timeChange="timeChange"></Barchart>
     <Linechart :mySeries="lineSeries" @allParamChange="linetimeChange"></Linechart>
     <Linechart :mySeries="lineSeriestow" @allParamChange="linetimeChangetow" :showTarget="true"></Linechart>
   <!-- 第二排 -->

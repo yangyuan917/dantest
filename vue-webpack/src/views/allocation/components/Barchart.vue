@@ -66,12 +66,33 @@ const props = defineProps({
 })
 
 const start_date = ref('')
-const end_date = ref('2023-09-28')
+const end_date = ref('2023-09-21')
+const  getDateTime = ()=>{
 
+// 获取当前日期
+let currentDate = new Date();
+
+// 获取前一天的日期
+let previousDate = new Date(currentDate);
+previousDate.setDate(currentDate.getDate() - 1);
+
+// 格式化日期为'YYYY-MM-DD'格式
+let formattedDate = previousDate.toISOString().split('T')[0];
+  end_date.value = formattedDate
+}
+// getDateTime()
+
+let obj = {
+    start_date: start_date.value,
+    end_date: end_date.value
+  }
+  emit('timeChange', obj)
 const xData =ref([])
 const  getXdata = async()=>{
 let res = await api.get('/catergory_list')//这边写获取x轴坐标的数据
 // let res = await api.get('/catergory_list')
+  let myChart = echarts.init(document.getElementById(uid.value))
+
   xData.value =res.data.data // x 轴的数据
   console.log('xData.value :>> ', xData.value);
   let options = myOption.value
@@ -81,7 +102,7 @@ let res = await api.get('/catergory_list')//这边写获取x轴坐标的数据
   })
 }
 
-getXdata()
+// getXdata()
 const myOption = ref({
   // color: ['#c0504d', '#4f81bd'], // 设置柱状图的颜色，分别对应红色和蓝色
   legend: {

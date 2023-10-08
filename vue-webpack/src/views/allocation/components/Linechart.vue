@@ -85,9 +85,7 @@ const checkboxOptions = ref([
 ])
 
 const getCheckboxOptions = async()=>{
- let params = {
- time:'111111111'
- }
+
 let res = await api.get('/catergory_list')
 checkboxOptions.value = []
 // checkboxOptions.value = res.data.data //这里获取数据
@@ -98,11 +96,16 @@ label:item,value:item
 checkboxOptions.value.push(obj)
 })
 selectedOptions.value = res.data.data.slice(0,4)
+allobj.selectedOptions = selectedOptions.value
+console.log('allobj111 :>> ', allobj);
+  emit('allParamChange', allobj)
+
 }
 getCheckboxOptions()
 
 const checkChange = (val) => {
   allobj.selectedOptions = val
+  console.log('allobj :>> ', allobj);
   emit('allParamChange', allobj)
   console.log('selectedOptions :>> ', selectedOptions.value)
 }
@@ -285,9 +288,13 @@ watch(
   display: flex;
 }
 .left-item {
-  width: 100px;
+  width: 120px;
   /* background-color: red; */
-  height: 100%;
+  /* height: 100%; */
+
+  max-height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
   margin-left: 20px;
 }
 .echarts {

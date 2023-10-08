@@ -49,7 +49,7 @@
   import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue'
   import * as echarts from 'echarts'
   import api from '@/utils/api';
-  
+
   const emit = defineEmits(['timeChange', 'allParamChange'])
   const props = defineProps({
     myStyle: {
@@ -59,7 +59,7 @@
         // height: '400px',
       })
     },
-  
+
     title: {
       type: String,
       default: '标题'
@@ -81,9 +81,9 @@
   })
   const selectedOptions = ref([]) // 保存被选中的选项的数组
   const checkboxOptions = ref([
-  
+
   ])
-  
+
   const getCheckboxOptions = async()=>{
    let params = {
    time:'111111111'
@@ -98,20 +98,23 @@
   checkboxOptions.value.push(obj)
   })
   selectedOptions.value = res.data.data.slice(0,4)
+  allobj.selectedOptions = selectedOptions.value
+  emit('allParamChange', allobj)
+
   }
   getCheckboxOptions()
-  
+
   const checkChange = (val) => {
     allobj.selectedOptions = val
     emit('allParamChange', allobj)
     console.log('selectedOptions :>> ', selectedOptions.value)
   }
-  
+
   const start_date = ref('')
   const end_date = ref('2023-09-28')
   let timeValue = ref(['2023-09-01', '2023-09-28'])
-  
-  
+
+
   // 指标
   const target = ref('')
   let targetList = ref([
@@ -128,29 +131,29 @@
       value: 'fund_duration'
     }
   ])
-  
+
   const getTargetList = async()=>{
   let params = {}
   // let res  =   await api.get('/operation',{params})
   // targetList.value = res.xxx 这里获取数据
-  
+
   }
-  
+
   getTargetList()
-  
-  
+
+
   const targetChange  = (val)=>{//指标改变
   allobj.target = val
   emit('allParamChange', allobj)
   }
-  
+
   let allobj = {
     start_date: timeValue.value[0],
     end_date: timeValue.value[1],
     target:target.value,
     selectedOptions: selectedOptions.value
   }
-  
+
   emit('allParamChange', allobj)
   //配置
   const myOption = ref({
@@ -196,7 +199,7 @@
     let stime = value[0]
     let etime = value[1]
     let myOptions = myOption.value
-  
+
     myOptions.xAxis.min = new Date(stime.replace(/-/g, '/'))
     myOptions.xAxis.max = new Date(etime.replace(/-/g, '/'))
     let myChart = echarts.init(document.getElementById(uid.value))
@@ -204,14 +207,14 @@
       notMerge: true //不和之前的option合并
     })
   }
-  
+
   // 因为是封装的组件，会多次调用，id不能重复，要在初始化之前写，不然会报错dom为定义
-  
+
   let uid = ref('')
   onBeforeMount(() => {
     uid.value = `echarts-uid-${parseInt((Math.random() * 1000000).toString())}`
   })
-  
+
   onMounted(() => {
     let myChart = echarts.init(document.getElementById(uid.value))
     // 在template中可以直接取props中的值，但是在script中不行，因为script是在挂载之前执行的
@@ -220,7 +223,7 @@
     myChart.setOption(myOption.value, {
       notMerge: true //不和之前的option合并
     })
-  
+
     // 监听页面的大小
     window.addEventListener('resize', () => {
       setTimeout(() => {
@@ -232,7 +235,7 @@
       }, 300)
     })
   })
-  
+
   //监听props中myOption的变化，变化的话重新渲染echarts
   watch(
     () => props.mySeries,
@@ -248,14 +251,14 @@
     }
   )
   </script>
-  
+
   <style scoped>
   .echarts-box {
     background-color: #ffffff;
     border-radius: 8px;
     width: 32%;
   }
-  
+
   .title-box {
     padding: 20px;
     padding-bottom: 4px;
@@ -264,16 +267,16 @@
     font-family: PingFang SC;
     font-weight: bold;
     /* color: #262626; */
-  
+
     color: red;
   }
-  
+
   .time-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  
+
   /* 一条灰色的线，高1px */
   .line {
     height: 1px;
@@ -287,8 +290,11 @@
   .left-item {
     width: 100px;
     /* background-color: red; */
-    height: 100%;
     margin-left: 20px;
+     max-height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-left: 20px;
   }
   .echarts {
     padding: 20px;
@@ -301,10 +307,10 @@
     aspect-ratio: 16/9;
     /* 设置宽高比为16:9 */
     /* min-width: calc(33.33% - 20px); */
-  
+
     /* width: 580px; */
   }
-  
+
   .item {
     flex: 1;
     min-width: calc(33.33% - 20px);
@@ -314,10 +320,9 @@
     box-sizing: border-box;
     text-align: center;
   }
-  
+
   .time {
     display: flex;
     justify-content: center;
   }
   </style>
-  

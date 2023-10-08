@@ -102,7 +102,7 @@ let res = await api.get('/catergory_list')//这边写获取x轴坐标的数据
   })
 }
 
-getXdata()
+// getXdata()
 const myOption = ref({
   // color: ['#c0504d', '#4f81bd'], // 设置柱状图的颜色，分别对应红色和蓝色
   legend: {
@@ -162,7 +162,7 @@ watch(
     // let myOptions = my
     myOption.value.legend.data = [start_date.value, end_date.value]
     myOption.value.series = newVal
-    //  myOption.value.xAxis.data = props.xData
+     myOption.value.xAxis.data = props.xData
     myChart.setOption(myOption.value, {
       notMerge: true //不和之前的option合并
     })

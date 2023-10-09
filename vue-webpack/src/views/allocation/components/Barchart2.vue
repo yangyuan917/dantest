@@ -6,22 +6,12 @@
           {{ title }}
         </div>
         <!-- 改一下class -->
-        <div class="time">  
+        <div class="time">
           <el-select v-model="start_date" @change="targetChange" v-if="showTarget" placeholder="请选择行业">
-              <el-option
-                v-for="item in targetList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
+            <el-option v-for="item in targetList" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
           <el-select v-model="end_date" @change="targetChange" v-if="showTarget" placeholder="请选择行业">
-            <el-option
-              v-for="item in targetList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+            <el-option v-for="item in targetList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </div>
       </div>
@@ -54,11 +44,17 @@ const props = defineProps({
     default: () => ({}),
     required: true
   },
-  xData:{
+  xData: {
     type: Array,
     default: () => ([]),
 
   },
+  echartsLegend: {
+    type: Array,
+    default: () => ([]),
+
+  },
+
   // myOption: {
   //   type: Object,
   //   default: () => ({}),
@@ -67,39 +63,45 @@ const props = defineProps({
 })
 
 const target = ref('')
-  let targetList = ref([
-    {
-      label: '全部',
-      value: '全部'
-    },
-    {
-      label: '银行',
-      value: '银行'
-    },
-  ])
+let targetList = ref([
+  {
+    label: '全部',
+    value: '全部'
+  },
+  {
+    label: '银行',
+    value: '银行'
+  },
+])
 
 
 const start_date = ref('全部')
 const end_date = ref('银行')
 
-const xData =ref([])
-const  getXdata = async()=>{
-let res = await api.get('/industry_list')//这边写获取x轴坐标的数据
-// let res = await api.get('/catergory_list')
-  xData.value =res.data.data // x 轴的数据
+const xData = ref([])
+const getXdata = async () => {
+  let res = await api.get('/industry_list')//这边写获取x轴坐标的数据
+  // let res = await api.get('/catergory_list')
+  xData.value = res.data.data // x 轴的数据
   console.log('xData.value :>> ', xData.value);
   let options = myOption.value
- options.xAxis.data =  xData.value
-   myChart.setOption(options, {
+  options.xAxis.data = xData.value
+  myChart.setOption(options, {
     notMerge: true //不和之前的option合并
   })
 }
 
-getXdata()
+// getXdata()
 const myOption = ref({
   // color: ['#c0504d', '#4f81bd'], // 设置柱状图的颜色，分别对应红色和蓝色
   legend: {
-    data: [start_date.value, end_date.value] // 设置图例的数据
+    data:   props.echartsLegend // 设置图例的数据
+  },
+    tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow',
+    },
   },
   xAxis: {
     type: 'category',
@@ -108,6 +110,7 @@ const myOption = ref({
       rotate: 45
     }
   },
+
   yAxis: {
     type: 'value'
   },
@@ -153,9 +156,8 @@ watch(
   (newVal, oldVal) => {
     let myChart = echarts.init(document.getElementById(uid.value))
     // let myOptions = my
-    myOption.value.legend.data = [start_date.value, end_date.value]
     myOption.value.series = newVal
-     myOption.value.xAxis.data = props.xData
+    // myOption.value.xAxis.data = props.xData
     myChart.setOption(myOption.value, {
       notMerge: true //不和之前的option合并
     })
@@ -166,9 +168,8 @@ watch(
   (newVal, oldVal) => {
     let myChart = echarts.init(document.getElementById(uid.value))
     // let myOptions = my
-    myOption.value.legend.data = [start_date.value, end_date.value]
     // myOption.value.series = newVal
-     myOption.value.xAxis.data = newVal
+    myOption.value.xAxis.data = newVal
     myChart.setOption(myOption.value, {
       notMerge: true //不和之前的option合并
     })

@@ -304,7 +304,7 @@
     width: 60%;
     flex: 1;
     height: auto;
-    aspect-ratio: 16/9;
+    aspect-ratio: 16/16;
     /* 设置宽高比为16:9 */
     /* min-width: calc(33.33% - 20px); */
 

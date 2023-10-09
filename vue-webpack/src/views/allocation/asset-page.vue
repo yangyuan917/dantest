@@ -1,6 +1,6 @@
 <template>
   <BarandLinechart :mySeries="lineSeries" @allParamChange="allChange" :showTarget="true"></BarandLinechart>
-  <Barchart2 :mySeries="series" @allParamChange="timeChange"></Barchart2>
+  <Barchart2 :mySeries="series" :echartsLegend="echartsLegend"  @allParamChange="timeChange"></Barchart2>
 </template>
 <script setup>
 import { reactive, ref } from 'vue'
@@ -45,7 +45,7 @@ const allChange = async (val)=>{//参数改变
       let target = ''
       arr = await  getLineData2(val,target)
       lineSeries.value = arr
-      console.log('lineSeries.value :>> ', lineSeries.value)
+      console.log('111111111lineSeries.value :>> ', lineSeries.value)
     }
 
     const  getLineData2 = async(val,target)=>{
@@ -73,6 +73,7 @@ const allChange = async (val)=>{//参数改变
   return {
     name: indicator,
     type: indicator == '市值(元)' ? 'bar' : 'line',
+    yAxisIndex: indicator == '市值(元)' ? 0 : 1,
     data: Object.entries(rawData[indicator]).map(([date, value]) => [date, value])
   };
 
@@ -91,72 +92,53 @@ return arr
 
     // return arr
 
-
+const echartsLegend = ref([
+ '图例一', '图例二','图例三', '图例四',
+])//这是图例，必须和series中的name一致
 const series = ref([
   {
-    name: '柱状图',
-    type: 'bar',
-   data: [
-      ['2023-09-01', 20],
-      ['2023-09-02', 30],
-      ['2023-09-03', -20]
-    ], //
-  },
-  {
-    name: '柱状图',
-    type: 'bar',
-    data: [
-      ['2023-09-01', 10],
-      ['2023-09-02', 40],
-      ['2023-09-03', 80]
-    ], //
-  }
+      name: '图例一',//这是名字
+      type: 'bar',
+
+       stack: 'stack1',
+        itemStyle: {
+        color: '#8f9cc6',//这里修改颜色
+      },
+      data: [-100, -52, -200, -334, -390, -330, -220]//这里修改数据，后台获取到的数据可以放这里
+    },
+        {
+      name: '图例二',
+      type: 'bar',
+
+       stack: 'stack1',
+        itemStyle: {
+        color: ' #5470c6',
+      },
+      data: [100, 52, 200, 334, 390, 330, 220]
+    },
+            {
+      name: '图例三',
+      type: 'bar',
+
+       stack: 'stack2',
+        itemStyle: {
+        color: ' #b7ccad',
+      },
+      data: [-100, -52, -200, -334, -390, -330, -220]
+    },
+            {
+      name: '图例四',
+      type: 'bar',
+
+       stack: 'stack2',
+        itemStyle: {
+        color: '#91CC75',
+      },
+      data: [100, 52, 200, 334, 390, 330, 220]
+    },
 ])
 
-// const barXdata = ref([])
-// const resultFmoadata = ref([]) //处理过后的数据
 
-// const timeChange = (val) => {
-//   console.log('val :>> ', val)
-//   getBarchartData(val.start_date, val.end_date)
-// }
-// const getBarchartData = async (start_date, end_date) => {//柱状图
-//   let params = {
-//     start_date,
-//     end_date,
-//     separate_name: separate_name.value
-//   }
-
-// let res = await api.get('/transaction_stock', { params })
-// let start_date_data1 = res.data.data[`${start_date}`]
-//   let end_date_data1 = res.data.data[`${end_date}`]
-//    let valuesArray1 = []
-//    let valuesArray2 = []
-//    console.log('start_date_data1 :>> ', start_date_data1); 
-// if (start_date_data1) {
-//   barXdata.value = Object.keys(start_date_data1) ;//轴的值
-//    valuesArray1 = Object.values(start_date_data1);
-// }
-// if (end_date_data1) {
-//   barXdata.value = Object.keys(end_date_data1) ;//轴的值
-
-//    valuesArray2 = Object.values(end_date_data1);
-
-// }
-//   series.value = [
-//     {
-//       name: start_date,
-
-//       type: 'bar',
-
-//       data: valuesArray1 // 蓝色柱状图的数据
-//     },
-//     {
-//       name: end_date,
-//       type: 'bar',
-//       data: valuesArray2 // 蓝色柱状图的数据
-//     }
-//   ]
 
 </script>
 

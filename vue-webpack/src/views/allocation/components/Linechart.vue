@@ -182,6 +182,12 @@ const myOption = ref({
       rotate: 45
     }
   },
+    tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow',
+    },
+  },
   // xAxis: {
   //   type: 'category',
   //   data: ['城投债券', '同业存单', '现金', '同业借款', '金融债'], // x 轴的数据
@@ -305,7 +311,7 @@ watch(
   width: 60%;
   flex: 1;
   height: auto;
-  aspect-ratio: 16/9;
+  aspect-ratio: 16/16;
   /* 设置宽高比为16:9 */
   /* min-width: calc(33.33% - 20px); */
 

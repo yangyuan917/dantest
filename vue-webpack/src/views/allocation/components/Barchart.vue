@@ -6,22 +6,10 @@
           {{ title }}
         </div>
         <div class="time">
-          <el-date-picker
-            v-model="start_date"
-            type="date"
-            @change="changeDateTime"
-            value-format="YYYY-MM-DD"
-            style="max-width: 240px"
-            placeholder="请选择开始日期"
-          />
-          <el-date-picker
-            v-model="end_date"
-            type="date"
-            @change="changeDateTime"
-            value-format="YYYY-MM-DD"
-            style="max-width: 240px"
-            placeholder="请选择结束日期"
-          />
+          <el-date-picker v-model="start_date" type="date" @change="changeDateTime" value-format="YYYY-MM-DD"
+            style="max-width: 240px" placeholder="请选择开始日期" />
+          <el-date-picker v-model="end_date" type="date" @change="changeDateTime" value-format="YYYY-MM-DD"
+            style="max-width: 240px" placeholder="请选择结束日期" />
         </div>
       </div>
       <div class="line"></div>
@@ -53,7 +41,7 @@ const props = defineProps({
     default: () => ({}),
     required: true
   },
-  xData:{
+  xData: {
     type: Array,
     default: () => ([]),
 
@@ -67,37 +55,37 @@ const props = defineProps({
 
 const start_date = ref('')
 const end_date = ref('2023-09-21')
-const  getDateTime = ()=>{
+const getDateTime = () => {
 
-// 获取当前日期
-let currentDate = new Date();
+  // 获取当前日期
+  let currentDate = new Date();
 
-// 获取前一天的日期
-let previousDate = new Date(currentDate);
-previousDate.setDate(currentDate.getDate() - 1);
+  // 获取前一天的日期
+  let previousDate = new Date(currentDate);
+  previousDate.setDate(currentDate.getDate() - 1);
 
-// 格式化日期为'YYYY-MM-DD'格式
-let formattedDate = previousDate.toISOString().split('T')[0];
+  // 格式化日期为'YYYY-MM-DD'格式
+  let formattedDate = previousDate.toISOString().split('T')[0];
   end_date.value = formattedDate
 }
 // getDateTime()
 
 let obj = {
-    start_date: start_date.value,
-    end_date: end_date.value
-  }
-  emit('timeChange', obj)
-const xData =ref([])
-const  getXdata = async()=>{
-let res = await api.get('/catergory_list')//这边写获取x轴坐标的数据
-// let res = await api.get('/catergory_list')
+  start_date: start_date.value,
+  end_date: end_date.value
+}
+emit('timeChange', obj)
+const xData = ref([])
+const getXdata = async () => {
+  let res = await api.get('/catergory_list')//这边写获取x轴坐标的数据
+  // let res = await api.get('/catergory_list')
   let myChart = echarts.init(document.getElementById(uid.value))
 
-  xData.value =res.data.data // x 轴的数据
+  xData.value = res.data.data // x 轴的数据
   console.log('xData.value :>> ', xData.value);
   let options = myOption.value
- options.xAxis.data =  xData.value
-   myChart.setOption(options, {
+  options.xAxis.data = xData.value
+  myChart.setOption(options, {
     notMerge: true //不和之前的option合并
   })
 }
@@ -108,6 +96,13 @@ const myOption = ref({
   legend: {
     data: [start_date.value, end_date.value] // 设置图例的数据
   },
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow',
+    },
+  },
+
   xAxis: {
     type: 'category',
     data: xData.value, // x 轴的数据
@@ -162,7 +157,7 @@ watch(
     // let myOptions = my
     myOption.value.legend.data = [start_date.value, end_date.value]
     myOption.value.series = newVal
-     myOption.value.xAxis.data = props.xData
+    myOption.value.xAxis.data = props.xData
     myChart.setOption(myOption.value, {
       notMerge: true //不和之前的option合并
     })
@@ -175,7 +170,7 @@ watch(
     // let myOptions = my
     myOption.value.legend.data = [start_date.value, end_date.value]
     // myOption.value.series = newVal
-     myOption.value.xAxis.data = newVal
+    myOption.value.xAxis.data = newVal
     myChart.setOption(myOption.value, {
       notMerge: true //不和之前的option合并
     })
@@ -227,7 +222,7 @@ watch(
   text-align: center;
   width: 100%;
   height: auto;
-  aspect-ratio: 16/9;
+  aspect-ratio: 16/13;
   /* 设置宽高比为16:9 */
   /* min-width: calc(33.33% - 20px); */
 

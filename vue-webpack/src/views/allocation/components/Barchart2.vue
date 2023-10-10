@@ -6,7 +6,7 @@
           {{ title }}
         </div>
         <!-- 改一下class -->
-        <div class="time">
+        <div class="sector">
           <el-select v-model="start_date" @change="targetChange" v-if="showTarget" placeholder="请选择行业">
             <el-option v-for="item in targetList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>

@@ -222,7 +222,7 @@ watch(
   text-align: center;
   width: 100%;
   height: auto;
-  aspect-ratio: 16/13;
+  aspect-ratio: 16/9;
   /* 设置宽高比为16:9 */
   /* min-width: calc(33.33% - 20px); */
 

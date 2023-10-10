@@ -1,6 +1,6 @@
 <template>
   <BarandLinechart :mySeries="lineSeries" @allParamChange="allChange" :showTarget="true"></BarandLinechart>
-  <Barchart2 :mySeries="series" :echartsLegend="echartsLegend"  @allParamChange="timeChange"></Barchart2>
+  <Barchart2 :mySeries="series" :echartsLegend="echartsLegend"  @allParamChange="timeChange" :showTarget="true"></Barchart2>
 </template>
 <script setup>
 import { reactive, ref } from 'vue'

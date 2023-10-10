@@ -276,9 +276,13 @@ watch(
   display: flex;
 }
 .left-item {
-  width: 100px;
+  width: 120px;
   /* background-color: red; */
-  height: 100%;
+  /* height: 100%; */
+
+  max-height: 360px;
+  overflow-y: scroll;
+  overflow-x: hidden;
   margin-left: 20px;
 }
 .echarts {
@@ -289,7 +293,7 @@ watch(
   width: 60%;
   flex: 1;
   height: auto;
-  aspect-ratio: 16/9;
+  aspect-ratio: 16/12;
   /* 设置宽高比为16:9 */
   /* min-width: calc(33.33% - 20px); */
 

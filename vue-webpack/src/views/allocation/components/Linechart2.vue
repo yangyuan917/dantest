@@ -291,7 +291,7 @@
     width: 100px;
     /* background-color: red; */
     margin-left: 20px;
-     max-height: 400px;
+     max-height: 360px;
   overflow-y: scroll;
   overflow-x: hidden;
   margin-left: 20px;
@@ -304,7 +304,7 @@
     width: 60%;
     flex: 1;
     height: auto;
-    aspect-ratio: 16/16;
+    aspect-ratio: 16/12;
     /* 设置宽高比为16:9 */
     /* min-width: calc(33.33% - 20px); */
 

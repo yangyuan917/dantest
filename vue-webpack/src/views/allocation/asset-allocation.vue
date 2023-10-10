@@ -104,9 +104,28 @@
   // console.log('barXdata2_1 :>> ', barXdata2_1.value);
 
     console.log('res :>> ', res);
-    //  `${dateString}T00:00:00.000000000`;
-    let start_date_data1 = res.data.data[`${start_date}T00:00:00.000000000`]
-    let end_date_data1 = res.data.data[`${end_date}T00:00:00.000000000`]
+    const data = res.data.data
+    const data2_1 = res2_1.data.data
+    const data2_2 = res2_2.data.data   
+    const orderedData = {};
+    const catergory_list = await api.get('/catergory_list') //这边写获取x轴坐标的数据
+    const industry_list = await api.get('/industry_list') //这边写获取x轴坐标的数据
+    const index_list = await api.get('/index_list') //这边写获取x轴坐标的数据
+
+    // Loop through each date in the received data
+    Object.keys(data).forEach(date => {
+        orderedData[date] = {};
+
+        // Use the predefined order from catergory_list to order the data for this date
+        catergory_list.data.data.forEach(key => {
+            if(data[date].hasOwnProperty(key)) {
+                orderedData[date][key] = data[date][key];
+            }
+        });
+    });
+
+    let start_date_data1 = orderedData[`${start_date}`]
+    let end_date_data1 = orderedData[`${end_date}`]
      let valuesArray1 = []
      let valuesArray2 = []
      console.log('start_date_data1 :>> ', start_date_data1);
@@ -144,8 +163,24 @@
     console.log('1111111111111barXdata :>> ', barXdata.value);
 
     // 第二排第一个图
-    let start_date_data2_1 = res2_1.data.data[`${start_date}`]
-    let end_date_data2_1 = res2_1.data.data[`${end_date}`]
+    // Loop through each date in the received data
+    console.log('industry_list :>> ', industry_list.data.data);
+    const orderedData2_1 = {};
+    Object.keys(data2_1).forEach(date => {
+    
+      orderedData2_1[date] = {};
+
+    // Use the predefined order from catergory_list to order the data for this date
+    industry_list.data.data.forEach(key => {
+        if(data2_1[date].hasOwnProperty(key)) {
+          orderedData2_1[date][key] = data2_1[date][key];
+        }
+    });
+});
+
+
+    let start_date_data2_1 = orderedData2_1[`${start_date}`]
+    let end_date_data2_1 = orderedData2_1[`${end_date}`]
      let valuesArray2_1_1 = []
      let valuesArray2_1_2 = []
   if (start_date_data2_1) {
@@ -180,8 +215,21 @@ console.log('44444 :>> ', 44444);
 
 
     // 第二排第二个图
-    let start_date_data2_2 = res2_2.data.data[`${start_date}`]
-    let end_date_data2_2 = res2_2.data.data[`${end_date}`]
+    const orderedData2_2 = {};
+    Object.keys(data2_2).forEach(date => {
+    
+      orderedData2_2[date] = {};
+
+    // Use the predefined order from catergory_list to order the data for this date
+    index_list.data.data.forEach(key => {
+        if(data2_2[date].hasOwnProperty(key)) {
+          orderedData2_2[date][key] = data2_2[date][key];
+        }
+    });
+});
+
+    let start_date_data2_2 = orderedData2_2[`${start_date}`]
+    let end_date_data2_2 = orderedData2_2[`${end_date}`]
     let valuesArray2_2_1 = []
     let valuesArray2_2_2 = []
   if (start_date_data2_2) {

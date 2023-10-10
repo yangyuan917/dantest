@@ -34,7 +34,10 @@ const props = defineProps({
       // height: '400px',
     })
   },
-
+showTarget: {
+  type: Boolean,
+  default: false
+},
   title: {
     type: String,
     default: '标题'

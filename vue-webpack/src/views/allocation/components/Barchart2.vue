@@ -7,12 +7,24 @@
         </div>
         <!-- 改一下class -->
         <div class="sector">
-          <el-select v-model="start_date" @change="targetChange" v-if="showTarget" placeholder="请选择行业">
+          <el-select v-model="sector1" @change="targetChange" v-if="showTarget" placeholder="请选择行业">
             <el-option v-for="item in targetList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-          <el-select v-model="end_date" @change="targetChange" v-if="showTarget" placeholder="请选择行业">
+          <el-select v-model="sector2" @change="targetChange" v-if="showTarget" placeholder="请选择行业">
             <el-option v-for="item in targetList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
+        </div>
+          <div class="time">
+         <el-date-picker
+            v-model="timeValue"
+            type="daterange"
+            @change="changeTime"
+            value-format="YYYY-MM-DD"
+            range-separator="-"
+            start-placeholder="请选择开始日"
+            end-placeholder="请选择结束日"
+            style="max-width: 240px"
+          />
         </div>
       </div>
       <div class="line"></div>
@@ -23,7 +35,7 @@
 <script setup>
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue'
 import * as echarts from 'echarts'
-const emit = defineEmits(['timeChange'])
+const emit = defineEmits(['allParamChange'])
 import api from '@/utils/api';
 
 const props = defineProps({
@@ -68,8 +80,8 @@ showTarget: {
 const target = ref('')
 let targetList = ref([
   {
-    label: '全部',
-    value: '全部'
+    label: '总计',
+    value: '总计'
   },
   {
     label: '银行',
@@ -78,8 +90,20 @@ let targetList = ref([
 ])
 
 
-const start_date = ref('全部')
-const end_date = ref('银行')
+let timeValue = ref(['2023-09-01', '2023-09-28'])
+let sector1 = ref('总计')
+let sector2 = ref('银行')
+let obj = {
+sector1,
+sector2
+}
+const targetChange = ()=>{
+// allParamChange()
+
+emit('allParamChange', obj)
+}
+
+emit('allParamChange', obj)
 
 const xData = ref([])
 const getXdata = async () => {
@@ -106,28 +130,48 @@ const myOption = ref({
       type: 'shadow',
     },
   },
+
+    dataZoom: [
+    // 添加数据区域缩放组件，即滚动条
+    {
+      show: true,
+      type: 'slider',
+      top: '90%',
+      bottom: '4%',
+      start: 0,
+      end: 100
+    }
+  ],
   xAxis: {
-    type: 'category',
-    data: xData.value, // x 轴的数据
+    type: 'time',
+    //   min:'Thu, 02 Jan 2020 00:00:00 GMT',
+    //   max:"Tue, 01 Sep 2020 00:00:00 GMT",
+    min: new Date(timeValue.value[0].replace(/-/g, '/')),
+    max: new Date(timeValue.value[1].replace(/-/g, '/')),
     axisLabel: {
       rotate: 45
     }
   },
-
   yAxis: {
     type: 'value'
   },
   series: props.mySeries
 })
 
-const changeDateTime = (value) => {
-  //选择时间改变时，向父组件传事件
-  let obj = {
-    start_date: start_date.value,
-    end_date: end_date.value
-  }
-  emit('timeChange', obj)
+const changeTime = (value) => {
+  //当时间改变时，myOption中的xAxis的min和max也要改变，重新渲染echarts
+  let stime = value[0]
+  let etime = value[1]
+  let myOptions = myOption.value
+
+  myOptions.xAxis.min = new Date(stime.replace(/-/g, '/'))
+  myOptions.xAxis.max = new Date(etime.replace(/-/g, '/'))
+  let myChart = echarts.init(document.getElementById(uid.value))
+  myChart.setOption(myOptions, {
+    notMerge: true //不和之前的option合并
+  })
 }
+
 // 因为是封装的组件，会多次调用，id不能重复，要在初始化之前写，不然会报错dom为定义
 let uid = ref('')
 onBeforeMount(() => {

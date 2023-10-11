@@ -1,6 +1,6 @@
 <template>
   <BarandLinechart :mySeries="lineSeries" @allParamChange="allChange" :showTarget="true"></BarandLinechart>
-  <Barchart2 :mySeries="series" :echartsLegend="echartsLegend"  @allParamChange="timeChange" :showTarget="true"></Barchart2>
+  <Barchart2 :mySeries="series" :echartsLegend="echartsLegend"  @allParamChange="barChange" :showTarget="true"></Barchart2>
 </template>
 <script setup>
 import { reactive, ref } from 'vue'
@@ -82,16 +82,61 @@ return arr
 }
 
 
-    // const transformedObj = {
-    //   name: catergory,
-    //   type: 'line',
-    //   data:Object.entries(data[catergory]).map(([date, value]) => [date, value])
-    // };
-    // let arr = []
-    // arr.push(transformedObj)
 
-    // return arr
 
+const barChange  =async (obj)=>{//参数改变
+console.log('参数改变obj :>> ', obj);
+let params = {
+sector1:obj.sector1.value,
+sector2:obj.sector2.value,
+
+}
+  let res = await api.get('/transaction_stock',{params})
+  let list = res.data.data
+  echartsLegend.value = Object.keys(list)
+  let arr = resultFmoat(list)
+  series.value = arr
+console.log('res :>> ', res);
+console.log('list :>> ', list);
+console.log('arr :>> ', arr);
+console.log('echartsLegend :>> ', echartsLegend);
+// transaction_stock
+  // let arr = []
+  // let target = ''
+  // arr =    getLineData2(val,target)
+  // lineSeries.value = arr
+  // console.log('111111111lineSeries.value :>> ', lineSeries.value)
+}
+
+const  resultFmoat = (inputObject)=>{
+  const result = [];
+for (const key in inputObject) {
+  if (inputObject.hasOwnProperty(key)) {
+    const item = {
+      name: key,
+      type: 'bar',
+      stack: 'stack1',
+      itemStyle: {
+        color: '#8f9cc6'
+      },
+      data: Object.entries(inputObject[key]).map(([date, value]) => [date, value])
+    };
+    result.push(item);
+  }
+}
+result[0].stack = 'stack1';
+result[0].itemStyle.color = '#8f9cc6';
+result[1].stack = 'stack1';
+result[1].itemStyle.color = '#5470c6';
+result[2].stack = 'stack2';
+result[2].itemStyle.color = '#b7ccad';
+result[3].stack = 'stack2';
+result[3].itemStyle.color = '#91CC75';
+
+
+
+return result
+}
 const echartsLegend = ref([
  '图例一', '图例二','图例三', '图例四',
 ])//这是图例，必须和series中的name一致
@@ -104,7 +149,14 @@ const series = ref([
         itemStyle: {
         color: '#8f9cc6',//这里修改颜色
       },
-      data: [-100, -52, -200, -334, -390, -330, -220]//这里修改数据，后台获取到的数据可以放这里
+
+        data: [
+      ['2023-09-01', -10],
+      ['2023-09-02', -40],
+      ['2023-09-04', -80],
+      ['2023-09-05', -80],
+      ['2023-09-06', -80]
+    ], ////这里修改数据，后台获取到的数据可以放这里
     },
         {
       name: '图例二',
@@ -114,7 +166,13 @@ const series = ref([
         itemStyle: {
         color: ' #5470c6',
       },
-      data: [100, 52, 200, 334, 390, 330, 220]
+      data: [
+      ['2023-09-01', 10],
+      ['2023-09-02', 40],
+      ['2023-09-04', 80],
+      ['2023-09-05', 80],
+      ['2023-09-06', 80]
+    ]
     },
             {
       name: '图例三',
@@ -124,7 +182,13 @@ const series = ref([
         itemStyle: {
         color: ' #b7ccad',
       },
-      data: [-100, -52, -200, -334, -390, -330, -220]
+       data: [
+      ['2023-09-01', -10],
+      ['2023-09-02', -40],
+      ['2023-09-04', -80],
+      ['2023-09-05', -80],
+      ['2023-09-06', -80]
+    ]
     },
             {
       name: '图例四',
@@ -134,10 +198,85 @@ const series = ref([
         itemStyle: {
         color: '#91CC75',
       },
-      data: [100, 52, 200, 334, 390, 330, 220]
+      data: [
+      ['2023-09-01', 10],
+      ['2023-09-02', 40],
+      ['2023-09-04', 80],
+      ['2023-09-05', 80],
+      ['2023-09-06', 80]
+    ]
     },
 ])
 
+
+
+// [
+//   {
+//       name: '总计_减仓',
+//       type: 'bar',
+
+//        stack: 'stack1',
+//         itemStyle: {
+//         color: '#8f9cc6',
+//       },
+
+//         data: [
+//           [ "2023-09-19", 0.768577],
+//         ["2023-09-20", 0.457382],
+//         ["2023-09-21", 0.377451],
+//         ["2023-09-22", 0.166451]
+
+//     ],
+//     },
+//         {
+//       name: '图例二',
+//       type: 'bar',
+
+//        stack: 'stack1',
+//         itemStyle: {
+//         color: ' #5470c6',
+//       },
+//       data: [
+//       ['2023-09-01', 10],
+//       ['2023-09-02', 40],
+//       ['2023-09-04', 80],
+//       ['2023-09-05', 80],
+//       ['2023-09-06', 80]
+//     ]
+//     },
+//             {
+//       name: '图例三',
+//       type: 'bar',
+
+//        stack: 'stack2',
+//         itemStyle: {
+//         color: ' #b7ccad',
+//       },
+//        data: [
+//       ['2023-09-01', -10],
+//       ['2023-09-02', -40],
+//       ['2023-09-04', -80],
+//       ['2023-09-05', -80],
+//       ['2023-09-06', -80]
+//     ]
+//     },
+//             {
+//       name: '图例四',
+//       type: 'bar',
+
+//        stack: 'stack2',
+//         itemStyle: {
+//         color: '#91CC75',
+//       },
+//       data: [
+//       ['2023-09-01', 10],
+//       ['2023-09-02', 40],
+//       ['2023-09-04', 80],
+//       ['2023-09-05', 80],
+//       ['2023-09-06', 80]
+//     ]
+//     },
+// ]
 
 
 </script>

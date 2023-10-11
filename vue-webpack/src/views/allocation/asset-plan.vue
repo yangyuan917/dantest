@@ -1,8 +1,14 @@
 <template>
-<div style="width: 100%;">
-  <el-input v-model="separate_name" style="width: 200px;" placeholder="输入separate_name" ></el-input>
-
-</div>
+  <div style="width: 100%;">
+    <el-select v-model="selectedSeparateName" placeholder="选择separate_name" style="width: 200px;">
+      <el-option
+        v-for="name in separateNames"
+        :key="name"
+        :label="name"
+        :value="name">
+      </el-option>
+    </el-select>
+  </div>
 <!-- 第一排 -->
   <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
   <Linechart :mySeries="lineSeries" @allParamChange="linetimeChange"></Linechart>
@@ -18,13 +24,36 @@
   <Linechart2 :mySeries="series3_2" @allParamChange="linetimeChange3"></Linechart2>
 </template>
 <script setup>
+import { onMounted, watch} from 'vue'
 import { reactive, ref } from 'vue'
 import Barchart from './components/Barchart'
 import Linechart from './components/Linechart'
 import Linechart2 from './components/Linechart2'
 import api from '@/utils/api'
 // const separate_name = ref('中信证券增盈1号集合资产管理计划')
-const separate_name = ref('gz')
+const separate_name = ref("")
+const separateNames = ref([]);
+const selectedSeparateName = ref("");
+onMounted(async () => {
+  try {
+
+    const response = await api.get('/separate_list');
+    console.log('catergory_list :>> ', response.data)
+    separateNames.value = response.data.data; // 调整这里以匹配你的API响应结构
+  } catch (error) {
+    console.error('Failed to fetch API data:', error);
+    // 这里你可以添加一些额外的错误处理逻辑
+  }
+});
+
+watch(selectedSeparateName, (newVal, oldVal) => {
+  // 这里你可以添加一些逻辑，例如使用新的 separate_name 来获取新的数据
+  separate_name.value = newVal;
+  console.log('separate_name changed from', oldVal, 'to', newVal);
+  // 如果你的其他逻辑需要使用 separate_name，你可以在这里添加那些逻辑
+  // 或者在其他地方直接使用 selectedSeparateName.value
+});
+
 //柱状图
 const series = ref([])
 const barXdata = ref([])
@@ -125,8 +154,8 @@ console.log('barXdata: ', barXdata.value);
 
   console.log('res :>> ', res);
   //  `${dateString}T00:00:00.000000000`;
-  let start_date_data1 = res.data.data[`${start_date}T00:00:00.000000000`]
-  let end_date_data1 = res.data.data[`${end_date}T00:00:00.000000000`]
+  let start_date_data1 = res.data.data[`${start_date}`]
+  let end_date_data1 = res.data.data[`${end_date}`]
    let valuesArray1 = []
    let valuesArray2 = []
    console.log('start_date_data1 :>> ', start_date_data1); 

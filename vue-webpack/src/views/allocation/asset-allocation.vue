@@ -107,6 +107,7 @@
     const data = res.data.data
     const data2_1 = res2_1.data.data
     const data2_2 = res2_2.data.data   
+    const data3_1 = res3_1.data.data   
     const orderedData = {};
     const catergory_list = await api.get('/catergory_list') //这边写获取x轴坐标的数据
     const industry_list = await api.get('/industry_list') //这边写获取x轴坐标的数据
@@ -258,8 +259,20 @@ console.log('44444 :>> ', 44444);
     ]
 
    // 第三排第一个图
-   let start_date_data3_1 = res3_1.data.data[`${start_date}`]
-    let end_date_data3_1 = res3_1.data.data[`${end_date}`]
+   const orderedData3_1 = {};
+    Object.keys(data3_1).forEach(date => {
+    
+      orderedData3_1[date] = {};
+
+    // Use the predefined order from catergory_list to order the data for this date
+    industry_list.data.data.forEach(key => {
+        if(data3_1[date].hasOwnProperty(key)) {
+          orderedData3_1[date][key] = data3_1[date][key];
+        }
+    });
+});
+    let start_date_data3_1 = orderedData3_1[`${start_date}`]
+    let end_date_data3_1 = orderedData3_1[`${end_date}`]
     let valuesArray3_1_1 = []
     let valuesArray3_1_2 = []
   if (start_date_data3_1) {

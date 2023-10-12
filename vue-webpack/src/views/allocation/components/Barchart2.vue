@@ -203,6 +203,7 @@ watch(
   (newVal, oldVal) => {
     let myChart = echarts.init(document.getElementById(uid.value))
     // let myOptions = my
+    myOption.value.legend.data =  props.echartsLegend
     myOption.value.series = newVal
     // myOption.value.xAxis.data = props.xData
     myChart.setOption(myOption.value, {

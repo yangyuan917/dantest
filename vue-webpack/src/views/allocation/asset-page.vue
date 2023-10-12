@@ -124,14 +124,34 @@ for (const key in inputObject) {
     result.push(item);
   }
 }
-result[0].stack = 'stack1';
-result[0].itemStyle.color = '#8f9cc6';
-result[1].stack = 'stack1';
-result[1].itemStyle.color = '#5470c6';
+console.log('result :>> ', result);
+
+let colorArr = ['#8f9cc6', '#5470c6', '#b7ccad', '#91CC75'];
+result.map(item=>{
+  item.itemStyle.color = colorArr.shift()
+})
+
+let resultLength = result.length
+
+if (resultLength==2) {
+  result[0].stack = 'stack1';
+  result[1].stack = 'stack1';
+}else if(resultLength==4){
+ result[0].stack = 'stack1';
+  result[1].stack = 'stack1';
 result[2].stack = 'stack2';
-result[2].itemStyle.color = '#b7ccad';
 result[3].stack = 'stack2';
-result[3].itemStyle.color = '#91CC75';
+
+}
+
+// result[0].stack = 'stack1';
+// result[0].itemStyle.color = '#8f9cc6';
+// result[1].stack = 'stack1';
+// result[1].itemStyle.color = '#5470c6';
+// result[2].stack = 'stack2';
+// result[2].itemStyle.color = '#b7ccad';
+// result[3].stack = 'stack2';
+// result[3].itemStyle.color = '#91CC75';
 
 
 

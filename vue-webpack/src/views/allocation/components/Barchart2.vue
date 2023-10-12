@@ -78,17 +78,33 @@ showTarget: {
 })
 
 const target = ref('')
-let targetList = ref([
-  {
-    label: '总计',
-    value: '总计'
-  },
-  {
-    label: '银行',
-    value: '银行'
-  },
-])
+// let targetList = ref([
+//   {
+//     label: '总计',
+//     value: '总计'
+//   },
+//   {
+//     label: '银行',
+//     value: '银行'
+//   },
+// ])
 
+const targetList = ref([]) // 初始化为一个空数组
+
+const getTargetList = async () => {
+  try {
+    const response = await api.get('/industry_list') // 使用你的API端点
+    targetList.value = response.data.data.map(item => ({
+      label: item, // 使用你的字段名
+      value: item  // 使用你的字段名
+    }))
+  } catch (error) {
+    console.error('Failed to fetch target list:', error)
+    // 可以在这里添加一些错误处理逻辑，例如显示一个错误消息给用户
+  }
+}
+
+getTargetList()
 
 let timeValue = ref(['2023-09-01', '2023-09-28'])
 let sector1 = ref('总计')

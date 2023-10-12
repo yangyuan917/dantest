@@ -109,7 +109,7 @@ const end_date = ref('2023-09-28')
 let timeValue = ref(['2023-09-01', '2023-09-28'])
 
 // 指标
-const target = ref('')
+const target = ref('yield')
 const targetList = ref([
 {
     label: '到期收益率',
@@ -276,13 +276,9 @@ watch(
   display: flex;
 }
 .left-item {
-  width: 120px;
+  width: 100px;
   /* background-color: red; */
-  /* height: 100%; */
-
-  max-height: 360px;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  height: 100%;
   margin-left: 20px;
 }
 .echarts {

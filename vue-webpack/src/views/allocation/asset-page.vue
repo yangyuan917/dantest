@@ -108,35 +108,44 @@ console.log('echartsLegend :>> ', echartsLegend);
   // console.log('111111111lineSeries.value :>> ', lineSeries.value)
 }
 
-const  resultFmoat = (inputObject)=>{
+const resultFmoat = (inputObject) => {
   const result = [];
-for (const key in inputObject) {
-  if (inputObject.hasOwnProperty(key)) {
-    const item = {
-      name: key,
-      type: 'bar',
-      stack: 'stack1',
-      itemStyle: {
-        color: '#8f9cc6'
-      },
-      data: Object.entries(inputObject[key]).map(([date, value]) => [date, value])
-    };
-    result.push(item);
+  for (const key in inputObject) {
+    if (inputObject.hasOwnProperty(key)) {
+      const item = {
+        name: key,
+        type: 'bar',
+        stack: 'stack1',
+        itemStyle: {
+          color: '#8f9cc6'
+        },
+        data: Object.entries(inputObject[key]).map(([date, value]) => [date, value])
+      };
+      result.push(item);
+    }
   }
-}
-result[0].stack = 'stack1';
-result[0].itemStyle.color = '#8f9cc6';
-result[1].stack = 'stack1';
-result[1].itemStyle.color = '#5470c6';
-result[2].stack = 'stack2';
-result[2].itemStyle.color = '#b7ccad';
-result[3].stack = 'stack2';
-result[3].itemStyle.color = '#91CC75';
+
+  if (result[0]) {
+    result[0].stack = 'stack1';
+    result[0].itemStyle.color = '#8f9cc6';
+  }
+  if (result[1]) {
+    result[1].stack = 'stack1';
+    result[1].itemStyle.color = '#5470c6';
+  }
+  if (result[2]) {
+    result[2].stack = 'stack2';
+    result[2].itemStyle.color = '#b7ccad';
+  }
+  if (result[3]) {
+    result[3].stack = 'stack2';
+    result[3].itemStyle.color = '#91CC75';
+  }
+
+  return result;
+};
 
 
-
-return result
-}
 const echartsLegend = ref([
  '图例一', '图例二','图例三', '图例四',
 ])//这是图例，必须和series中的name一致

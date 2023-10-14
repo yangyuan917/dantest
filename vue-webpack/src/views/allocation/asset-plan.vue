@@ -1,4 +1,5 @@
 <template>
+<div class="all-page-flex">
   <div style="width: 100%;">
     <el-select v-model="selectedSeparateName" placeholder="选择separate_name" style="width: 200px;">
       <el-option
@@ -22,6 +23,8 @@
 
    <Barchart :mySeries="series3_1" :xData="barXdata3_1" @timeChange="timeChange"></Barchart>
   <Linechart2 :mySeries="series3_2" @allParamChange="linetimeChange3"></Linechart2>
+
+  </div>
 </template>
 <script setup>
 import { onMounted, watch} from 'vue'
@@ -117,8 +120,8 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
   let res3_1 = await api.get('/separate_fundprtindustry', { params })
   const data = res.data.data
   const data2_1 = res2_1.data.data
-  const data2_2 = res2_2.data.data   
-  const data3_1 = res3_1.data.data   
+  const data2_2 = res2_2.data.data
+  const data3_1 = res3_1.data.data
   const orderedData = {};
   const catergory_list = await api.get('/catergory_list') //这边写获取x轴坐标的数据
   const industry_list = await api.get('/industry_list') //这边写获取x轴坐标的数据
@@ -161,18 +164,18 @@ const processBarData = (res) => {
   let valuesArray2 = [];
   let series = ref([])
   let barXdata = ref([])
-  
+
   console.log('start_date_data: ', start_date_data);
 
   if (start_date_data) {
     barXdata.value = Object.keys(start_date_data); // X 轴的值
     valuesArray1 = Object.values(start_date_data);
   }
-  
+
   if (end_date_data) {
     valuesArray2 = Object.values(end_date_data);
   }
-  
+
   series.value = [
     {
       name: start_date,
@@ -207,7 +210,7 @@ console.log('barXdata: ', barXdata.value);
   let end_date_data1 = orderedData[`${end_date}`]
    let valuesArray1 = []
    let valuesArray2 = []
-   console.log('start_date_data1 :>> ', start_date_data1); 
+   console.log('start_date_data1 :>> ', start_date_data1);
 if (start_date_data1) {
   barXdata.value = Object.keys(start_date_data1) ;//轴的值
    valuesArray1 = Object.values(start_date_data1);
@@ -242,7 +245,7 @@ if (end_date_data1) {
   // 第二排第一个图
   let start_date_data2_1 = res2_1.data.data[`${start_date}`]
   let end_date_data2_1 = res2_1.data.data[`${end_date}`]
-  console.log('start_date_data2_1 :>> ', start_date_data2_1); 
+  console.log('start_date_data2_1 :>> ', start_date_data2_1);
    let valuesArray2_1_1 = []
    let valuesArray2_1_2 = []
 if (start_date_data2_1) {
@@ -272,7 +275,7 @@ if (end_date_data2_1) {
   ]
 
 
-  
+
   // 第二排第二个图
   let start_date_data2_2 = res2_2.data.data[`${start_date}`]
   let end_date_data2_2 = res2_2.data.data[`${end_date}`]
@@ -626,4 +629,8 @@ function transformData(arrlist) {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+
+
+
+</style>

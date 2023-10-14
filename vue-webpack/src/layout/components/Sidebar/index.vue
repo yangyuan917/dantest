@@ -49,17 +49,18 @@ const filterRoutes = () => {
       routerList.push(...item.children)
     }
   })
-  for (let i = 0; i < routerList.length; i++) {
-    if (
-      routerList[i].meta &&
-      routerList[i].meta.roles &&
-      !routerList[i].meta.roles.includes(roles)
-    ) {
-      routerList.splice(i, 1)
-      i--
-    }
-  }
-  filterChildrens(routerList)
+//下面是过滤权限用的，后面用到可以解开
+  // for (let i = 0; i < routerList.length; i++) {
+  //   if (
+  //     routerList[i].meta &&
+  //     routerList[i].meta.roles &&
+  //     !routerList[i].meta.roles.includes(roles)
+  //   ) {
+  //     routerList.splice(i, 1)
+  //     i--
+  //   }
+  // }
+  // filterChildrens(routerList)
 }
 
 /**

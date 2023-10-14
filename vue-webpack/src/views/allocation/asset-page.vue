@@ -1,15 +1,9 @@
 <template>
-  <BarandLinechart
-    :mySeries="lineSeries"
-    @allParamChange="allChange"
-    :showTarget="true"
-  ></BarandLinechart>
-  <Barchart2
-    :mySeries="series"
-    :echartsLegend="echartsLegend"
-    @allParamChange="barChange"
-    :showTarget="true"
-  ></Barchart2>
+  <div class="all-page-flex">
+    <BarandLinechart :mySeries="lineSeries" @allParamChange="allChange" :showTarget="true"></BarandLinechart>
+    <Barchart2 :mySeries="series" :echartsLegend="echartsLegend" @allParamChange="barChange" :showTarget="true">
+    </Barchart2>
+  </div>
 </template>
 <script setup>
 import { reactive, ref } from 'vue'
@@ -97,7 +91,7 @@ const barChange = async (obj) => {
     sector2: obj.sector2.value
   }
   let res = await api.get('/transaction_stock', { params })
-//  let testObj = res.data.data
+  //  let testObj = res.data.data
   let testObj = {//返回的格式已这个为标准,改好以后注释这边的，解开上面的注释
     lsit1: {
       总计_减仓: {
@@ -129,20 +123,20 @@ const barChange = async (obj) => {
     }
   }
 
-let list = [testObj.lsit1,testObj.list2]
-let Legend1 = Object.keys(testObj.lsit1)
-let Legend2 = Object.keys(testObj.list2)
-echartsLegend.value = [...Legend1,...Legend2]
-  let arr1 = resultFmoat(testObj.lsit1,1)
-  let arr2 = resultFmoat(testObj.list2,2)
-  series.value = [...arr1,...arr2]
+  let list = [testObj.lsit1, testObj.list2]
+  let Legend1 = Object.keys(testObj.lsit1)
+  let Legend2 = Object.keys(testObj.list2)
+  echartsLegend.value = [...Legend1, ...Legend2]
+  let arr1 = resultFmoat(testObj.lsit1, 1)
+  let arr2 = resultFmoat(testObj.list2, 2)
+  series.value = [...arr1, ...arr2]
   console.log('res :>> ', res)
   console.log('list :>> ', list)
   console.log('echartsLegend :>> ', echartsLegend)
 
 }
 
-const resultFmoat = (inputObject,type) => {
+const resultFmoat = (inputObject, type) => {
   const result = []
   for (const key in inputObject) {
     if (inputObject.hasOwnProperty(key)) {
@@ -159,27 +153,27 @@ const resultFmoat = (inputObject,type) => {
     }
   }
 
-if (type==1) {
-  if (result[0]) {
-    result[0].stack = 'stack1'
-    result[0].itemStyle.color = '#8f9cc6'
+  if (type == 1) {
+    if (result[0]) {
+      result[0].stack = 'stack1'
+      result[0].itemStyle.color = '#8f9cc6'
+    }
+    if (result[1]) {
+      result[1].stack = 'stack1'
+      result[1].itemStyle.color = '#5470c6'
+    }
   }
-  if (result[1]) {
-    result[1].stack = 'stack1'
-    result[1].itemStyle.color = '#5470c6'
-  }
-}
 
-if (type==2) {
-  if (result[0]) {
-    result[0].stack = 'stack2'
-    result[0].itemStyle.color = '#b7ccad'
+  if (type == 2) {
+    if (result[0]) {
+      result[0].stack = 'stack2'
+      result[0].itemStyle.color = '#b7ccad'
+    }
+    if (result[1]) {
+      result[0].stack = 'stack2'
+      result[1].itemStyle.color = '#91CC75'
+    }
   }
-  if (result[1]) {
-    result[0].stack = 'stack2'
-    result[1].itemStyle.color = '#91CC75'
-  }
-}
 
   // if (result[0]) {
   //   result[0].stack = 'stack1'

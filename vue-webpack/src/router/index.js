@@ -1,29 +1,13 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 export const constantRoutes = [
-
   {
     path: '/login',
-    component: () => import('@/views/HomeView.vue'),
+    component: () => import('@/views/login/login.vue'),
     meta: {
       title: '登录'
     }
   },
-
-  {
-      path: '',
-    component: () => import('@/views/allocation/index.vue'),
-    meta: {
-      title: '资产配置'
-    }
-  },
-  // {
-  //   path: '/login',
-  //   component: () => import('@/views/login/index.vue'),
-  //   meta: {
-  //     title: '登录'
-  //   }
-  // },
   {
     path: '/404',
     component: () => import('@/views/error-page/404.vue'),
@@ -41,32 +25,46 @@ export const constantRoutes = [
   {
     path: '/',
     component: () => import('@/layout/index.vue'),
-    // redirect: '/home',
-    redirect: '/login',
+    redirect: '/asset-allocation',
     children: [
-      // {
-      //   path: '/homeview',
-      //   component: () => import('@/views/HomeView.vue'),
-      //   name: 'Home',
-      //   meta: { title: 'SS首页', icon: 'HomeFilled', affix: true }
-      // },
       {
-        path: '/home',
-        component: () => import('@/views/home/index.vue'),
-        name: 'Home',
-        meta: { title: '首页', icon: 'HomeFilled', affix: true }
+        path: '/asset-allocation',
+        component: () => import('@/views/allocation/asset-allocation.vue'),
+        name: 'assetAllocation',
+        meta: { title: '大类资产配置', icon: '', affix: true }
       },
+      {
+        path: '/asset-plan',
+        component: () => import('@/views/allocation/asset-plan.vue'),
+        name: 'assetPlan',
+        meta: { title: '资管计划', icon: '', affix: true }
+      },
+      {
+        path: '/asset-page',
+        component: () => import('@/views/allocation/asset-page.vue'),
+        name: 'assetPage',
+        meta: { title: '页面三', icon: '', affix: true }
+      },
+
+
+
+      // {
+      //   path: '/home',
+      //   component: () => import('@/views/home/index.vue'),
+      //   name: 'Home',
+      //   meta: { title: '首页', icon: 'el-icon-s-home', affix: true }
+      // },
       {
         path: '/setting',
         component: () => import('@/views/setting/index.vue'),
         name: 'Setting',
-        meta: { title: '设置', icon: 'Tools', roles: ['admin'] }
+        meta: { title: '设置', icon: 'el-icon-s-tools', roles: ['admin'] }
       },
       {
         path: '/menu',
         name: 'Menu',
         component: () => import('@/views/menu/index.vue'),
-        meta: { title: '菜单', icon: 'Menu', roles: ['admin', 'editor'] },
+        meta: { title: '菜单', icon: 'el-icon-menu', roles: ['admin', 'editor'] },
         redirect: '/menu2',
         children: [
           {
@@ -102,19 +100,15 @@ export const constantRoutes = [
         path: '/star',
         component: () => import('@/views/star/index.vue'),
         name: 'Star',
-        meta: { title: '图表', icon: 'Histogram', roles: ['admin', 'editor'] }
+        meta: { title: '图表', icon: 'el-icon-s-data', roles: ['admin', 'editor'] }
       },
       {
         path: '/xueyue',
         component: () => import('@/views/xueyue/index.vue'),
         name: 'Xueyue',
-        meta: { title: '雪月', icon: 'Flag', roles: ['admin'] }
+        meta: { title: '雪月', icon: 'el-icon-s-flag', roles: ['admin'] }
       }
     ]
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    redirect: '/'
   }
 ]
 

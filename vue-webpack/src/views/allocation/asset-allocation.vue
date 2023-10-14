@@ -1,4 +1,5 @@
 <template>
+<div class="all-page-flex">
   <!-- 第一排 -->
     <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
     <Linechart :mySeries="lineSeries" @allParamChange="linetimeChange"></Linechart>
@@ -12,6 +13,9 @@
 
      <Barchart :mySeries="series3_1" :xData="barXdata3_1" @timeChange="timeChange"></Barchart>
     <Linechart2 :mySeries="series3_2" @allParamChange="linetimeChange3"></Linechart2>
+
+</div>
+
   </template>
   <script setup>
   import { reactive, ref } from 'vue'
@@ -106,8 +110,8 @@
     console.log('res :>> ', res);
     const data = res.data.data
     const data2_1 = res2_1.data.data
-    const data2_2 = res2_2.data.data   
-    const data3_1 = res3_1.data.data   
+    const data2_2 = res2_2.data.data
+    const data3_1 = res3_1.data.data
     const orderedData = {};
     const catergory_list = await api.get('/catergory_list') //这边写获取x轴坐标的数据
     const industry_list = await api.get('/industry_list') //这边写获取x轴坐标的数据
@@ -168,7 +172,7 @@
     console.log('industry_list :>> ', industry_list.data.data);
     const orderedData2_1 = {};
     Object.keys(data2_1).forEach(date => {
-    
+
       orderedData2_1[date] = {};
 
     // Use the predefined order from catergory_list to order the data for this date
@@ -218,7 +222,7 @@ console.log('44444 :>> ', 44444);
     // 第二排第二个图
     const orderedData2_2 = {};
     Object.keys(data2_2).forEach(date => {
-    
+
       orderedData2_2[date] = {};
 
     // Use the predefined order from catergory_list to order the data for this date
@@ -261,7 +265,7 @@ console.log('44444 :>> ', 44444);
    // 第三排第一个图
    const orderedData3_1 = {};
     Object.keys(data3_1).forEach(date => {
-    
+
       orderedData3_1[date] = {};
 
     // Use the predefined order from catergory_list to order the data for this date
@@ -594,4 +598,7 @@ console.log('44444 :>> ', 44444);
 
   </script>
 
-  <style scoped></style>
+  <style scoped>
+
+
+  </style>

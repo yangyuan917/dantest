@@ -91,45 +91,15 @@ const barChange = async (obj) => {
     sector2: obj.sector2.value
   }
   let res = await api.get('/transaction_stock', { params })
-  //  let testObj = res.data.data
-  let testObj = {//返回的格式已这个为标准,改好以后注释这边的，解开上面的注释
-    lsit1: {
-      总计_减仓: {
-        '2023-09-19': 0.768577,
-        '2023-09-20': 0.457382,
-        '2023-09-21': 0.377451,
-        '2023-09-22': 0.166451
-      },
-      总计_加仓: {
-        '2023-09-19': 0.048041,
-        '2023-09-20': 0.00432,
-        '2023-09-21': 0.353934,
-        '2023-09-22': 0.989539
-      }
-    },
-    list2: {
-      银行_减仓: {
-        '2023-09-19': 0,
-        '2023-09-20': 0,
-        '2023-09-21': 0.407317,
-        '2023-09-22': 0
-      },
-      银行_加仓: {
-        '2023-09-19': 0.102545,
-        '2023-09-20': 0.357606,
-        '2023-09-21': 0.98334,
-        '2023-09-22': 0.212323
-      }
-    }
-  }
+ let testObj = res.data.data
 
-  let list = [testObj.lsit1, testObj.list2]
-  let Legend1 = Object.keys(testObj.lsit1)
-  let Legend2 = Object.keys(testObj.list2)
-  echartsLegend.value = [...Legend1, ...Legend2]
-  let arr1 = resultFmoat(testObj.lsit1, 1)
-  let arr2 = resultFmoat(testObj.list2, 2)
-  series.value = [...arr1, ...arr2]
+let list = [testObj.list1,testObj.list2]
+let Legend1 = testObj.list1 ? Object.keys(testObj.list1) : []
+let Legend2 = testObj.list2 ? Object.keys(testObj.list2) : []
+echartsLegend.value = [...Legend1,...Legend2]
+  let arr1 = resultFmoat(testObj.list1,1)
+  let arr2 = resultFmoat(testObj.list2,2)
+  series.value = [...arr1,...arr2]
   console.log('res :>> ', res)
   console.log('list :>> ', list)
   console.log('echartsLegend :>> ', echartsLegend)

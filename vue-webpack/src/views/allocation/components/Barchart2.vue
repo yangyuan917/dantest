@@ -98,6 +98,10 @@ const getTargetList = async () => {
       label: item, // 使用你的字段名
       value: item  // 使用你的字段名
     }))
+    targetList.value.unshift({
+      label: '总计',
+      value: '总计' 
+    })
   } catch (error) {
     console.error('Failed to fetch target list:', error)
     // 可以在这里添加一些错误处理逻辑，例如显示一个错误消息给用户

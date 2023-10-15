@@ -53,7 +53,7 @@
 <script setup>
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue'
 import * as echarts from 'echarts'
-import api from '@/utils/api';
+import {api} from '@/utils/api';
 
 const emit = defineEmits(['timeChange', 'allParamChange'])
 const props = defineProps({

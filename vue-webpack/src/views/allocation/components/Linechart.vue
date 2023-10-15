@@ -7,23 +7,16 @@
         </div>
         <div class="time">
           <el-select v-model="target" @change="targetChange" v-if="showTarget" placeholder="请选择指标">
-            <el-option
-              v-for="item in targetList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+            <el-option v-for="item in targetList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-          <el-date-picker
-            v-model="timeValue"
-            type="daterange"
-            @change="changeTime"
-            value-format="YYYY-MM-DD"
-            range-separator="-"
-            start-placeholder="请选择开始日"
-            end-placeholder="请选择结束日"
-            style="max-width: 240px"
-          />
+          <!-- <el-date-picker v-model="timeValue" type="daterange" @change="changeTime" value-format="YYYY-MM-DD"
+            range-separator="-" start-placeholder="请选择开始日" end-placeholder="请选择结束日" style="max-width: 240px" /> -->
+
+          <el-date-picker v-model="start_date" type="date" @change="changeDateTime" value-format="YYYY-MM-DD"
+            style="max-width: 240px" placeholder="请选择开始日期" />
+          <el-date-picker v-model="end_date" type="date" @change="changeDateTime" value-format="YYYY-MM-DD"
+            style="max-width: 240px" placeholder="请选择结束日期" />
+
         </div>
       </div>
       <div class="line"></div>
@@ -31,12 +24,8 @@
     <div class="all-box">
       <div class="left-item">
         <el-checkbox-group v-model="selectedOptions" @change="checkChange">
-          <el-checkbox
-            v-for="option in checkboxOptions"
-            :key="option.value"
-            :label="option.value"
-            :disabled="selectedOptions.length === 5 && !selectedOptions.includes(option.value)"
-          >
+          <el-checkbox v-for="option in checkboxOptions" :key="option.value" :label="option.value"
+            :disabled="selectedOptions.length === 5 && !selectedOptions.includes(option.value)">
             {{ option.label }}
           </el-checkbox>
         </el-checkbox-group>
@@ -46,9 +35,9 @@
   </div>
 </template>
 <script setup>
-import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue'
+import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch,inject } from 'vue'
 import * as echarts from 'echarts'
-import api from '@/utils/api';
+import { api } from '@/utils/api';
 
 const emit = defineEmits(['timeChange', 'allParamChange'])
 const props = defineProps({
@@ -64,9 +53,17 @@ const props = defineProps({
     type: String,
     default: '标题'
   },
-  showTarget: {
+  showTarget: {//是否显示指标
     type: Boolean,
     default: false
+  },
+  father_start_date: {//父组件下拉框的开始时间值
+    type: String,
+    default: ''
+  },
+  father_end_date: {//父组件下拉框的结束时间值
+    type: String,
+    default: ''
   },
   mySeries: {
     type: Object,
@@ -79,25 +76,29 @@ const props = defineProps({
   //   required: true,
   // },
 })
+
+
+
+
 const selectedOptions = ref([]) // 保存被选中的选项的数组
 const checkboxOptions = ref([
 
 ])
 
-const getCheckboxOptions = async()=>{
+const getCheckboxOptions = async () => {
 
-let res = await api.get('/catergory_list')
-checkboxOptions.value = []
-// checkboxOptions.value = res.data.data //这里获取数据
-res.data.data.map(item=>{
-let obj = {
-label:item,value:item
-}
-checkboxOptions.value.push(obj)
-})
-selectedOptions.value = res.data.data.slice(0,4)
-allobj.selectedOptions = selectedOptions.value
-console.log('allobj111 :>> ', allobj);
+  let res = await api.get('/catergory_list')
+  checkboxOptions.value = []
+  // checkboxOptions.value = res.data.data //这里获取数据
+  res.data.data.map(item => {
+    let obj = {
+      label: item, value: item
+    }
+    checkboxOptions.value.push(obj)
+  })
+  selectedOptions.value = res.data.data.slice(0, 4)
+  allobj.selectedOptions = selectedOptions.value
+  console.log('allobj111 :>> ', allobj);
   emit('allParamChange', allobj)
 
 }
@@ -105,16 +106,33 @@ getCheckboxOptions()
 
 const checkChange = (val) => {
   allobj.selectedOptions = val
-  console.log('allobj :>> ', allobj);
   emit('allParamChange', allobj)
-  console.log('selectedOptions :>> ', selectedOptions.value)
 }
 
-const start_date = ref('')
-const end_date = ref('2023-09-28')
+// const start_date = ref('')
+// const end_date = ref('2023-09-28')
 let timeValue = ref(['2023-09-01', '2023-09-28'])
 
+//时间控件相关
 
+const father_date = inject('father_date');
+watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
+  console.log('Value changed:', father_date.value.father_start_date);
+  start_date.value = father_date.value.father_start_date
+  end_date.value = father_date.value.father_end_date
+changeDateTime()
+}, { deep: true });//深层次监听
+
+
+const start_date = ref('')
+  start_date.value = father_date.value.father_start_date
+const end_date = ref('')
+  end_date.value = father_date.value.father_end_date
+const changeDateTime = () => {
+  //选择时间改变时，向父组件传事件
+  emit('allParamChange', allobj)
+}
+changeDateTime()
 // 指标
 const target = ref('')
 let targetList = ref([
@@ -132,25 +150,25 @@ let targetList = ref([
   }
 ])
 
-const getTargetList = async()=>{
-let params = {}
-// let res  =   await api.get('/operation',{params})
-// targetList.value = res.xxx 这里获取数据
+const getTargetList = async () => {
+  let params = {}
+  // let res  =   await api.get('/operation',{params})
+  // targetList.value = res.xxx 这里获取数据
 
 }
 
 getTargetList()
 
 
-const targetChange  = (val)=>{//指标改变
-allobj.target = val
-emit('allParamChange', allobj)
+const targetChange = (val) => {//指标改变
+  allobj.target = val
+  emit('allParamChange', allobj)
 }
 
 let allobj = {
-  start_date: timeValue.value[0],
-  end_date: timeValue.value[1],
-  target:target.value,
+  start_date: start_date.value,
+  end_date: end_date.value,
+  target: target.value,
   selectedOptions: selectedOptions.value
 }
 
@@ -182,7 +200,7 @@ const myOption = ref({
       rotate: 45
     }
   },
-    tooltip: {
+  tooltip: {
     trigger: 'axis',
     axisPointer: {
       type: 'shadow',
@@ -290,9 +308,11 @@ watch(
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
 .all-box {
   display: flex;
 }
+
 .left-item {
   width: 120px;
   /* background-color: red; */
@@ -303,6 +323,7 @@ watch(
   overflow-x: hidden;
   margin-left: 20px;
 }
+
 .echarts {
   padding: 20px;
   padding-bottom: 6px;

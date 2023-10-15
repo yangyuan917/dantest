@@ -36,7 +36,7 @@
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue'
 import * as echarts from 'echarts'
 const emit = defineEmits(['allParamChange'])
-import api from '@/utils/api';
+import {api} from '@/utils/api';
 
 const props = defineProps({
   myStyle: {
@@ -100,7 +100,7 @@ const getTargetList = async () => {
     }))
     targetList.value.unshift({
       label: '总计',
-      value: '总计' 
+      value: '总计'
     })
   } catch (error) {
     console.error('Failed to fetch target list:', error)

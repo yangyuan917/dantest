@@ -1,42 +1,63 @@
 <template>
-<div class="all-page-flex">
-  <div style="width: 100%;">
-    <el-select v-model="selectedSeparateName" placeholder="选择separate_name" style="width: 200px;">
-      <el-option
-        v-for="name in separateNames"
-        :key="name"
-        :label="name"
-        :value="name">
-      </el-option>
-    </el-select>
-  </div>
-<!-- 第一排 -->
-  <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
-  <Linechart :mySeries="lineSeries" @allParamChange="linetimeChange"></Linechart>
-  <Linechart :mySeries="lineSeriestow" @allParamChange="linetimeChangetow" :showTarget="true"></Linechart>
-<!-- 第二排 -->
+  <div class="all-page-flex">
+    <div style="width: 100%;">
+      <el-select v-model="separate_name" placeholder="选择separate_name" style="width: 200px; margin-right: 10px;"
+        @change="selectedSeparateNameChange">
+        <el-option v-for="name in separateNames" :key="name" :label="name" :value="name">
+        </el-option>
+      </el-select>
+      <el-date-picker v-model="father_start_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
+        style="max-width: 240px" placeholder="请选择开始日期" />
+      <el-date-picker v-model="father_end_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
+        style="max-width: 240px" placeholder="请选择结束日期" />
+      <!-- <TopTimePicker ref="TopTimePickerRef"  /> -->
 
-  <Barchart :mySeries="series2_1" :xData="barXdata2_1" @timeChange="timeChange"></Barchart>
-  <Barchart :mySeries="series2_2" :xData="barXdata2_2" @timeChange="timeChange"></Barchart>
-  <Linechart2 :mySeries="series2_3" @allParamChange="linetimeChange2"></Linechart2>
-<!-- 第三排 -->
+    </div>
+    <!-- 第一排 -->
+    <Barchart :mySeries="series" :xData="barXdata" :separate_name="separate_name" @timeChange="timeChange"></Barchart>
+    <Linechart :mySeries="lineSeries" @allParamChange="linetimeChange"></Linechart>
+    <Linechart :mySeries="lineSeriestow" @allParamChange="linetimeChangetow" :showTarget="true"></Linechart>
+    <!-- 第二排 -->
 
-   <Barchart :mySeries="series3_1" :xData="barXdata3_1" @timeChange="timeChange"></Barchart>
-  <Linechart2 :mySeries="series3_2" @allParamChange="linetimeChange3"></Linechart2>
+    <Barchart :mySeries="series2_1" :xData="barXdata2_1" :separate_name="separate_name" @timeChange="timeChange">
+    </Barchart>
+    <Barchart :mySeries="series2_2" :xData="barXdata2_2" :separate_name="separate_name" @timeChange="timeChange">
+    </Barchart>
+    <Linechart2 :mySeries="series2_3" @allParamChange="linetimeChange2"></Linechart2>
+    <!-- 第三排 -->
+
+    <Barchart :mySeries="series3_1" :xData="barXdata3_1" :separate_name="separate_name" @timeChange="timeChange">
+    </Barchart>
+    <Linechart2 :mySeries="series3_2" @allParamChange="linetimeChange3"></Linechart2>
 
   </div>
 </template>
 <script setup>
-import { onMounted, watch} from 'vue'
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted, watch, provide } from 'vue'
+import TopTimePicker from '@/components/TopTimePicker.vue'
 import Barchart from './components/Barchart'
 import Linechart from './components/Linechart'
 import Linechart2 from './components/Linechart2'
-import api from '@/utils/api'
+import { api } from '@/utils/api'
 // const separate_name = ref('中信证券增盈1号集合资产管理计划')
 const separate_name = ref("中信证券增盈1号集合资产管理计划")
 const separateNames = ref([]);
-const selectedSeparateName = ref("中信证券增盈1号集合资产管理计划");
+
+
+//父组件时间
+const father_start_date = ref('')
+const father_end_date = ref('')
+const father_date = ref({
+  father_start_date: '',
+  father_end_date: ''
+
+})
+provide('father_date', father_date);
+const father_date_Chage = (val) => {
+  father_date.value.father_start_date = father_start_date.value
+  father_date.value.father_end_date = father_end_date.value
+}
+
 onMounted(async () => {
   try {
 
@@ -49,41 +70,12 @@ onMounted(async () => {
   }
 });
 
-watch(selectedSeparateName, async (newVal, oldVal, val) => {
-  // 使用新的 separate_name 来获取新的数据
-  separate_name.value = newVal;
-  console.log('separate_name changed from', oldVal, 'to', newVal);
+// const selectedSeparateNameChange = (val)=>{//下拉框事件
 
-  // 注意：在这里你需要提供 start_date 和 end_date 的值。
-  // 你可能需要将它们定义为响应式变量，并在适当的地方更新它们的值。
-  // const start_date = 'your_start_date';
-  // const end_date = 'your_end_date';
+// separate_name.value  = val
 
-  // 注意：在这里你需要提供 target 的值。
-  // 你可能需要将它定义为响应式变量，并在适当的地方更新它的值。
-  // const target = 'your_target';
+// }
 
-  await getBarchartData(val.start_date, val.end_date);
-
-  const arr = await getLineData({ start_date, end_date }, target);
-  lineSeries.value = arr;
-
-  const arr2 = await getLineData2({ start_date, end_date }, target);
-  lineSeriestow.value = arr2;
-});
-
-// watch(selectedSeparateName, (newVal, oldVal) => {
-//   // 这里你可以添加一些逻辑，例如使用新的 separate_name 来获取新的数据
-//   separate_name.value = newVal;
-//   console.log('separate_name changed from', oldVal, 'to', newVal);
-//   getBarchartData(val.start_date, val.end_date)
-//   arr = getLineData(val,target)
-//   lineSeries.value = arr
-//   arr = getLineData2(val,target)
-//   lineSeriestow.value = arr
-//   // 如果你的其他逻辑需要使用 separate_name，你可以在这里添加那些逻辑
-//   // 或者在其他地方直接使用 selectedSeparateName.value
-// });
 
 //柱状图
 const series = ref([])
@@ -105,7 +97,7 @@ let barXdata3_1 = ref([])
 const resultFmoadata = ref([]) //处理过后的数据
 
 const timeChange = (val) => {
-  console.log('val :>> ', val)
+  console.log('2222222222val :>> ', val)
   getBarchartData(val.start_date, val.end_date)
 }
 const getBarchartData = async (start_date, end_date) => {//柱状图
@@ -115,6 +107,7 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
     separate_name: separate_name.value
   }
   let res = await api.get('/asset_concentrate_separate', { params })
+  console.log('res :>> ', res);
   let res2_1 = await api.get('/separate_prtindustry', { params })
   let res2_2 = await api.get('/separate_prtindex', { params })
   let res3_1 = await api.get('/separate_fundprtindustry', { params })
@@ -129,102 +122,102 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
 
   // Loop through each date in the received data
   Object.keys(data).forEach(date => {
-      orderedData[date] = {};
+    orderedData[date] = {};
 
-      // Use the predefined order from catergory_list to order the data for this date
-      catergory_list.data.data.forEach(key => {
-          if(data[date].hasOwnProperty(key)) {
-              orderedData[date][key] = data[date][key];
-          }
-      });
+    // Use the predefined order from catergory_list to order the data for this date
+    catergory_list.data.data.forEach(key => {
+      if (data[date].hasOwnProperty(key)) {
+        orderedData[date][key] = data[date][key];
+      }
+    });
   });
 
 
-if (!res.data.data) {
-series.value = {}
-  return
-}
-if (!res2_1.data.data) {
-series2_1.value = {}
-  return
-}
-if (!res2_2.data.data) {
-series2_2.value = {}
-  return
-}
-if (!res3_1.data.data) {
-series3_1.value = {}
-  return
-}
-
-const processBarData = (res) => {
-  let start_date_data = res.data.data[`${start_date}`];
-  let end_date_data = res.data.data[`${end_date}`];
-  let valuesArray1 = [];
-  let valuesArray2 = [];
-  let series = ref([])
-  let barXdata = ref([])
-
-  console.log('start_date_data: ', start_date_data);
-
-  if (start_date_data) {
-    barXdata.value = Object.keys(start_date_data); // X 轴的值
-    valuesArray1 = Object.values(start_date_data);
+  if (!res.data.data) {
+    series.value = {}
+    return
+  }
+  if (!res2_1.data.data) {
+    series2_1.value = {}
+    return
+  }
+  if (!res2_2.data.data) {
+    series2_2.value = {}
+    return
+  }
+  if (!res3_1.data.data) {
+    series3_1.value = {}
+    return
   }
 
-  if (end_date_data) {
-    valuesArray2 = Object.values(end_date_data);
-  }
+  const processBarData = (res) => {
+    let start_date_data = res.data.data[`${start_date}`];
+    let end_date_data = res.data.data[`${end_date}`];
+    let valuesArray1 = [];
+    let valuesArray2 = [];
+    let series = ref([])
+    let barXdata = ref([])
 
-  series.value = [
-    {
-      name: start_date,
-      type: 'bar',
-      data: valuesArray1 // 蓝色柱状图的数据
-    },
-    {
-      name: end_date,
-      type: 'bar',
-      data: valuesArray2 // 蓝色柱状图的数据
+    console.log('start_date_data: ', start_date_data);
+
+    if (start_date_data) {
+      barXdata.value = Object.keys(start_date_data); // X 轴的值
+      valuesArray1 = Object.values(start_date_data);
     }
-  ];
-console.log('start_date_data: ', start_date_data);
-console.log('end_date_data: ', end_date_data);
-console.log('valuesArray1: ', valuesArray1);
-console.log('valuesArray2: ', valuesArray2);
-console.log('series: ', series.value);
-console.log('barXdata: ', barXdata.value);
 
-  return [series, barXdata]
-};
+    if (end_date_data) {
+      valuesArray2 = Object.values(end_date_data);
+    }
 
-// todo: 这个processBarData函数为什么不行?
-// [series2_1, barXdata2_1] = processBarData(res2_1);
-// console.log('res2_1 :>> ', res2_1);
-// console.log('series2_1 :>> ', series2_1);
-// console.log('barXdata2_1 :>> ', barXdata2_1.value);
+    series.value = [
+      {
+        name: start_date,
+        type: 'bar',
+        data: valuesArray1 // 蓝色柱状图的数据
+      },
+      {
+        name: end_date,
+        type: 'bar',
+        data: valuesArray2 // 蓝色柱状图的数据
+      }
+    ];
+    console.log('start_date_data: ', start_date_data);
+    console.log('end_date_data: ', end_date_data);
+    console.log('valuesArray1: ', valuesArray1);
+    console.log('valuesArray2: ', valuesArray2);
+    console.log('series: ', series.value);
+    console.log('barXdata: ', barXdata.value);
+
+    return [series, barXdata]
+  };
+
+  // todo: 这个processBarData函数为什么不行?
+  // [series2_1, barXdata2_1] = processBarData(res2_1);
+  // console.log('res2_1 :>> ', res2_1);
+  // console.log('series2_1 :>> ', series2_1);
+  // console.log('barXdata2_1 :>> ', barXdata2_1.value);
 
   console.log('res :>> ', res);
   //  `${dateString}T00:00:00.000000000`;
   let start_date_data1 = orderedData[`${start_date}`]
   let end_date_data1 = orderedData[`${end_date}`]
-   let valuesArray1 = []
-   let valuesArray2 = []
-   console.log('start_date_data1 :>> ', start_date_data1);
-if (start_date_data1) {
-  barXdata.value = Object.keys(start_date_data1) ;//轴的值
-   valuesArray1 = Object.values(start_date_data1);
+  let valuesArray1 = []
+  let valuesArray2 = []
+  console.log('start_date_data1 :>> ', start_date_data1);
+  if (start_date_data1) {
+    barXdata.value = Object.keys(start_date_data1);//轴的值
+    valuesArray1 = Object.values(start_date_data1);
 
 
 
 
-}
-if (end_date_data1) {
-  barXdata.value = Object.keys(end_date_data1) ;//轴的值
+  }
+  if (end_date_data1) {
+    barXdata.value = Object.keys(end_date_data1);//轴的值
 
-   valuesArray2 = Object.values(end_date_data1);
+    valuesArray2 = Object.values(end_date_data1);
 
-}
+  }
   series.value = [
     {
       name: start_date,
@@ -246,19 +239,19 @@ if (end_date_data1) {
   let start_date_data2_1 = res2_1.data.data[`${start_date}`]
   let end_date_data2_1 = res2_1.data.data[`${end_date}`]
   console.log('start_date_data2_1 :>> ', start_date_data2_1);
-   let valuesArray2_1_1 = []
-   let valuesArray2_1_2 = []
-if (start_date_data2_1) {
-  barXdata2_1.value = Object.keys(start_date_data2_1) ;//轴的值
-  valuesArray2_1_1 = Object.values(start_date_data2_1);
-  console.log('barXdata2_1 :>> ', barXdata2_1.value);
-}
-if (end_date_data2_1) {
-  barXdata2_1.value = Object.keys(end_date_data2_1) ;//轴的值
+  let valuesArray2_1_1 = []
+  let valuesArray2_1_2 = []
+  if (start_date_data2_1) {
+    barXdata2_1.value = Object.keys(start_date_data2_1);//轴的值
+    valuesArray2_1_1 = Object.values(start_date_data2_1);
+    console.log('barXdata2_1 :>> ', barXdata2_1.value);
+  }
+  if (end_date_data2_1) {
+    barXdata2_1.value = Object.keys(end_date_data2_1);//轴的值
 
-  valuesArray2_1_2 = Object.values(end_date_data2_1);
+    valuesArray2_1_2 = Object.values(end_date_data2_1);
 
-}
+  }
   series2_1.value = [
     {
       name: start_date,
@@ -281,16 +274,16 @@ if (end_date_data2_1) {
   let end_date_data2_2 = res2_2.data.data[`${end_date}`]
   let valuesArray2_2_1 = []
   let valuesArray2_2_2 = []
-if (start_date_data2_2) {
-  barXdata2_2.value = Object.keys(start_date_data2_2) ;//轴的值
-  valuesArray2_2_1 = Object.values(start_date_data2_2);
-}
-if (end_date_data2_2) {
-  barXdata2_2.value = Object.keys(end_date_data2_2) ;//轴的值
+  if (start_date_data2_2) {
+    barXdata2_2.value = Object.keys(start_date_data2_2);//轴的值
+    valuesArray2_2_1 = Object.values(start_date_data2_2);
+  }
+  if (end_date_data2_2) {
+    barXdata2_2.value = Object.keys(end_date_data2_2);//轴的值
 
-  valuesArray2_2_2 = Object.values(end_date_data2_2);
+    valuesArray2_2_2 = Object.values(end_date_data2_2);
 
-}
+  }
   series2_2.value = [
     {
       name: start_date,
@@ -306,21 +299,21 @@ if (end_date_data2_2) {
     }
   ]
 
- // 第三排第一个图
- let start_date_data3_1 = res3_1.data.data[`${start_date}`]
+  // 第三排第一个图
+  let start_date_data3_1 = res3_1.data.data[`${start_date}`]
   let end_date_data3_1 = res3_1.data.data[`${end_date}`]
   let valuesArray3_1_1 = []
   let valuesArray3_1_2 = []
-if (start_date_data3_1) {
-  barXdata3_1.value = Object.keys(start_date_data3_1) ;//轴的值
-  valuesArray3_1_1 = Object.values(start_date_data3_1);
-}
-if (end_date_data3_1) {
-  barXdata3_1.value = Object.keys(end_date_data3_1) ;//轴的值
+  if (start_date_data3_1) {
+    barXdata3_1.value = Object.keys(start_date_data3_1);//轴的值
+    valuesArray3_1_1 = Object.values(start_date_data3_1);
+  }
+  if (end_date_data3_1) {
+    barXdata3_1.value = Object.keys(end_date_data3_1);//轴的值
 
-  valuesArray3_1_2 = Object.values(end_date_data3_1);
+    valuesArray3_1_2 = Object.values(end_date_data3_1);
 
-}
+  }
   series3_1.value = [
     {
       name: start_date,
@@ -337,7 +330,7 @@ if (end_date_data3_1) {
   ]
 
   // let res = await api.get('/operation')
-  }
+}
 
 
 
@@ -353,15 +346,15 @@ const lineSeries = ref([
     ] //
   }
 ])
-const linetimeChange =async (val) => {
+const linetimeChange = async (val) => {
   console.log('父组件val :>> ', val)
   let selectedOptions = val.selectedOptions
   console.log('selectedOptions :>> ', selectedOptions)
 
   let arr = []
   let target = ''
-arr = await getLineData(val,target)
-console.log('arr111 :>> ', arr);
+  arr = await getLineData(val, target)
+  console.log('arr111 :>> ', arr);
   // selectedOptions.map((item, index) => {
   //   let randomInt = Math.floor(Math.random() * 10) + index
   //   let obj = {
@@ -379,22 +372,22 @@ console.log('arr111 :>> ', arr);
   lineSeries.value = arr
 }
 
-const  getLineData = async(val,target)=>{
-let catergory = val.selectedOptions;
-let params = {
-  separate_name: separate_name.value,
-  catergory:catergory.join("','")
-  // separate_name:separate_name.value,
-}
-if (target) {
-params.target = target
-}
+const getLineData = async (val, target) => {
+  let catergory = val.selectedOptions;
+  let params = {
+    separate_name: separate_name.value,
+    catergory: catergory.join("','")
+    // separate_name:separate_name.value,
+  }
+  if (target) {
+    params.target = target
+  }
 
-let res = await api.get('/asset_concentrate_timeseries_separate',{params})
-let data = res.data.data
+  let res = await api.get('/asset_concentrate_timeseries_separate', { params })
+  let data = res.data.data
 
-console.log('catergory :>> ', catergory);
-let arr = catergory.map(category => {
+  console.log('catergory :>> ', catergory);
+  let arr = catergory.map(category => {
     const transformedObj = {
       name: category,
       type: 'line',
@@ -403,14 +396,14 @@ let arr = catergory.map(category => {
     return transformedObj;
   });
 
-// const transformedObj = {
-//   name: catergory,
-//   type: 'line',
-//   data:Object.entries(data[catergory]).map(([date, value]) => [date, value])
-// };
-// let arr = []
-// arr.push(transformedObj)
-return arr
+  // const transformedObj = {
+  //   name: catergory,
+  //   type: 'line',
+  //   data:Object.entries(data[catergory]).map(([date, value]) => [date, value])
+  // };
+  // let arr = []
+  // arr.push(transformedObj)
+  return arr
 
 }
 //折线图2
@@ -427,41 +420,41 @@ const lineSeriestow = ref([
 ])
 
 
-const linetimeChangetow =async (val) => {//这是有指标的
+const linetimeChangetow = async (val) => {//这是有指标的
   console.log('父组件val111 :>> ', val)
   // let selectedOptions = val.selectedOptions
   let arr = []
   let target = ''
-  arr =    await  getLineData2(val,target)
+  arr = await getLineData2(val, target)
   lineSeriestow.value = arr
 }
 
-const  getLineData2 = async(val,target)=>{
-let catergory = val.selectedOptions
-let indicator = val.target
-console.log('indicator :>> ', indicator)
-let params = {
-  separate_name: separate_name.value,
-  catergory:catergory.join("','"),
-  indicator: indicator
-  // separate_name:separate_name.value,
-}
-if (target) {
-params.target = target
-}
-let res = await api.get('/asset_indicator_separate',{params})
-console.log('/asset_indicator_separate    res :>> ', res)
-let data = res.data.data
-let arr = catergory.map(category => {
-      const transformedObj = {
-        name: category,
-        type: 'line',
-        data: Object.entries(data[category]).map(([date, value]) => [date, value])
-      };
-      return transformedObj;
-    });
+const getLineData2 = async (val, target) => {
+  let catergory = val.selectedOptions
+  let indicator = val.target
+  console.log('indicator :>> ', indicator)
+  let params = {
+    separate_name: separate_name.value,
+    catergory: catergory.join("','"),
+    indicator: indicator
+    // separate_name:separate_name.value,
+  }
+  if (target) {
+    params.target = target
+  }
+  let res = await api.get('/asset_indicator_separate', { params })
+  console.log('/asset_indicator_separate    res :>> ', res)
+  let data = res.data.data
+  let arr = catergory.map(category => {
+    const transformedObj = {
+      name: category,
+      type: 'line',
+      data: Object.entries(data[category]).map(([date, value]) => [date, value])
+    };
+    return transformedObj;
+  });
 
-return arr
+  return arr
 }
 
 
@@ -487,33 +480,33 @@ const series2_3 = ref([
     ] //
   }
 ])
-const linetimeChange2 =async (val) => {
+const linetimeChange2 = async (val) => {
   console.log('父组件val :>> ', val)
   let selectedOptions = val.selectedOptions
   console.log('selectedOptions :>> ', selectedOptions)
 
   let arr = []
   let target = ''
-arr = await getLineData3(val,target)
-console.log('arr111 :>> ', arr);
-series2_3.value = arr
+  arr = await getLineData3(val, target)
+  console.log('arr111 :>> ', arr);
+  series2_3.value = arr
 }
 
-const  getLineData3 = async(val,target)=>{
-let sector = val.selectedOptions;
-let params = {
-  separate_name: separate_name.value,
-  sector: sector.join("','")
-  // separate_name:separate_name.value,
-}
-if (target) {
-params.target = target
-}
+const getLineData3 = async (val, target) => {
+  let sector = val.selectedOptions;
+  let params = {
+    separate_name: separate_name.value,
+    sector: sector.join("','")
+    // separate_name:separate_name.value,
+  }
+  if (target) {
+    params.target = target
+  }
 
-let res = await api.get('/separate_prtindustry_timeseries',{params})
-let data = res.data.data
+  let res = await api.get('/separate_prtindustry_timeseries', { params })
+  let data = res.data.data
 
-let arr = sector.map(sector => {
+  let arr = sector.map(sector => {
     const transformedObj = {
       name: sector,
       type: 'line',
@@ -536,33 +529,33 @@ const series3_2 = ref([
     ] //
   }
 ])
-const linetimeChange3 =async (val) => {
+const linetimeChange3 = async (val) => {
   console.log('父组件val :>> ', val)
   let selectedOptions = val.selectedOptions
   console.log('selectedOptions :>> ', selectedOptions)
 
   let arr = []
   let target = ''
-arr = await getLineData4(val,target)
-console.log('arr111 :>> ', arr);
-series3_2.value = arr
+  arr = await getLineData4(val, target)
+  console.log('arr111 :>> ', arr);
+  series3_2.value = arr
 }
 
-const  getLineData4 = async(val,target)=>{
-let sector = val.selectedOptions;
-let params = {
-  separate_name: separate_name.value,
-  sector: sector.join("','")
-  // separate_name:separate_name.value,
-}
-if (target) {
-params.target = target
-}
+const getLineData4 = async (val, target) => {
+  let sector = val.selectedOptions;
+  let params = {
+    separate_name: separate_name.value,
+    sector: sector.join("','")
+    // separate_name:separate_name.value,
+  }
+  if (target) {
+    params.target = target
+  }
 
-let res = await api.get('/separate_fundprtindustry_timeseries',{params})
-let data = res.data.data
+  let res = await api.get('/separate_fundprtindustry_timeseries', { params })
+  let data = res.data.data
 
-let arr = sector.map(sector => {
+  let arr = sector.map(sector => {
     const transformedObj = {
       name: sector,
       type: 'line',
@@ -629,8 +622,4 @@ function transformData(arrlist) {
 
 </script>
 
-<style scoped>
-
-
-
-</style>
+<style scoped></style>

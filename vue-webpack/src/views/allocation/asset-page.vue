@@ -1,16 +1,37 @@
 <template>
   <div class="all-page-flex">
+   <div style="width: 100%;">
+      <el-date-picker v-model="father_start_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
+        style="max-width: 240px" placeholder="请选择开始日期" />
+      <el-date-picker v-model="father_end_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
+        style="max-width: 240px" placeholder="请选择结束日期" />
+    </div>
     <BarandLinechart :mySeries="lineSeries" @allParamChange="allChange" :showTarget="true"></BarandLinechart>
     <Barchart2 :mySeries="series" :echartsLegend="echartsLegend" @allParamChange="barChange" :showTarget="true">
     </Barchart2>
   </div>
 </template>
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref,provide } from 'vue'
 import Linechart from './components/Linechart'
 import BarandLinechart from './components/BarandLinechart.vue'
 import Barchart2 from './components/Barchart2.vue'
-import api from '@/utils/api'
+import {api} from '@/utils/api'
+
+//父组件时间
+const father_start_date = ref('')
+const father_end_date = ref('')
+const father_date = ref({
+  father_start_date: '',
+  father_end_date: ''
+
+})
+provide('father_date', father_date);
+const father_date_Chage = (val) => {
+  father_date.value.father_start_date = father_start_date.value
+  father_date.value.father_end_date = father_end_date.value
+}
+
 
 let lineSeries = ref([
   {

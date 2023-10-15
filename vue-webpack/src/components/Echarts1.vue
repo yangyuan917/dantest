@@ -25,7 +25,7 @@
 </template>
 <script setup>
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue';
-import api from '@/utils/api';
+import {api0} from '@/utils/api';
 import io from 'socket.io-client';
 
 import * as echarts from 'echarts';
@@ -135,7 +135,7 @@ watch(
 
 const getData_scores_short1 = async (selectedTarget, start_date) => { //获取对应的数据-获取第一排数据
 
-  let res = await api.get('/scores_short?target=' + selectedTarget)
+  let res = await api0.get('/scores_short?target=' + selectedTarget)
   res = res.data
   console.log('555555555555res :>> ', res);
   let keys1 = getLastValue(res.data.dy_downside_2)
@@ -147,7 +147,7 @@ const getData_scores_short1 = async (selectedTarget, start_date) => { //获取�
 
   tableData.value[0].data2 = keys2
   tableData.value[0].data3 = keys3
-  let data = await api.get('/scores_short1?target=' + selectedTarget + '&start_date=' + start_date)
+  let data = await api0.get('/scores_short1?target=' + selectedTarget + '&start_date=' + start_date)
   data = data.data;
   // this.dy_downside = data.data
   tableData.value[0].data4 = data.data.dy_downside_2

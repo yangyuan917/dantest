@@ -18,10 +18,10 @@
   </div>
 </template>
 <script setup>
-import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue'
+import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch, inject } from 'vue'
 import * as echarts from 'echarts'
 const emit = defineEmits(['timeChange'])
-import api from '@/utils/api';
+import { api } from '@/utils/api';
 
 const props = defineProps({
   myStyle: {
@@ -36,6 +36,18 @@ const props = defineProps({
     type: String,
     default: '标题'
   },
+  separate_name: {//父组件下拉框的值
+    type: String,
+    default: ''
+  },
+  father_start_date: {//父组件下拉框的开始时间值
+    type: String,
+    default: ''
+  },
+  father_end_date: {//父组件下拉框的结束时间值
+    type: String,
+    default: ''
+  },
   mySeries: {
     type: Object,
     default: () => ({}),
@@ -49,12 +61,43 @@ const props = defineProps({
   // myOption: {
   //   type: Object,
   //   default: () => ({}),
+
   //   required: true,
   // },
 })
 
+const father_date = inject('father_date')||'' ;
+watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
+  console.log('Value changed:', father_date.value.father_start_date);
+  start_date.value = father_date.value.father_start_date
+  end_date.value = father_date.value.father_end_date
+changeDateTime()
+}, { deep: true });//深层次监听
+//时间控件相关
 const start_date = ref('')
-const end_date = ref('2023-09-21')
+start_date.value = father_date.value.father_start_date||''
+const end_date = ref('')
+  end_date.value = father_date.value.father_end_date||''
+const changeDateTime = () => {
+  //选择时间改变时，向父组件传事件
+  let start_date_and_end_date = {
+    start_date: start_date.value,
+    end_date: end_date.value
+  }
+  emit('timeChange', start_date_and_end_date)
+}
+changeDateTime()
+
+watch(//监听下拉框
+  () => props.separate_name,
+  (newVal, oldVal) => {
+    changeDateTime()
+
+  }
+)
+
+
+
 const getDateTime = () => {
 
   // 获取当前日期
@@ -70,11 +113,7 @@ const getDateTime = () => {
 }
 // getDateTime()
 
-let obj = {
-  start_date: start_date.value,
-  end_date: end_date.value
-}
-emit('timeChange', obj)
+
 const xData = ref([])
 const getXdata = async () => {
   let res = await api.get('/catergory_list')//这边写获取x轴坐标的数据
@@ -116,14 +155,7 @@ const myOption = ref({
   series: props.mySeries
 })
 
-const changeDateTime = (value) => {
-  //选择时间改变时，向父组件传事件
-  let obj = {
-    start_date: start_date.value,
-    end_date: end_date.value
-  }
-  emit('timeChange', obj)
-}
+
 // 因为是封装的组件，会多次调用，id不能重复，要在初始化之前写，不然会报错dom为定义
 let uid = ref('')
 onBeforeMount(() => {
@@ -149,6 +181,12 @@ onMounted(() => {
     }, 300)
   })
 })
+
+
+
+
+
+
 //监听props中myOption的变化，变化的话重新渲染echarts
 watch(
   () => props.mySeries,
@@ -163,6 +201,8 @@ watch(
     })
   }
 )
+
+
 watch(
   () => props.xData,
   (newVal, oldVal) => {

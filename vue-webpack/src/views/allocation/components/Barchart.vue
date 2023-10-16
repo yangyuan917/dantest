@@ -6,45 +6,33 @@
           {{ title }}
         </div>
         <div class="time">
-          <el-date-picker v-model="start_date" type="date" @change="changeDateTime" value-format="YYYY-MM-DD"
-            style="max-width: 240px" placeholder="请选择开始日期" />
-          <el-date-picker v-model="end_date" type="date" @change="changeDateTime" value-format="YYYY-MM-DD"
-            style="max-width: 240px" placeholder="请选择结束日期" />
+          <el-date-picker v-model="start_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 200px" placeholder="请选择开始日期" />
+          <el-date-picker v-model="end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 200px" placeholder="请选择结束日期" />
         </div>
       </div>
       <div class="line"></div>
     </div>
-    <div :id="uid" :style="myStyle" class="echarts"></div>
+    <!-- <div :id="uid" :style="myStyle" class="echarts"></div> -->
+    <BaseEcharts :echartsOption="myOption" />
   </div>
 </template>
 <script setup>
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch, inject } from 'vue'
+import BaseEcharts from '@/components/BaseEcharts.vue'
+
 import * as echarts from 'echarts'
 const emit = defineEmits(['timeChange'])
 import { api } from '@/utils/api';
 
 const props = defineProps({
-  myStyle: {
-    type: Object,
-    default: () => ({
-      // width: '600px',
-      // height: '400px',
-    })
-  },
 
   title: {
     type: String,
     default: '标题'
   },
   separate_name: {//父组件下拉框的值
-    type: String,
-    default: ''
-  },
-  father_start_date: {//父组件下拉框的开始时间值
-    type: String,
-    default: ''
-  },
-  father_end_date: {//父组件下拉框的结束时间值
     type: String,
     default: ''
   },
@@ -58,17 +46,11 @@ const props = defineProps({
     default: () => ([]),
 
   },
-  // myOption: {
-  //   type: Object,
-  //   default: () => ({}),
-
-  //   required: true,
-  // },
 })
 
 const father_date = inject('father_date')||'' ;
+console.log('333father_date :>> ', father_date);
 watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
-  console.log('Value changed:', father_date.value.father_start_date);
   start_date.value = father_date.value.father_start_date
   end_date.value = father_date.value.father_end_date
 changeDateTime()
@@ -88,6 +70,14 @@ const changeDateTime = () => {
 }
 changeDateTime()
 
+
+
+const startDateChange = (val)=>{//开始时间改变
+    changeDateTime()
+}
+const endDateChange = (val)=>{//结束时间改变
+    changeDateTime()
+}
 watch(//监听下拉框
   () => props.separate_name,
   (newVal, oldVal) => {
@@ -95,9 +85,6 @@ watch(//监听下拉框
 
   }
 )
-
-
-
 const getDateTime = () => {
 
   // 获取当前日期
@@ -112,24 +99,7 @@ const getDateTime = () => {
   end_date.value = formattedDate
 }
 // getDateTime()
-
-
 const xData = ref([])
-const getXdata = async () => {
-  let res = await api.get('/catergory_list')//这边写获取x轴坐标的数据
-  // let res = await api.get('/catergory_list')
-  let myChart = echarts.init(document.getElementById(uid.value))
-
-  xData.value = res.data.data // x 轴的数据
-  console.log('xData.value :>> ', xData.value);
-  let options = myOption.value
-  options.xAxis.data = xData.value
-  myChart.setOption(options, {
-    notMerge: true //不和之前的option合并
-  })
-}
-
-// getXdata()
 const myOption = ref({
   // color: ['#c0504d', '#4f81bd'], // 设置柱状图的颜色，分别对应红色和蓝色
   legend: {
@@ -154,51 +124,13 @@ const myOption = ref({
   },
   series: props.mySeries
 })
-
-
-// 因为是封装的组件，会多次调用，id不能重复，要在初始化之前写，不然会报错dom为定义
-let uid = ref('')
-onBeforeMount(() => {
-  uid.value = `echarts-uid-${parseInt((Math.random() * 1000000).toString())}`
-})
-onMounted(() => {
-  let myChart = echarts.init(document.getElementById(uid.value))
-  // 在template中可以直接取props中的值，但是在script中不行，因为script是在挂载之前执行的
-  // let myOption = myOption.value
-  console.log('testmyOption :>> ', myOption.value)
-  myChart.setOption(myOption.value, {
-    notMerge: true //不和之前的option合并
-  })
-
-  // 监听页面的大小
-  window.addEventListener('resize', () => {
-    setTimeout(() => {
-      myChart?.resize({
-        animation: {
-          duration: 300
-        }
-      })
-    }, 300)
-  })
-})
-
-
-
-
-
-
 //监听props中myOption的变化，变化的话重新渲染echarts
 watch(
   () => props.mySeries,
   (newVal, oldVal) => {
-    let myChart = echarts.init(document.getElementById(uid.value))
-    // let myOptions = my
     myOption.value.legend.data = [start_date.value, end_date.value]
     myOption.value.series = newVal
     myOption.value.xAxis.data = props.xData
-    myChart.setOption(myOption.value, {
-      notMerge: true //不和之前的option合并
-    })
   }
 )
 
@@ -206,14 +138,8 @@ watch(
 watch(
   () => props.xData,
   (newVal, oldVal) => {
-    let myChart = echarts.init(document.getElementById(uid.value))
-    // let myOptions = my
     myOption.value.legend.data = [start_date.value, end_date.value]
-    // myOption.value.series = newVal
     myOption.value.xAxis.data = newVal
-    myChart.setOption(myOption.value, {
-      notMerge: true //不和之前的option合并
-    })
   }
 )
 

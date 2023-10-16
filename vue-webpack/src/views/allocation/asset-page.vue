@@ -16,14 +16,16 @@ import { reactive, ref,provide } from 'vue'
 import Linechart from './components/Linechart'
 import BarandLinechart from './components/BarandLinechart.vue'
 import Barchart2 from './components/Barchart2.vue'
+import {getTodayTime} from '@/utils/util'
 import {api} from '@/utils/api'
 
 //父组件时间
-const father_start_date = ref('')
+const father_start_date = ref('2023-09-02')
 const father_end_date = ref('')
+father_end_date.value = getTodayTime()
 const father_date = ref({
-  father_start_date: '',
-  father_end_date: ''
+  father_start_date: father_start_date.value,
+  father_end_date: father_end_date.value
 
 })
 provide('father_date', father_date);
@@ -60,22 +62,18 @@ let lineSeries = ref([
     yAxisIndex: 1 // 使用第二个 y 轴坐标
   }
 ])
-console.log('lineSeries.value :>> ', lineSeries.value)
-console.log('lineSeries :>> ', lineSeries)
+
 const allChange = async (val) => {
   //参数改变
-  console.log('父组件val111 :>> ', val)
   let arr = []
   let target = ''
   arr = await getLineData2(val, target)
   lineSeries.value = arr
-  console.log('111111111lineSeries.value :>> ', lineSeries.value)
 }
 
 const getLineData2 = async (val, target) => {
   let catergory = val.selectedOptions[0]
   let indicator = val.target
-  console.log('catergory :>> ', catergory)
   let params = {
     // separate_name: separate_name.value,
     catergory: catergory,
@@ -86,14 +84,8 @@ const getLineData2 = async (val, target) => {
     params.target = target
   }
   let res = await api.get('/transaction_bondfund', { params })
-  console.log('/transaction_bondfund    res :>> ', res)
   let rawData = res.data.data
-  console.log('rawData :>> ', rawData)
-  console.log('Object.keys(rawData) :>> ', Object.keys(rawData))
-
   const arr = Object.keys(rawData).map((indicator) => {
-    console.log('indicator :>> ', indicator)
-    console.log('entries(rawData[indicator]) :>> ', Object.entries(rawData[indicator]))
     return {
       name: indicator,
       type: indicator == '市值(元)' ? 'bar' : 'line',
@@ -121,9 +113,7 @@ echartsLegend.value = [...Legend1,...Legend2]
   let arr1 = resultFmoat(testObj.list1,1)
   let arr2 = resultFmoat(testObj.list2,2)
   series.value = [...arr1,...arr2]
-  console.log('res :>> ', res)
-  console.log('list :>> ', list)
-  console.log('echartsLegend :>> ', echartsLegend)
+
 
 }
 
@@ -254,74 +244,6 @@ const series = ref([
     ]
   }
 ])
-
-// [
-//   {
-//       name: '总计_减仓',
-//       type: 'bar',
-
-//        stack: 'stack1',
-//         itemStyle: {
-//         color: '#8f9cc6',
-//       },
-
-//         data: [
-//           [ "2023-09-19", 0.768577],
-//         ["2023-09-20", 0.457382],
-//         ["2023-09-21", 0.377451],
-//         ["2023-09-22", 0.166451]
-
-//     ],
-//     },
-//         {
-//       name: '图例二',
-//       type: 'bar',
-
-//        stack: 'stack1',
-//         itemStyle: {
-//         color: ' #5470c6',
-//       },
-//       data: [
-//       ['2023-09-01', 10],
-//       ['2023-09-02', 40],
-//       ['2023-09-04', 80],
-//       ['2023-09-05', 80],
-//       ['2023-09-06', 80]
-//     ]
-//     },
-//             {
-//       name: '图例三',
-//       type: 'bar',
-
-//        stack: 'stack2',
-//         itemStyle: {
-//         color: ' #b7ccad',
-//       },
-//        data: [
-//       ['2023-09-01', -10],
-//       ['2023-09-02', -40],
-//       ['2023-09-04', -80],
-//       ['2023-09-05', -80],
-//       ['2023-09-06', -80]
-//     ]
-//     },
-//             {
-//       name: '图例四',
-//       type: 'bar',
-
-//        stack: 'stack2',
-//         itemStyle: {
-//         color: '#91CC75',
-//       },
-//       data: [
-//       ['2023-09-01', 10],
-//       ['2023-09-02', 40],
-//       ['2023-09-04', 80],
-//       ['2023-09-05', 80],
-//       ['2023-09-06', 80]
-//     ]
-//     },
-// ]
 </script>
 
 <style scoped></style>

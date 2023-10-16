@@ -40,4 +40,19 @@ const DateFormat = function (date, fmt) {
   return fmt
 }
 
-export { getQueryStringByName, transformData, DateFormat }
+const getTodayTime = () => {
+  // 获取当前日期
+  let currentDate = new Date();
+
+  // 获取前一天的日期
+  let previousDate = new Date(currentDate);
+  previousDate.setDate(currentDate.getDate() - 1);
+
+  // 格式化日期为'YYYY-MM-DD'格式
+  let formattedDate = previousDate.toISOString().split('T')[0];
+ return  formattedDate
+}
+
+
+
+export { getQueryStringByName, transformData, DateFormat ,getTodayTime }

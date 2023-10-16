@@ -6,29 +6,17 @@
           {{ title }}
         </div>
         <div class="time">
-          <el-select
-            v-model="target"
-            @change="targetChange"
-            v-if="showTarget"
-            placeholder="请选择指标"
-          >
-            <el-option
-              v-for="item in targetList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+          <el-select v-model="target" @change="targetChange" v-if="showTarget" placeholder="请选择指标"
+            style="max-width: 130px">
+            <el-option v-for="item in targetList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-          <el-date-picker
-            v-model="timeValue"
-            type="daterange"
-            @change="changeTime"
-            value-format="YYYY-MM-DD"
-            range-separator="-"
-            start-placeholder="请选择开始日"
-            end-placeholder="请选择结束日"
-            style="max-width: 240px"
-          />
+          <!-- <el-date-picker v-model="timeValue" type="daterange" @change="changeTime" value-format="YYYY-MM-DD"
+            range-separator="-" start-placeholder="请选择开始日" end-placeholder="请选择结束日" style="max-width: 240px" /> -->
+          <el-date-picker v-model="start_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 200px" placeholder="请选择开始日期" />
+          <el-date-picker v-model="end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 200px" placeholder="请选择结束日期" />
+
         </div>
       </div>
       <div class="line"></div>
@@ -36,24 +24,24 @@
     <div class="all-box">
       <div class="left-item">
         <el-checkbox-group v-model="selectedOptions" @change="checkChange">
-          <el-checkbox
-            v-for="option in checkboxOptions"
-            :key="option.value"
-            :label="option.value"
-            :disabled="selectedOptions.length === 1 && !selectedOptions.includes(option.value)"
-          >
+          <el-checkbox v-for="option in checkboxOptions" :key="option.value" :label="option.value"
+            :disabled="selectedOptions.length === 1 && !selectedOptions.includes(option.value)">
             {{ option.label }}
           </el-checkbox>
         </el-checkbox-group>
       </div>
-      <div :id="uid" :style="myStyle" class="echarts"></div>
+      <!-- <div :id="uid" :style="myStyle" class="echarts"></div> -->
+      <BaseEcharts :echartsOption="myOption" />
+
     </div>
   </div>
 </template>
 <script setup>
-import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue'
+import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch, inject } from 'vue'
+import BaseEcharts from '@/components/BaseEcharts.vue'
+
 import * as echarts from 'echarts'
-import {api} from '@/utils/api';
+import { api } from '@/utils/api';
 
 const emit = defineEmits(['timeChange', 'allParamChange'])
 const props = defineProps({
@@ -104,14 +92,55 @@ const checkChange = (val) => {
   console.log('selectedOptions :>> ', selectedOptions.value)
 }
 
+
+const father_date = inject('father_date') || '';
+console.log('333father_date :>> ', father_date);
+watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
+  start_date.value = father_date.value.father_start_date
+  end_date.value = father_date.value.father_end_date
+  timeChangeResize()
+
+  changeDateTime()
+}, { deep: true });//深层次监听
+//时间控件相关
 const start_date = ref('')
-const end_date = ref('2023-09-28')
-let timeValue = ref(['2023-09-01', '2023-09-28'])
+start_date.value = father_date.value.father_start_date || ''
+const end_date = ref('')
+end_date.value = father_date.value.father_end_date || ''
+const changeDateTime = () => {
+  //选择时间改变时，向父组件传事件
+  // let start_date_and_end_date = {
+  //   start_date: start_date.value,
+  //   end_date: end_date.value
+  // }
+  emit('allParamChange', allobj)
+
+}
+changeDateTime()
+
+const startDateChange = (val) => {//开始时间改变
+  timeChangeResize()
+}
+const endDateChange = (val) => {//结束时间改变
+  timeChangeResize()
+}
+
+const timeChangeResize = () => {//时间改变时，重置x轴的时间控件
+  let stime = start_date.value
+  let etime = end_date.value
+  let myOptions = myOption.value
+  myOptions.xAxis.min = new Date(stime.replace(/-/g, '/'))
+  myOptions.xAxis.max = new Date(etime.replace(/-/g, '/'))
+
+}
+
+// const start_date = ref('')
+// const end_date = ref('2023-09-28')
 
 // 指标
 const target = ref('yield')
 const targetList = ref([
-{
+  {
     label: '到期收益率',
     value: 'yield'
   },
@@ -131,8 +160,8 @@ const targetChange = (val) => {
 }
 
 let allobj = {
-  start_date: timeValue.value[0],
-  end_date: timeValue.value[1],
+  start_date: start_date.value,
+  end_date: end_date.value,
   target: target.value,
   selectedOptions: selectedOptions.value
 }
@@ -164,8 +193,8 @@ const myOption = ref({
   },
   xAxis: {
     type: 'time',
-    min: new Date(timeValue.value[0].replace(/-/g, '/')),
-    max: new Date(timeValue.value[1].replace(/-/g, '/')),
+    min: new Date(start_date.value.replace(/-/g, '/')),
+    max: new Date(end_date.value.replace(/-/g, '/')),
     axisLabel: {
       rotate: 45
     }
@@ -198,44 +227,15 @@ const changeTime = (value) => {
 
 // 因为是封装的组件，会多次调用，id不能重复，要在初始化之前写，不然会报错dom为定义
 
-let uid = ref('')
-onBeforeMount(() => {
-  uid.value = `echarts-uid-${parseInt((Math.random() * 1000000).toString())}`
-})
 
-onMounted(() => {
-  let myChart = echarts.init(document.getElementById(uid.value))
-  // 在template中可以直接取props中的值，但是在script中不行，因为script是在挂载之前执行的
-  // let myOption = myOption.value
-  console.log('myOption :>> ', myOption.value)
-  myChart.setOption(myOption.value, {
-    notMerge: true //不和之前的option合并
-  })
-
-  // 监听页面的大小
-  window.addEventListener('resize', () => {
-    setTimeout(() => {
-      myChart?.resize({
-        animation: {
-          duration: 300
-        }
-      })
-    }, 300)
-  })
-})
 
 //监听props中myOption的变化，变化的话重新渲染echarts
 watch(
   () => props.mySeries,
   (newVal, oldVal) => {
-    let myChart = echarts.init(document.getElementById(uid.value))
-    // let myOptions = my
-    console.log('myOption :>> ', myOption.value)
     myOption.value.legend.data = [...selectedOptions.value]
     myOption.value.series = newVal
-    myChart.setOption(myOption.value, {
-      notMerge: true //不和之前的option合并
-    })
+
   }
 )
 </script>
@@ -272,15 +272,18 @@ watch(
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
 .all-box {
   display: flex;
 }
+
 .left-item {
   width: 100px;
   /* background-color: red; */
   height: 100%;
   margin-left: 20px;
 }
+
 .echarts {
   padding: 20px;
   padding-bottom: 6px;

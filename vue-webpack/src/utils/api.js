@@ -23,7 +23,7 @@ export const api = axios.create({
   timeout: 5000, // 设置请求超时时间
   //json 化
   transformRequest: [
-    function (data) {
+    function (data) { 
       data = JSON.stringify(data);
       return data;
     },

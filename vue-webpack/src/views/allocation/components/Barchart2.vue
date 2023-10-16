@@ -7,36 +7,37 @@
         </div>
         <!-- 改一下class -->
         <div class="sector">
-          <el-select v-model="sector1" @change="targetChange" v-if="showTarget" placeholder="请选择行业">
+          <el-select v-model="sector1" @change="targetChange" style="max-width: 120px" v-if="showTarget" placeholder="请选择行业">
             <el-option v-for="item in targetList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-          <el-select v-model="sector2" @change="targetChange" v-if="showTarget" placeholder="请选择行业">
+          <el-select v-model="sector2" @change="targetChange"  style="max-width: 120px" v-if="showTarget" placeholder="请选择行业">
             <el-option v-for="item in targetList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </div>
-          <div class="time">
-         <el-date-picker
-            v-model="timeValue"
-            type="daterange"
-            @change="changeTime"
-            value-format="YYYY-MM-DD"
-            range-separator="-"
-            start-placeholder="请选择开始日"
-            end-placeholder="请选择结束日"
-            style="max-width: 240px"
-          />
+        <div class="time">
+
+
+ <el-date-picker v-model="start_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 160px" placeholder="请选择开始日期" />
+          <el-date-picker v-model="end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 160px" placeholder="请选择结束日期" />
+
         </div>
       </div>
       <div class="line"></div>
     </div>
-    <div :id="uid" :style="myStyle" class="echarts"></div>
+    <!-- <div :id="uid" :style="myStyle" class="echarts"></div> -->
+    <BaseEcharts :echartsOption="myOption" />
+
   </div>
 </template>
 <script setup>
-import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch } from 'vue'
+import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch,inject } from 'vue'
+import BaseEcharts from '@/components/BaseEcharts.vue'
+
 import * as echarts from 'echarts'
 const emit = defineEmits(['allParamChange'])
-import {api} from '@/utils/api';
+import { api } from '@/utils/api';
 
 const props = defineProps({
   myStyle: {
@@ -46,10 +47,10 @@ const props = defineProps({
       // height: '400px',
     })
   },
-showTarget: {
-  type: Boolean,
-  default: false
-},
+  showTarget: {
+    type: Boolean,
+    default: false
+  },
   title: {
     type: String,
     default: '标题'
@@ -76,6 +77,37 @@ showTarget: {
   //   required: true,
   // },
 })
+//时间控件相关
+const startDateChange = (val)=>{//开始时间改变
+  timeChangeResize()
+
+}
+const endDateChange = (val)=>{//结束时间改变
+  timeChangeResize()
+
+}
+const father_date = inject('father_date');
+watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
+  start_date.value = father_date.value.father_start_date
+  end_date.value = father_date.value.father_end_date
+  timeChangeResize()
+
+}, { deep: true });//深层次监听
+
+const start_date = ref('')
+start_date.value = father_date.value.father_start_date
+const end_date = ref('')
+end_date.value = father_date.value.father_end_date
+
+const timeChangeResize = ()=>{//时间改变时，重置x轴的时间控件
+   let stime = start_date.value
+  let etime = end_date.value
+  let myOptions = myOption.value
+  myOptions.xAxis.min = new Date(stime.replace(/-/g, '/'))
+  myOptions.xAxis.max = new Date(etime.replace(/-/g, '/'))
+
+}
+
 
 const target = ref('')
 // let targetList = ref([
@@ -114,13 +146,13 @@ let timeValue = ref(['2023-09-01', '2023-09-28'])
 let sector1 = ref('总计')
 let sector2 = ref('银行')
 let obj = {
-sector1,
-sector2
+  sector1,
+  sector2
 }
-const targetChange = ()=>{
-// allParamChange()
+const targetChange = () => {
+  // allParamChange()
 
-emit('allParamChange', obj)
+  emit('allParamChange', obj)
 }
 
 emit('allParamChange', obj)
@@ -142,16 +174,16 @@ const getXdata = async () => {
 const myOption = ref({
   // color: ['#c0504d', '#4f81bd'], // 设置柱状图的颜色，分别对应红色和蓝色
   legend: {
-    data:   props.echartsLegend // 设置图例的数据
+    data: props.echartsLegend // 设置图例的数据
   },
-    tooltip: {
+  tooltip: {
     trigger: 'axis',
     axisPointer: {
       type: 'shadow',
     },
   },
 
-    dataZoom: [
+  dataZoom: [
     // 添加数据区域缩放组件，即滚动条
     {
       show: true,
@@ -166,8 +198,8 @@ const myOption = ref({
     type: 'time',
     //   min:'Thu, 02 Jan 2020 00:00:00 GMT',
     //   max:"Tue, 01 Sep 2020 00:00:00 GMT",
-    min: new Date(timeValue.value[0].replace(/-/g, '/')),
-    max: new Date(timeValue.value[1].replace(/-/g, '/')),
+    min: new Date( start_date.value.replace(/-/g, '/')),
+    max: new Date(end_date.value.replace(/-/g, '/')),
     axisLabel: {
       rotate: 45
     }
@@ -178,69 +210,28 @@ const myOption = ref({
   series: props.mySeries
 })
 
-const changeTime = (value) => {
-  //当时间改变时，myOption中的xAxis的min和max也要改变，重新渲染echarts
-  let stime = value[0]
-  let etime = value[1]
-  let myOptions = myOption.value
 
-  myOptions.xAxis.min = new Date(stime.replace(/-/g, '/'))
-  myOptions.xAxis.max = new Date(etime.replace(/-/g, '/'))
-  let myChart = echarts.init(document.getElementById(uid.value))
-  myChart.setOption(myOptions, {
-    notMerge: true //不和之前的option合并
-  })
-}
 
-// 因为是封装的组件，会多次调用，id不能重复，要在初始化之前写，不然会报错dom为定义
-let uid = ref('')
-onBeforeMount(() => {
-  uid.value = `echarts-uid-${parseInt((Math.random() * 1000000).toString())}`
-})
-onMounted(() => {
-  let myChart = echarts.init(document.getElementById(uid.value))
-  // 在template中可以直接取props中的值，但是在script中不行，因为script是在挂载之前执行的
-  // let myOption = myOption.value
-  console.log('testmyOption :>> ', myOption.value)
-  myChart.setOption(myOption.value, {
-    notMerge: true //不和之前的option合并
-  })
-
-  // 监听页面的大小
-  window.addEventListener('resize', () => {
-    setTimeout(() => {
-      myChart?.resize({
-        animation: {
-          duration: 300
-        }
-      })
-    }, 300)
-  })
-})
 //监听props中myOption的变化，变化的话重新渲染echarts
 watch(
   () => props.mySeries,
   (newVal, oldVal) => {
-    let myChart = echarts.init(document.getElementById(uid.value))
+    // let myChart = echarts.init(document.getElementById(uid.value))
     // let myOptions = my
-    myOption.value.legend.data =  props.echartsLegend
+    myOption.value.legend.data = props.echartsLegend
     myOption.value.series = newVal
     // myOption.value.xAxis.data = props.xData
-    myChart.setOption(myOption.value, {
-      notMerge: true //不和之前的option合并
-    })
+
   }
 )
 watch(
   () => props.xData,
   (newVal, oldVal) => {
-    let myChart = echarts.init(document.getElementById(uid.value))
+    // let myChart = echarts.init(document.getElementById(uid.value))
     // let myOptions = my
     // myOption.value.series = newVal
     myOption.value.xAxis.data = newVal
-    myChart.setOption(myOption.value, {
-      notMerge: true //不和之前的option合并
-    })
+
   }
 )
 
@@ -295,7 +286,9 @@ watch(
 
   /* width: 580px; */
 }
-
+.sector{
+max-width: 120px;
+}
 .item {
   flex: 1;
   min-width: calc(33.33% - 20px);

@@ -31,11 +31,13 @@
   import {api} from '@/utils/api'
 
 //父组件时间
-const father_start_date = ref('')
+const father_start_date = ref('2023-09-02')
 const father_end_date = ref('')
+father_end_date.value = getTodayTime()
+
 const father_date = ref({
-  father_start_date: '',
-  father_end_date: ''
+  father_start_date: father_start_date.value,
+  father_end_date: father_end_date.value
 
 })
 provide('father_date', father_date);

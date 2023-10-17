@@ -34,6 +34,7 @@
 <script setup>
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch,inject } from 'vue'
 import BaseEcharts from '@/components/BaseEcharts.vue'
+import {lastMonthDay} from '@/utils/util'
 
 import * as echarts from 'echarts'
 const emit = defineEmits(['allParamChange'])
@@ -88,14 +89,14 @@ const endDateChange = (val)=>{//结束时间改变
 }
 const father_date = inject('father_date');
 watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
-  start_date.value = father_date.value.father_start_date
+  start_date.value =lastMonthDay(father_date.value.father_start_date)
   end_date.value = father_date.value.father_end_date
   timeChangeResize()
 
 }, { deep: true });//深层次监听
 
 const start_date = ref('')
-start_date.value = father_date.value.father_start_date
+start_date.value = lastMonthDay(father_date.value.father_start_date)
 const end_date = ref('')
 end_date.value = father_date.value.father_end_date
 
@@ -158,19 +159,7 @@ const targetChange = () => {
 emit('allParamChange', obj)
 
 const xData = ref([])
-const getXdata = async () => {
-  let res = await api.get('/industry_list')//这边写获取x轴坐标的数据
-  // let res = await api.get('/catergory_list')
-  xData.value = res.data.data // x 轴的数据
-  console.log('xData.value :>> ', xData.value);
-  let options = myOption.value
-  options.xAxis.data = xData.value
-  myChart.setOption(options, {
-    notMerge: true //不和之前的option合并
-  })
-}
 
-// getXdata()
 const myOption = ref({
   // color: ['#c0504d', '#4f81bd'], // 设置柱状图的颜色，分别对应红色和蓝色
   legend: {

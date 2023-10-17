@@ -39,6 +39,7 @@
 <script setup>
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch, inject } from 'vue'
 import BaseEcharts from '@/components/BaseEcharts.vue'
+import {lastMonthDay} from '@/utils/util'
 
 import * as echarts from 'echarts'
 import { api } from '@/utils/api';
@@ -96,7 +97,7 @@ const checkChange = (val) => {
 const father_date = inject('father_date') || '';
 console.log('333father_date :>> ', father_date);
 watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
-  start_date.value = father_date.value.father_start_date
+  start_date.value = lastMonthDay(father_date.value.father_start_date)
   end_date.value = father_date.value.father_end_date
   timeChangeResize()
 
@@ -104,7 +105,7 @@ watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
 }, { deep: true });//深层次监听
 //时间控件相关
 const start_date = ref('')
-start_date.value = father_date.value.father_start_date || ''
+start_date.value = lastMonthDay(father_date.value.father_start_date)||''
 const end_date = ref('')
 end_date.value = father_date.value.father_end_date || ''
 const changeDateTime = () => {

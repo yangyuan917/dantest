@@ -30,17 +30,7 @@ const myOption = ref({//基础配置相关
 })
 
 let baseOption = {//基础配置，所有图都要
-  dataZoom: [
-    // 添加数据区域缩放组件，即滚动条
-    {
-      show: true,
-      type: 'slider',
-      top: '90%',
-      bottom: '4%',
-      start: 0,
-      end: 100
-    }
-  ],
+
     tooltip: {
     trigger: 'axis',
     axisPointer: {

@@ -1,3 +1,5 @@
+import { dayjs } from 'element-plus'
+
 const getQueryStringByName = function (name) {
   var result = location.search.match(new RegExp('[?&]' + name + '=([^&]+)', 'i'))
   if (result == null || result.length < 1) {
@@ -50,9 +52,12 @@ const getTodayTime = () => {
 
   // 格式化日期为'YYYY-MM-DD'格式
   let formattedDate = previousDate.toISOString().split('T')[0];
- return  formattedDate
+  return formattedDate
 }
 
+const lastMonthDay = (val) => {
+  return   dayjs(val).subtract(1, 'month').format('YYYY-MM-DD')
 
+}
 
-export { getQueryStringByName, transformData, DateFormat ,getTodayTime }
+export { getQueryStringByName, transformData, DateFormat, getTodayTime, lastMonthDay }

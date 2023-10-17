@@ -38,7 +38,9 @@
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch, inject } from 'vue'
 import * as echarts from 'echarts'
 import { api } from '@/utils/api';
+import {lastMonthDay} from '@/utils/util'
 import BaseEcharts from '@/components/BaseEcharts.vue'
+import { dayjs } from 'element-plus'
 
 const emit = defineEmits(['timeChange', 'allParamChange'])
 const props = defineProps({
@@ -50,6 +52,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+checkboxApi:{//获取选框接口用的api
+  type: String,
+    default: '/catergory_list'
+},
   father_start_date: {//父组件下拉框的开始时间值
     type: String,
     default: ''
@@ -70,7 +76,7 @@ const selectedOptions = ref([]) // 保存被选中的选项的数组
 const checkboxOptions = ref([
 ])
 const getCheckboxOptions = async () => {
-  let res = await api.get('/catergory_list')
+  let res = await api.get(props.checkboxApi)
   //  let res = await api.get('/industry_list')
   checkboxOptions.value = []
   // checkboxOptions.value = res.data.data //这里获取数据
@@ -103,7 +109,8 @@ const endDateChange = (val)=>{//结束时间改变
 }
 const father_date = inject('father_date');
 watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
-  start_date.value = father_date.value.father_start_date
+  start_date.value =  lastMonthDay(father_date.value.father_start_date)
+  console.log('start_date.value :>> ', start_date.value);
   end_date.value = father_date.value.father_end_date
   changeDateTime()
   timeChangeResize()
@@ -111,7 +118,7 @@ watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
 }, { deep: true });//深层次监听
 
 const start_date = ref('')
-start_date.value = father_date.value.father_start_date
+start_date.value =  lastMonthDay(father_date.value.father_start_date)||''
 const end_date = ref('')
 end_date.value = father_date.value.father_end_date
 const changeDateTime = () => {
@@ -177,17 +184,17 @@ const myOption = ref({
   legend: {
     data: [] // 设置图例的数据
   },
-  // dataZoom: [
-  //   // 添加数据区域缩放组件，即滚动条
-  //   {
-  //     show: true,
-  //     type: 'slider',
-  //     top: '90%',
-  //     bottom: '4%',
-  //     start: 0,
-  //     end: 100
-  //   }
-  // ],
+  dataZoom: [
+    // 添加数据区域缩放组件，即滚动条
+    {
+      show: true,
+      type: 'slider',
+      top: '90%',
+      bottom: '4%',
+      start: 0,
+      end: 100
+    }
+  ],
   xAxis: {
     type: 'time',
     //   min:'Thu, 02 Jan 2020 00:00:00 GMT',

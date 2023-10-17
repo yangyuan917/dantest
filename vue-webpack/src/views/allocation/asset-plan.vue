@@ -15,25 +15,27 @@
     </div>
     <!-- 第一排 -->
     <Barchart :mySeries="series" :xData="barXdata" :separate_name="separate_name" @timeChange="timeChange"></Barchart>
-    <Linechart :mySeries="lineSeries" @allParamChange="linetimeChange"></Linechart>
-    <Linechart :mySeries="lineSeriestow" @allParamChange="linetimeChangetow" :showTarget="true"></Linechart>
+    <Linechart :mySeries="lineSeries" :checkboxApi="checkboxApi1" @allParamChange="linetimeChange"></Linechart>
+    <Linechart :mySeries="lineSeriestow" :checkboxApi="checkboxApi1" @allParamChange="linetimeChangetow" :showTarget="true"></Linechart>
     <!-- 第二排 -->
 
     <Barchart :mySeries="series2_1" :xData="barXdata2_1" :separate_name="separate_name" @timeChange="timeChange">
     </Barchart>
     <Barchart :mySeries="series2_2" :xData="barXdata2_2" :separate_name="separate_name" @timeChange="timeChange">
     </Barchart>
-    <Linechart2 :mySeries="series2_3" @allParamChange="linetimeChange2"></Linechart2>
+    <Linechart :mySeries="series2_3" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange2"></Linechart>
     <!-- 第三排 -->
 
     <Barchart :mySeries="series3_1" :xData="barXdata3_1" :separate_name="separate_name" @timeChange="timeChange">
     </Barchart>
-    <Linechart2 :mySeries="series3_2" @allParamChange="linetimeChange3"></Linechart2>
+    <Linechart :mySeries="series3_2" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange3"></Linechart>
 
   </div>
 </template>
 <script setup>
 import { reactive, ref, onMounted, watch, provide } from 'vue'
+import {getTodayTime} from '@/utils/util'
+
 import Barchart from './components/Barchart'
 import Linechart from './components/Linechart'
 import Linechart2 from './components/Linechart2'
@@ -58,6 +60,9 @@ const father_date_Chage = (val) => {
   father_date.value.father_start_date = father_start_date.value
   father_date.value.father_end_date = father_end_date.value
 }
+
+const checkboxApi1=  '/catergory_list'
+const checkboxApi2=  '/industry_list'
 
 onMounted(async () => {
   try {
@@ -422,8 +427,6 @@ const lineSeriestow = ref([
 
 
 const linetimeChangetow = async (val) => {//这是有指标的
-  console.log('父组件val111 :>> ', val)
-  // let selectedOptions = val.selectedOptions
   let arr = []
   let target = ''
   arr = await getLineData2(val, target)

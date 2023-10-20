@@ -29,6 +29,11 @@
     <Barchart :mySeries="series3_1" :xData="barXdata3_1" :separate_name="separate_name" @timeChange="timeChange">
     </Barchart>
     <Linechart :mySeries="series3_2" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange3"></Linechart>
+    <Linechart :mySeries="series3_3" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange4"></Linechart>
+
+
+
+
 
   </div>
 </template>
@@ -500,7 +505,7 @@ const getLineData3 = async (val, target) => {
   let sector = val.selectedOptions;
   let params = {
     separate_name: separate_name.value,
-    sector: sector.join("','")
+    sector: sector.join(",")
     // separate_name:separate_name.value,
   }
   if (target) {
@@ -533,6 +538,60 @@ const series3_2 = ref([
     ] //
   }
 ])
+const series3_3 = ref([//
+  {
+    name: '线段1',
+    type: 'line',
+    data: [
+      ['2023-09-01', 20],
+      ['2023-09-02', 40],
+      ['2023-09-03', 50]
+    ] //
+  }
+])
+
+
+const  linetimeChange4 = async (val)=>{
+
+
+  console.log('父组件val :>> ', val)
+  let selectedOptions = val.selectedOptions
+  console.log('selectedOptions :>> ', selectedOptions)
+
+  let arr = []
+  let target = ''
+  arr = await getLineData5(val, target)
+  console.log('arr111 :>> ', arr);
+  series3_3.value = arr
+
+}
+
+const getLineData5 = async (val, target) => {
+  let sector = val.selectedOptions;
+  let params = {
+    dt:'北京,上海'//这个从哪里来
+
+  }
+   let res = await api.get('/asset_citybond_timeseries', { params })
+  let data = res.data.data
+    let resultArr =convertArray(data)
+    return resultArr
+  }
+function convertArray(arr) {
+ const result = [];
+
+ arr.forEach((item) => {
+   const data = item.data.map((value, index) => [item.xaxis[index], value]);
+   result.push({
+     name: item.name,
+     type: 'line',
+     data,
+   });
+ });
+
+ return result;
+}
+
 const linetimeChange3 = async (val) => {
   console.log('父组件val :>> ', val)
   let selectedOptions = val.selectedOptions
@@ -549,7 +608,7 @@ const getLineData4 = async (val, target) => {
   let sector = val.selectedOptions;
   let params = {
     separate_name: separate_name.value,
-    sector: sector.join("','")
+    sector: sector.join(",")
     // separate_name:separate_name.value,
   }
   if (target) {

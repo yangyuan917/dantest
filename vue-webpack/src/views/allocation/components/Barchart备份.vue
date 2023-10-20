@@ -48,6 +48,7 @@ const props = defineProps({
 })
 
 const father_date = inject('father_date')||'' ;
+console.log('333father_date :>> ', father_date);
 watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
   start_date.value = father_date.value.father_start_date
   end_date.value = father_date.value.father_end_date
@@ -89,8 +90,8 @@ const xData = ref([])
 const myOption = ref({
   // color: ['#c0504d', '#4f81bd'], // 设置柱状图的颜色，分别对应红色和蓝色
   legend: {
-    data: [start_date.value, end_date.value] // 设置图例的数据
-    // data: ['2023-09-02','2023-10-19'] // 设置图例的数据
+    // data: [start_date.value, end_date.value] // 设置图例的数据
+    data: ['2023-09-02','2023-10-19'] // 设置图例的数据
   },
   tooltip: {
     trigger: 'axis',

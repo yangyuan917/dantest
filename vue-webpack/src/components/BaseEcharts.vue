@@ -39,21 +39,26 @@ let baseOption = {//基础配置，所有图都要
   },
 }
 myOption.value = props.echartsOption
+//  myChart.setOption(myOption.value, {
+//   })
 // 因为是封装的组件，会多次调用，id不能重复，要在初始化之前写，不然会报错dom为定义
+ let myChart = ''
 let uid = ref('')
 onBeforeMount(() => {
   uid.value = `echarts-uid-${parseInt((Math.random() * 1000000).toString())}`
 })
-  let myChart = ''
+
 
 onMounted(() => {
 myChart =  echarts.init(document.getElementById(uid.value))
-  myChart.setOption(baseOption, {
+  myChart.setOption(myOption.value, {
     // notMerge: true //不和之前的option合并
   })
   // 监听页面的大小
   window.addEventListener('resize', () => {
+  console.log('myOption.value', myOption.value)
     setTimeout(() => {
+
       myChart?.resize({
         animation: {
           duration: 300

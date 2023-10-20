@@ -35,62 +35,38 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  mySeries: {
-    type: Object,
-    default: () => ({}),
-    required: true
-  },
-  xData: {
-    type: Array,
-    default: () => ([]),
-
-  },
+  api_url: {// 传入的接口名称
+    type: String,
+    default: ''
+  }
 })
-
-const father_date = inject('father_date')||'' ;
+const father_date = inject('father_date') || '';
 watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
   start_date.value = father_date.value.father_start_date
   end_date.value = father_date.value.father_end_date
-changeDateTime()
+  getAllData()
 }, { deep: true });//深层次监听
 //时间控件相关
 const start_date = ref('')
-start_date.value = father_date.value.father_start_date||''
+start_date.value = father_date.value.father_start_date || ''
 const end_date = ref('')
-  end_date.value = father_date.value.father_end_date||''
-const changeDateTime = () => {
-  //选择时间改变时，向父组件传事件
-  let start_date_and_end_date = {
-    start_date: start_date.value,
-    end_date: end_date.value
-  }
-  emit('timeChange', start_date_and_end_date)
+end_date.value = father_date.value.father_end_date || ''
+
+const startDateChange = (val) => {//开始时间改变
+  getAllData()
 }
-changeDateTime()
+const endDateChange = (val) => {//结束时间改变
+  getAllData()
 
-
-
-const startDateChange = (val)=>{//开始时间改变
-    changeDateTime()
 }
-const endDateChange = (val)=>{//结束时间改变
-    changeDateTime()
-}
-watch(//监听下拉框
-  () => props.separate_name,
-  (newVal, oldVal) => {
-    changeDateTime()
 
-  }
-)
 
-// getDateTime()
 const xData = ref([])
+const mySeries = ref([])
 const myOption = ref({
   // color: ['#c0504d', '#4f81bd'], // 设置柱状图的颜色，分别对应红色和蓝色
   legend: {
     data: [start_date.value, end_date.value] // 设置图例的数据
-    // data: ['2023-09-02','2023-10-19'] // 设置图例的数据
   },
   tooltip: {
     trigger: 'axis',
@@ -101,7 +77,7 @@ const myOption = ref({
 
   xAxis: {
     type: 'category',
-    data:  props.xData, // x 轴的数据
+    data: xData.value, // x 轴的数据
     axisLabel: {
       rotate: 45
     }
@@ -109,31 +85,31 @@ const myOption = ref({
   yAxis: {
     type: 'value'
   },
-  series: props.mySeries
+  series: mySeries.value
 })
-console.log('myOption1111111111', myOption)
-//监听props中myOption的变化，变化的话重新渲染echarts
-watch(
-  () => props.mySeries,
-  (newVal, oldVal) => {
-    myOption.value.legend.data = [start_date.value, end_date.value]
-    myOption.value.series = newVal
-    myOption.value.xAxis.data = props.xData
+const getAllData = async () => {//所有的数据请求都在这里，区别就是接口不同，要求返回的格式必须相同,后续后端其他接口改造完，可用这个组件统一
+
+  let params = {
+    start_date: start_date.value,
+    end_date: end_date.value
   }
-)
-
-
-watch(
-  () => props.xData,
-  (newVal, oldVal) => {
-    myOption.value.legend.data = [start_date.value, end_date.value]
-    myOption.value.xAxis.data = newVal
+  let res = await api.get(props.api_url, { params })
+  res = res.data
+  if (!res.data) {
+    return
   }
-)
+  mySeries.value = res.data.series.map(item => {
+    item.type = 'bar'
+    return item
+  })
 
-
-
-
+  xData.value = res.data.xaxis
+  myOption.value.legend.data = [start_date.value, end_date.value]
+  myOption.value.series = mySeries.value
+  myOption.value.xAxis.data = xData.value
+  console.log('myOption.value', myOption.value)
+}
+getAllData()
 </script>
 
 <style scoped>

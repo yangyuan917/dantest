@@ -45,17 +45,23 @@ export const constantRoutes = [
         name: 'asset-page',
         meta: { title: '页面三', icon: '', affix: true }
       },
-
+          {
+            path: '/fixed-income',
+            component: () => import('@/views/allocation/fixed-income.vue'),
+            name: 'fixed-income',
+            meta: { title: '固定收益', icon: '', affix: true }
+          },
       {
-        path: '/xxx',
-        component: () => import('@/views/allocation/asset-page.vue'),
-        name: 'xxx',
+        path: '/price-monitor',
+        component: () => import('@/views/price-monitor/index.vue'),
+        name: 'price-monitor',
         meta: { title: '价格监测', icon: '', affix: true },
+         redirect: '/fixed-income',
         children: [
           {
-            path: '/xx',
-            component: () => import('@/views/allocation/asset-page.vue'),
-            name: 'assetPage',
+            path: '/fixed-income',
+            component: () => import('@/views/allocation/fixed-income.vue'),
+            name: 'fixed-income',
             meta: { title: '固定收益', icon: '', affix: true }
           },
           {

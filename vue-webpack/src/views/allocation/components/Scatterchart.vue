@@ -37,7 +37,13 @@ const props = defineProps({
 })
 
 let scatterData = ref([
-
+{
+value: [
+    1,
+    300
+  ],
+  name: '1adasdasdas'
+},
   [
     321.639344,
     100.085301
@@ -85,24 +91,31 @@ const xData = ref([
 ])
 const mySeries = ref([])
 const myOption = ref({
+  // tooltip: {
+    // trigger: 'axis',
+  //   axisPointer: {
+  //     type: 'shadow',
+  //   },
+  // },
   tooltip: {
-    trigger: 'axis',
-    axisPointer: {
+   axisPointer: {
       type: 'shadow',
     },
+    formatter: function (params) {
+    // console.log('params', params)
+      if (params.seriesType === 'scatter') {
+        console.log('params :>> ', params);
+        return '名称：' + params.seriesName + '<br/>' +
+        '值:'  +params.data.value +'<br/>' +
+          'code：' + params.data.code + '<br/>' +
+          'bond_name：' + params.data.bond_name;
+      } else {
+      console.log('line', params)
+         return '名称：' + params.seriesName + '<br/>'+
+           '值:'  +params.value +'<br/>'
+      }
+    }
   },
-  // tooltip: {
-  //   formatter: function (params) {
-  //     if (params.seriesType === 'scatter') {
-  //       console.log('params :>> ', params);
-  //       return '债券名称：' + params.seriesName + '<br/>' +
-  //         '债券代码：' + params.data.code + '<br/>' +
-  //         '债券名称：' + params.data.bond_name;
-  //     } else {
-  //       return params.value;
-  //     }
-  //   }
-  // },
   // xAxis: {
   //   type: 'category',
   //   data: xData.value, // x 轴的数据
@@ -138,12 +151,12 @@ const myOption = ref({
       name: '折线图',
       data: lineData.value
     },
-    // {
-    //   type: 'scatter',
-    //   name: '散点图',
-    //   symbolSize: 10,
-    //   data: scatterData.value
-    // },
+    {
+      type: 'scatter',
+      name: '散点图',
+      symbolSize: 10,
+      data: scatterData.value
+    },
 
   ]
 })
@@ -160,17 +173,33 @@ const getAllData = async () => {//所有的数据请求都在这里，区别就�
   console.log('lineRes :>> ', lineRes);
   lineRes = lineRes.data
   scatRes = scatRes.data.data
-
   lineData.value = lineRes.data.series.data
   // scatterData.value =scatRes.data.data
-  scatRes.map(item => {
+  const transformedData = scatRes.map(item => {
     item.type = 'scatter';
     item.symbolSize = 10
-    return item
+     const transformedItem = {
+       type:'scatter',
+      symbolSize: 10,
+    data: []
+  };
+
+  item.data.forEach((value, index) => {
+    transformedItem.data.push({
+      value,
+
+      name: item.name[index],
+      bond_name: item.bond_name[index],
+      code: item.code[index]
+    });
+  });
+
+  transformedItem.name = item.name;
+
+  return transformedItem;
 
   })
   // scatterData.value =scatRes[0]
-  console.log('scatRes :>> ', scatRes);
   xData.value = lineRes.data.xaixs
   // let scatterRes = await api.get('/curve_cnbd', { params })
   // myOption.value.xAxis.data = xData.value
@@ -185,7 +214,7 @@ const getAllData = async () => {//所有的数据请求都在这里，区别就�
     // { bond_name: '债券11111', type: 'scatter', name:'11', data: [1, 2] },
     // scatterData.value
     // scatRes[0]
-    ...scatRes
+    ...transformedData
   ]
 
 console.log('myOption :>> ', myOption);
@@ -202,6 +231,13 @@ console.log('myOption :>> ', myOption);
   // myOption.value.xAxis.data = xData.value
 }
 getAllData()
+
+
+
+
+
+
+
 </script>
 
 <style scoped>

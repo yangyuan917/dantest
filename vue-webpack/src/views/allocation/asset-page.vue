@@ -110,10 +110,15 @@ let list = [testObj.list1,testObj.list2]
 let Legend1 = testObj.list1 ? Object.keys(testObj.list1) : []
 let Legend2 = testObj.list2 ? Object.keys(testObj.list2) : []
 echartsLegend.value = [...Legend1,...Legend2]
+console.log('testObj.list1', testObj.list1)
+console.log('testObj.list2', testObj.list2)
   let arr1 = resultFmoat(testObj.list1,1)
   let arr2 = resultFmoat(testObj.list2,2)
-  series.value = [...arr1,...arr2]
+console.log('arr1', arr1)
+console.log('arr2', arr2)
 
+  series.value = [...arr1,...arr2]
+console.log('8888888888888888series.value ', series.value )
 
 }
 
@@ -151,7 +156,7 @@ const resultFmoat = (inputObject, type) => {
       result[0].itemStyle.color = '#b7ccad'
     }
     if (result[1]) {
-      result[0].stack = 'stack2'
+      result[1].stack = 'stack2'
       result[1].itemStyle.color = '#91CC75'
     }
   }

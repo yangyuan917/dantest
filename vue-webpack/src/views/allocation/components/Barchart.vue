@@ -117,7 +117,11 @@ watch(
   () => props.mySeries,
   (newVal, oldVal) => {
     myOption.value.legend.data = [start_date.value, end_date.value]
-    myOption.value.series = newVal
+    myOption.value.series = newVal.map(item=>{
+     item.barMaxWidth =  30
+     return item
+
+    })
     myOption.value.xAxis.data = props.xData
   }
 )

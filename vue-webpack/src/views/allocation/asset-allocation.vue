@@ -7,7 +7,7 @@
         style="max-width: 240px" placeholder="请选择结束日期" />
     </div>
     <!-- 第一排 -->
-    <Barchart :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
+    <Barchart title="自定义标题" :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
     <Linechart :mySeries="lineSeries" :checkboxApi="checkboxApi1" @allParamChange="linetimeChange"></Linechart>
     <Linechart :mySeries="lineSeriestow" :checkboxApi="checkboxApi1" @allParamChange="linetimeChangetow"
       :showTarget="true"></Linechart>
@@ -157,53 +157,6 @@ return item
 })
 barXdata3_3.value  =res.data.xaxis
 
-  console.log('asset_citybond1res', res)
-  // series3_3.value = [
-  //   {
-  //     type: 'bar',
-  //     "data": [
-  //       0.291755,
-  //       0.274528,
-  //       0.033864,
-  //       0.879404,
-  //       0.41137,
-  //       0.023718,
-  //       0.791575,
-  //       0.76622,
-  //       0.351986,
-  //       0.051498,
-  //       0.78058,
-  //       0.786922,
-  //       0.857404,
-  //       0.57595,
-  //       0.840691,
-  //       0.947402
-  //     ],
-  //     "name": "2023-10-10"
-  //   },
-  //   {
-  //     type: 'bar',
-  //     "data": [
-  //       0.099295,
-  //       0.089537,
-  //       0.623497,
-  //       0.174646,
-  //       0.379318,
-  //       0.536166,
-  //       0.931625,
-  //       0.385132,
-  //       0.926775,
-  //       0.279418,
-  //       0.934767,
-  //       0.65284,
-  //       0.082294,
-  //       0.227716,
-  //       0.330444,
-  //       0.554052
-  //     ],
-  //     "name": "2023-10-12"
-  //   },
-  // ]
 
 }
 getBarchartData3_3(father_start_date.value, father_end_date.value)

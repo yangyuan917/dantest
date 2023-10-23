@@ -136,7 +136,11 @@ const myOption = ref({
     {
       type: 'line',
       name: '折线图',
-      data: lineData.value
+      data: lineData.value,
+       smooth: true,  // 设置为光滑曲线
+    symbol: '',  // 不显示标点
+
+
     },
     // {
     //   type: 'scatter',

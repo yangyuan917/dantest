@@ -86,8 +86,8 @@ let lineData = ref(
 );
 
 const xData = ref([
-
-
+])
+const legendData = ref([
 ])
 const mySeries = ref([])
 const myOption = ref({
@@ -105,7 +105,7 @@ const myOption = ref({
     // console.log('params', params)
       if (params.seriesType === 'scatter') {
         console.log('params :>> ', params);
-        return '名称：' + params.seriesName + '<br/>' +
+        return '类别：' + params.seriesName + '<br/>' +
         '值:'  +params.data.value +'<br/>' +
           'code：' + params.data.code + '<br/>' +
           'bond_name：' + params.data.bond_name;
@@ -117,7 +117,7 @@ const myOption = ref({
     }
   },
   // xAxis: {
-  //   type: 'category',
+  //   type: 'value',
   //   data: xData.value, // x 轴的数据
   //   // axisLabel: {
   //   //   rotate: 45
@@ -144,6 +144,10 @@ const myOption = ref({
       end: 100
     }
   ],
+  legend: {
+    data: legendData.value // 设置图例的数据
+
+  },
   // series: mySeries.value
   series: [
     {
@@ -172,13 +176,16 @@ const getAllData = async () => {//所有的数据请求都在这里，区别就�
   let params = {
 
   }
-  let lineRes = await api.get('/curve_cnbd', { params })
-  let scatRes = await api.get('/fixincome_price', { params })
+  let lineRes = await api.get('/bp/curve_cnbd', { params })
+  let scatRes = await api.get('/bp/fixincome_price', { params })
   console.log('lineRes :>> ', lineRes);
   lineRes = lineRes.data
   scatRes = scatRes.data.data
-  lineData.value = lineRes.data.series.data
+  lineData.value = lineRes.data.data
+  console.log('scatRes', scatRes)
   // scatterData.value =scatRes.data.data
+  legendData.value = scatRes.map(item => item.name)
+  console.log('legendData.value', legendData.value)
   const transformedData = scatRes.map(item => {
     item.type = 'scatter';
     item.symbolSize = 10
@@ -206,13 +213,14 @@ const getAllData = async () => {//所有的数据请求都在这里，区别就�
   // scatterData.value =scatRes[0]
   xData.value = lineRes.data.xaixs
   // let scatterRes = await api.get('/curve_cnbd', { params })
-  // myOption.value.xAxis.data = xData.value
+  myOption.value.xAxis.data = xData.value
+  myOption.value.legend.data = legendData.value
   myOption.value.series = [
 
     {
       type: 'line',
 
-      name: lineRes.data.series.name,
+      name: '折线图',
       data: lineData.value
     },
     // { bond_name: '债券11111', type: 'scatter', name:'11', data: [1, 2] },
@@ -248,7 +256,7 @@ getAllData()
 .echarts-box {
   background-color: #ffffff;
   border-radius: 8px;
-  width: 32%;
+  width: 100%;
 }
 
 .title-box {

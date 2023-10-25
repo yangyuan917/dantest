@@ -1,10 +1,31 @@
 <template>
   <div class="all-page-flex">
    <div style="width: 100%;">
+    <el-select v-model="separate_name" placeholder="选择separate_name" style="width: 200px; margin-right: 10px;"
+        @change="selectedSeparateNameChange">
+        <el-option v-for="name in separateNames" :key="name" :label="name" :value="name">
+        </el-option>
+      </el-select>
       <el-date-picker v-model="father_start_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
         style="max-width: 240px" placeholder="请选择开始日期" />
       <el-date-picker v-model="father_end_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
-        style="max-width: 240px" placeholder="请选择结束日期" />
+        style="max-width: 240px;margin-right: 6px; " placeholder="请选择结束日期" />
+        <el-select v-model="inter_trade" placeholder="是否内部交易" style="width: 80px; margin-right: 16px;">
+          <el-option label="否" :value="0"></el-option>
+          <el-option label="是" :value="1"></el-option>
+        </el-select>
+          <el-button type="primary" @click="onSubmit">查询</el-button>
+    </div>
+    <div  class="table-box">
+    <el-table :data="tableData" height="450" border>
+          <el-table-column label="分组" prop="index">
+            <template #default="scope">
+              <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetails(scope.row)">{{ scope.row.index }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="交易笔数" prop="symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="市值(元)"></el-table-column>
+        </el-table>
     </div>
     <BarandLinechart :mySeries="lineSeries" @allParamChange="allChange" :showTarget="true"></BarandLinechart>
     <Barchart2 :mySeries="series" :echartsLegend="echartsLegend" @allParamChange="barChange" :showTarget="true">
@@ -18,7 +39,16 @@ import BarandLinechart from './components/BarandLinechart.vue'
 import Barchart2 from './components/Barchart2.vue'
 import {getTodayTime} from '@/utils/util'
 import {api} from '@/utils/api'
-
+import {  useRouter} from 'vue-router'
+const router = useRouter()
+//----------------获取下拉框--------------------
+const separate_name = ref("中信证券增盈1号集合资产管理计划")
+const separateNames = ref([]);
+const  getSeparateNames = async()=>{
+ const response = await api.get('/separate_list');
+    separateNames.value = response.data.data; // 调整这里以匹配你的API响应结构
+}
+getSeparateNames()
 //父组件时间
 const father_start_date = ref('2023-09-02')
 const father_end_date = ref('')
@@ -33,7 +63,41 @@ const father_date_Chage = (val) => {
   father_date.value.father_start_date = father_start_date.value
   father_date.value.father_end_date = father_end_date.value
 }
+//表格相关
+const tableData = ref([])
+const inter_trade = ref('')
+const formInline = ref({
+  start_date: "2023-10-12",
+  end_date: "2023-10-19",
+  cat: "同业存单"
+})
 
+const onSubmit = async () => {
+let params = {
+start_date: father_start_date.value,
+  end_date: father_end_date.value,
+ separate_name: separate_name.value,
+  cat: "",
+  inter_trade:inter_trade.value,
+}
+  let res = await api.get('/txn/atp', { params: params })
+  tableData.value = res.data.data
+}
+onSubmit()
+
+const goDetails = (row) => {
+  console.log(row)
+  router.push({
+  path: "/table-details",
+  query: {
+  start_date: father_start_date.value,
+  end_date: father_end_date.value,
+ separate_name: separate_name.value,
+  cat: row.index,
+ inter_trade:inter_trade.value,
+  }
+  })
+}
 
 let lineSeries = ref([
   {
@@ -251,4 +315,11 @@ const series = ref([
 ])
 </script>
 
-<style scoped></style>
+<style scoped>
+.table-box{
+width: 33%;
+aspect-ratio: 16/9;
+
+}
+
+</style>

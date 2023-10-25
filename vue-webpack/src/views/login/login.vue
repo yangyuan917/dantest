@@ -1,7 +1,13 @@
 <template>
   <div class="login-view">
     <div class="login-content">
-      <div class="login-title">系统登录</div>
+
+      <div class="login-title">
+        <img class="logo-img" :src="require('@img/logo.jpg')" alt="logo" />
+        系统登录
+      </div>
+
+
       <el-form ref="loginFormRef" class="login-form" :model="param" :rules="rules">
         <el-form-item prop="username">
           <el-input v-model="param.username" placeholder="用户名" size="large">
@@ -11,13 +17,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input
-            v-model="param.password"
-            placeholder="密码"
-            size="large"
-            :type="passwordType"
-            @keyup.enter="submitForm"
-          >
+          <el-input v-model="param.password" placeholder="密码" size="large" :type="passwordType" @keyup.enter="submitForm">
             <template #prepend>
               <I v-if="passwordLock" name="Lock" size="14" @click="switchPass" />
               <I v-else name="Unlock" size="14" @click="switchPass" />
@@ -92,18 +92,30 @@ const submitForm = async () => {
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: #235bae;
-  background-image: url('../../assets/img/login_bg.jpg');
-  background-size: cover;
+  /* background-color: #235bae; */
+  background: linear-gradient(to bottom right, #84B5FF, #2A67F3);
+
+  /* background-image: url('../../assets/img/login_bg.jpg');
+  background-size: cover; */
+}
+
+.login-title-box {
+  display: flex;
+
+
 }
 
 .login-title {
+margin-top: 16px;
   width: 100%;
   font-size: 20px;
   line-height: 50px;
-  color: #fff;
+    color: #1e1e1e;
   text-align: center;
-  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  /* border-bottom: 1px solid #ddd; */
 }
 
 .login-content {
@@ -114,8 +126,18 @@ const submitForm = async () => {
   width: 350px;
   margin: -190px 0 0 -175px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.4);
+  /* background: rgba(255, 255, 255, 0.4);
+   */
+   background-color: #fff;
   border-radius: 5px;
+}
+
+.logo-img {
+  width: 50px;
+  height: 50px;
+margin-left: 30px;
+border-radius: 8px;
+margin-right: 6px;
 }
 
 .login-form {
@@ -141,5 +163,4 @@ const submitForm = async () => {
 .el-icon-lock,
 .el-icon-unlock {
   cursor: pointer;
-}
-</style>
+}</style>

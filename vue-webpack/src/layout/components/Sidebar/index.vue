@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar-container">
     <div class="logo" @click="$router.push('/')">
-      <img class="logo-img" :src="require('@img/logo.png')" alt="logo" />
+      <img class="logo-img" :src="require('@img/logo.jpg')" alt="logo" />
       <transition name="el-zoom-in-center">
         <h1 v-show="opened" class="logo-text">Vue Element Admin</h1>
       </transition>
@@ -31,7 +31,90 @@ import SidebarItem from './SidebarItem.vue'
 
 const roles = getRoles()
 const store = useStore()
-const routerList = reactive([])
+const routerList = reactive([
+
+
+      {
+        path: '/asset-allocation',
+        component: () => import('@/views/allocation/asset-allocation.vue'),
+        name: 'assetAllocation',
+        meta: { title: '大类资产配置', icon: '', affix: true }
+      },
+      {
+        path: '/asset-plan',
+        component: () => import('@/views/allocation/asset-plan.vue'),
+        name: 'assetPlan',
+        meta: { title: '资管计划', icon: '', affix: true }
+      },
+      {
+        path: '/asset-page',
+        component: () => import('@/views/allocation/asset-page.vue'),
+        name: 'asset-page',
+        meta: { title: '页面三', icon: '', affix: true }
+      },
+
+          {
+            path: '/fixed-income',
+            component: () => import('@/views/allocation/fixed-income.vue'),
+            name: 'fixed-income',
+            meta: { title: '固定收益', icon: '', affix: true }
+          },
+      {
+        path: '/price-monitor',
+        component: () => import('@/views/price-monitor/index.vue'),
+        name: 'price-monitor',
+        meta: { title: '价格监测', icon: '', affix: true },
+         redirect: '/fixed-income',
+        children: [
+          {
+            path: '/fixed-income',
+            component: () => import('@/views/allocation/fixed-income.vue'),
+            name: 'fixed-income',
+            meta: { title: '固定收益', icon: '', affix: true }
+          },
+          {
+            path: '/marke-trisk',
+            component: () => import('@/views/allocation/marke-trisk.vue'),
+            name: 'marke-trisk',
+            meta: { title: ' 市场风险', icon: '', affix: true }
+          }
+        ]
+      },
+      {
+        path: '/amarket-monitor',
+        component: () => import('@/views/market-monitor/index.vue'),
+        name: 'amarket-monitor',
+        meta: { title: '市场监测', icon: '', roles: ['admin', 'editor'], affix: true },
+        redirect: '/macro-interest-rate',
+        children: [
+          {
+            path: '/macro-interest-rate',
+            component: () => import('@/views/market-monitor/macro-interest-rate.vue'),
+            name: 'macro-interest-rate',
+            meta: { title: '宏观利率', icon: '', affix: true }
+          },
+          {
+            path: '/capital-flow',
+            component: () => import('@/views/market-monitor/capital-flow.vue'),
+            name: 'capital-flow',
+            meta: { title: ' 资金流向', icon: '', affix: true }
+          },
+          {
+            path: '/real-estate',
+            component: () => import('@/views/market-monitor/real-estate.vue'),
+            name: 'real-estate',
+            meta: { title: '房地产', icon: '', affix: true }
+          },
+          {
+            path: '/monitor-target-tank',
+            component: () => import('@/views/market-monitor/monitor-target-tank.vue'),
+            name: 'assetPage',
+            meta: { title: ' 标的池', icon: '', affix: true }
+          }
+        ]
+      }
+
+])
 
 const opened = computed(() => store.state.app.sidebar.opened)
 const isCollapse = computed(() => !opened.value)
@@ -46,7 +129,7 @@ onMounted(() => {
 const filterRoutes = () => {
   constantRoutes.forEach((item) => {
     if (item.path === '/') {
-      routerList.push(...item.children)
+      // routerList.push(...item.children)
     }
   })
 //下面是过滤权限用的，后面用到可以解开

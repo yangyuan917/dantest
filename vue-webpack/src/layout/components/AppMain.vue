@@ -2,7 +2,7 @@
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
       <router-view v-slot="{ Component }">
-        <keep-alive>
+        <keep-alive exclude="table-details">
           <component :is="Component" />
         </keep-alive>
       </router-view>
@@ -10,10 +10,11 @@
   </section>
 </template>
 
-<script>
+<script >
 import { defineComponent } from 'vue'
 export default defineComponent({
-  name: 'AppMain'
+  name: 'AppMain',
+  excludearr: ['table-details'],
 })
 </script>
 

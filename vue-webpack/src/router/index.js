@@ -45,6 +45,12 @@ export const constantRoutes = [
         name: 'asset-page',
         meta: { title: '页面三', icon: '', affix: true }
       },
+      {
+        path: '/table-details',
+        component: () => import('@/views/allocation/table-details.vue'),
+        name: 'table-details',
+        meta: { title: '表格详情', icon: '', affix: true }
+      },
           {
             path: '/fixed-income',
             component: () => import('@/views/allocation/fixed-income.vue'),
@@ -65,9 +71,9 @@ export const constantRoutes = [
             meta: { title: '固定收益', icon: '', affix: true }
           },
           {
-            path: '/xx',
-            component: () => import('@/views/allocation/asset-page.vue'),
-            name: 'xx',
+            path: '/marke-trisk',
+            component: () => import('@/views/allocation/marke-trisk.vue'),
+            name: 'marke-trisk',
             meta: { title: ' 市场风险', icon: '', affix: true }
           }
         ]

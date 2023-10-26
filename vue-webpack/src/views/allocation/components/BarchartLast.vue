@@ -107,7 +107,7 @@ const getAllData = async () => {//所有的数据请求都在这里，区别就�
   myOption.value.legend.data = [start_date.value, end_date.value]
   myOption.value.series = mySeries.value
   myOption.value.xAxis.data = xData.value
-  console.log('myOption.value', myOption.value)
+
 }
 getAllData()
 </script>

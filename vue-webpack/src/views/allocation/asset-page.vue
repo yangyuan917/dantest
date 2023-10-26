@@ -1,7 +1,7 @@
 <template>
   <div class="all-page-flex">
-   <div style="width: 100%;">
-    <el-select v-model="separate_name" placeholder="选择separate_name" style="width: 200px; margin-right: 10px;"
+    <div style="width: 100%;">
+      <el-select v-model="separate_name" placeholder="选择separate_name" style="width: 200px; margin-right: 10px;"
         @change="selectedSeparateNameChange">
         <el-option v-for="name in separateNames" :key="name" :label="name" :value="name">
         </el-option>
@@ -10,38 +10,85 @@
         style="max-width: 240px" placeholder="请选择开始日期" />
       <el-date-picker v-model="father_end_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
         style="max-width: 240px;margin-right: 6px; " placeholder="请选择结束日期" />
-        <el-select v-model="inter_trade" placeholder="是否内部交易" style="width: 80px; margin-right: 16px;">
-          <el-option label="否" :value="0"></el-option>
-          <el-option label="是" :value="1"></el-option>
-        </el-select>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
+      <el-select v-model="inter_trade" placeholder="是否内部交易" style="width: 80px; margin-right: 16px;">
+        <el-option label="否" :value="0"></el-option>
+        <el-option label="是" :value="1"></el-option>
+      </el-select>
+      <el-button type="primary" @click="onSubmit">查询</el-button>
     </div>
-    <div  class="table-box">
-    <el-table :data="tableData" height="490" border>
-          <el-table-column label="分组" prop="index">
+    <div class="table-box">
+      <el-table :data="tableData" height="490" border>
+        <el-table-column label="">
+          <el-table-column label="分组" prop="类别1">
             <template #default="scope">
-              <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetails(scope.row)">{{ scope.row.index }}</span>
+              <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetails(scope.row)">{{
+                scope.row.类别1 }}</span>
             </template>
           </el-table-column>
+        </el-table-column>
+        <el-table-column label="总计 " align="center">
           <el-table-column label="交易笔数" prop="symbol2"></el-table-column>
           <el-table-column label="交易金额" prop="市值(元)"></el-table-column>
-        </el-table>
+        </el-table-column>
+        <el-table-column label="加仓 " align="center">
+          <el-table-column label="交易笔数" prop="加仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="加仓_市值(元)"></el-table-column>
+        </el-table-column>
+        <el-table-column label="减仓 " align="center">
+          <el-table-column label="交易笔数" prop="减仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="减仓_市值(元)"></el-table-column>
+        </el-table-column>
+        <el-table-column label="到期 " align="center">
+          <el-table-column label="交易笔数" prop="到期_symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="到期_市值(元)"></el-table-column>
+        </el-table-column>
+
+      </el-table>
     </div>
     <BarandLinechart :mySeries="lineSeries" @allParamChange="allChange" :showTarget="true"></BarandLinechart>
+        <div class="table-box">
+      <el-table :data="tableData" height="490" border>
+        <el-table-column label="">
+          <el-table-column label="分组" prop="归属资管计划/自主投资基金">
+            <template #default="scope">
+              <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetails(scope.row)">{{
+                scope.row.归属资管计划/自主投资基金 }}</span>
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column label="总计 " align="center">
+          <el-table-column label="交易笔数" prop="symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="市值(元)"></el-table-column>
+        </el-table-column>
+        <el-table-column label="加仓 " align="center">
+          <el-table-column label="交易笔数" prop="加仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="加仓_市值(元)"></el-table-column>
+        </el-table-column>
+        <el-table-column label="减仓 " align="center">
+          <el-table-column label="交易笔数" prop="减仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="减仓_市值(元)"></el-table-column>
+        </el-table-column>
+        <el-table-column label="到期 " align="center">
+          <el-table-column label="交易笔数" prop="到期_symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="到期_市值(元)"></el-table-column>
+        </el-table-column>
+
+      </el-table>
+    </div>
     <Barchart2 :mySeries="series" :echartsLegend="echartsLegend" @allParamChange="barChange" :showTarget="true">
     </Barchart2>
   </div>
 </template>
 <script setup>
-import { reactive, ref,provide } from 'vue'
+import { reactive, ref, provide } from 'vue'
 import Linechart from './components/Linechart'
 import BarandLinechart from './components/BarandLinechart.vue'
 import BaseEcharts from '@/components/BaseEcharts.vue'
 
 import Barchart2 from './components/Barchart2.vue'
-import {getTodayTime} from '@/utils/util'
-import {api} from '@/utils/api'
-import {  useRouter} from 'vue-router'
+import { getTodayTime } from '@/utils/util'
+import { api } from '@/utils/api'
+import { useRouter } from 'vue-router'
 const router = useRouter()
 
 
@@ -51,9 +98,9 @@ const router = useRouter()
 //----------------获取下拉框--------------------
 const separate_name = ref("中信证券增盈1号集合资产管理计划")
 const separateNames = ref([]);
-const  getSeparateNames = async()=>{
- const response = await api.get('/separate_list');
-    separateNames.value = response.data.data; // 调整这里以匹配你的API响应结构
+const getSeparateNames = async () => {
+  const response = await api.get('/separate_list');
+  separateNames.value = response.data.data; // 调整这里以匹配你的API响应结构
 }
 getSeparateNames()
 //父组件时间
@@ -72,30 +119,33 @@ const father_date_Chage = (val) => {
 }
 //表格相关
 const tableData = ref([])
-const inter_trade = ref('')
+const tableData1 = ref([])
+const inter_trade = ref(0)
 const onSubmit = async () => {
-let params = {
-start_date: father_start_date.value,
-  end_date: father_end_date.value,
-  cat: "",
-  inter_trade:inter_trade.value,
-}
+  let params = {
+    start_date: father_start_date.value,
+    end_date: father_end_date.value,
+    cat: "",
+    inter_trade: inter_trade.value,
+  }
   let res = await api.get('/txn/atp', { params: params })
+  let res1 = await api.get('/txn/atp2', { params: params })
   tableData.value = res.data.data
+  tableData1.value = res1.data.data
 }
 onSubmit()
 
 const goDetails = (row) => {
   console.log(row)
   router.push({
-  path: "/table-details",
-  query: {
-  start_date: father_start_date.value,
-  end_date: father_end_date.value,
- separate_name: separate_name.value,
-  cat: row.index,
- inter_trade:inter_trade.value,
-  }
+    path: "/table-details",
+    query: {
+      start_date: father_start_date.value,
+      end_date: father_end_date.value,
+      separate_name: separate_name.value,
+      cat: row.index,
+      inter_trade: inter_trade.value,
+    }
   })
 }
 
@@ -168,21 +218,21 @@ const barChange = async (obj) => {
     sector2: obj.sector2.value
   }
   let res = await api.get('/transaction_stock', { params })
- let testObj = res.data.data
+  let testObj = res.data.data
 
-let list = [testObj.list1,testObj.list2]
-let Legend1 = testObj.list1 ? Object.keys(testObj.list1) : []
-let Legend2 = testObj.list2 ? Object.keys(testObj.list2) : []
-echartsLegend.value = [...Legend1,...Legend2]
-console.log('testObj.list1', testObj.list1)
-console.log('testObj.list2', testObj.list2)
-  let arr1 = resultFmoat(testObj.list1,1)
-  let arr2 = resultFmoat(testObj.list2,2)
-console.log('arr1', arr1)
-console.log('arr2', arr2)
+  let list = [testObj.list1, testObj.list2]
+  let Legend1 = testObj.list1 ? Object.keys(testObj.list1) : []
+  let Legend2 = testObj.list2 ? Object.keys(testObj.list2) : []
+  echartsLegend.value = [...Legend1, ...Legend2]
+  console.log('testObj.list1', testObj.list1)
+  console.log('testObj.list2', testObj.list2)
+  let arr1 = resultFmoat(testObj.list1, 1)
+  let arr2 = resultFmoat(testObj.list2, 2)
+  console.log('arr1', arr1)
+  console.log('arr2', arr2)
 
-  series.value = [...arr1,...arr2]
-console.log('8888888888888888series.value ', series.value )
+  series.value = [...arr1, ...arr2]
+  console.log('8888888888888888series.value ', series.value)
 
 }
 
@@ -316,11 +366,10 @@ const series = ref([
 </script>
 
 <style scoped>
-.table-box{
-width: 66%;
-height: 490px;
-/* aspect-ratio: 16/9; */
+.table-box {
+  width: 66%;
+  height: 490px;
+  /* aspect-ratio: 16/9; */
 
 }
-
 </style>

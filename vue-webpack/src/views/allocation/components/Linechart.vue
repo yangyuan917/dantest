@@ -110,9 +110,9 @@ const endDateChange = (val)=>{//结束时间改变
 const father_date = inject('father_date');
 watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
   start_date.value =  lastMonthDay(father_date.value.father_start_date)
-  console.log('start_date.value :>> ', start_date.value);
+  // console.log('start_date.value :>> ', start_date.value);
   end_date.value = father_date.value.father_end_date
-  changeDateTime()
+  // changeDateTime()
   timeChangeResize()
 
 }, { deep: true });//深层次监听

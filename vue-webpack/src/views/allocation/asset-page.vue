@@ -17,7 +17,7 @@
           <el-button type="primary" @click="onSubmit">查询</el-button>
     </div>
     <div  class="table-box">
-    <el-table :data="tableData" height="450" border>
+    <el-table :data="tableData" height="490" border>
           <el-table-column label="分组" prop="index">
             <template #default="scope">
               <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetails(scope.row)">{{ scope.row.index }}</span>
@@ -36,11 +36,18 @@
 import { reactive, ref,provide } from 'vue'
 import Linechart from './components/Linechart'
 import BarandLinechart from './components/BarandLinechart.vue'
+import BaseEcharts from '@/components/BaseEcharts.vue'
+
 import Barchart2 from './components/Barchart2.vue'
 import {getTodayTime} from '@/utils/util'
 import {api} from '@/utils/api'
 import {  useRouter} from 'vue-router'
 const router = useRouter()
+
+
+
+
+
 //----------------获取下拉框--------------------
 const separate_name = ref("中信证券增盈1号集合资产管理计划")
 const separateNames = ref([]);
@@ -66,17 +73,10 @@ const father_date_Chage = (val) => {
 //表格相关
 const tableData = ref([])
 const inter_trade = ref('')
-const formInline = ref({
-  start_date: "2023-10-12",
-  end_date: "2023-10-19",
-  cat: "同业存单"
-})
-
 const onSubmit = async () => {
 let params = {
 start_date: father_start_date.value,
   end_date: father_end_date.value,
- separate_name: separate_name.value,
   cat: "",
   inter_trade:inter_trade.value,
 }
@@ -317,8 +317,9 @@ const series = ref([
 
 <style scoped>
 .table-box{
-width: 33%;
-aspect-ratio: 16/9;
+width: 66%;
+height: 490px;
+/* aspect-ratio: 16/9; */
 
 }
 

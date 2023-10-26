@@ -31,7 +31,7 @@ const columns = ref([
 .echarts-box {
   background-color: #ffffff;
   border-radius: 8px;
-  width: 32%;
+  width: 33.3%;
   aspect-ratio: 16/9;
 }
 

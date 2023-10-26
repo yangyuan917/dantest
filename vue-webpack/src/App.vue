@@ -9,7 +9,8 @@
   display: flex;
   flex-wrap: wrap;
   padding: 20px;
-  gap: 20px;
+  padding-top: 4px;
+  gap: 8px;
   background-color: #EFF1F6;
 
 }

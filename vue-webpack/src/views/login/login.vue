@@ -27,8 +27,8 @@
         <div class="login-btn">
           <el-button type="primary" :loading="btnLoading" @click="submitForm">登录</el-button>
         </div>
-        <p class="login-tips">用户名: admin 密码: 123</p>
-        <p class="login-tips">用户名: editor 密码: 456</p>
+        <!-- <p class="login-tips">用户名: admin 密码: 123</p>
+        <p class="login-tips">用户名: editor 密码: 456</p> -->
       </el-form>
     </div>
   </div>
@@ -93,7 +93,7 @@ const submitForm = async () => {
   width: 100%;
   height: 100%;
   /* background-color: #235bae; */
-  background: linear-gradient(to bottom right, #84B5FF, #2A67F3);
+  background: linear-gradient(to  right, #FCFBE3, #1064AA);
 
   /* background-image: url('../../assets/img/login_bg.jpg');
   background-size: cover; */
@@ -123,13 +123,13 @@ margin-top: 16px;
   top: 50%;
   left: 50%;
   z-index: 1;
-  width: 350px;
+  width: 450px;
   margin: -190px 0 0 -175px;
   overflow: hidden;
   /* background: rgba(255, 255, 255, 0.4);
    */
    background-color: #fff;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .logo-img {

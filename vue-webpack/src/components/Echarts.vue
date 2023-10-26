@@ -164,7 +164,7 @@ watch(
 .echarts-box {
   background-color: #ffffff;
   border-radius: 8px;
-  width: 33.3%;
+  width: 32.5%;
 }
 
 .title-box {

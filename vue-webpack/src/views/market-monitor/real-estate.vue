@@ -43,7 +43,7 @@ provide('father_date',father_date)
 
 //第一个图
 const lineSeries1 = ref([])
-const checkboxApi1 = '/catergory_list'//左侧的选框接口
+const checkboxApi1 = '/list/city_price'//左侧的选框接口
 const linetimeChange1 = (val) => {
 console.log('val1', val)
 if (!val) {
@@ -54,8 +54,8 @@ getLineSeries1Data(val)
 }
 const  getLineSeries1Data = async(val) => {//获取第一个数据
   let params = {
-  // td:val.selectedOptions.join(",")
-  dt:'通州,大运'//测试数据
+  dt:val.selectedOptions.join(",")
+  // dt:'通州,大运'//测试数据
   }
   let res = await api.get('/estate/listp2',{params})
   let resdata = res.data.data
@@ -81,7 +81,7 @@ function convertDataForECharts(data) {
 
 //第二个图
 const lineSeries2 = ref([])
-const checkboxApi2 = '/catergory_list'//左侧的选框接口
+const checkboxApi2 = '/list/city_price'//左侧的选框接口
 const linetimeChange2 = (val) => {
 console.log('val1', val)
 if (!val) {
@@ -92,8 +92,8 @@ getLineSeries2Data(val)
 }
 const  getLineSeries2Data = async(val) => {//获取第二个数据
   let params = {
-  // td:val.selectedOptions.join(",")
-  dt:'通州,大运'//测试数据
+  dt:val.selectedOptions.join(",")
+  // dt:'通州,大运'//测试数据
   }
   let res = await api.get('/estate/listp',{params})
   let resdata = res.data.data
@@ -120,7 +120,7 @@ function convertToEChartsFormat(data) {
 
 //第三个图
 const lineSeries3 = ref([])
-const checkboxApi3 = '/catergory_list'//左侧的选框接口
+const checkboxApi3 = '/list/city_onsale'//左侧的选框接口
 const linetimeChange3 = (val) => {
 console.log('val1', val)
 if (!val) {
@@ -129,10 +129,10 @@ if (!val) {
 getLineSeries3Data(val)
 
 }
-const  getLineSeries3Data = async(val) => {//获取第二个数据
+const  getLineSeries3Data = async(val) => {//获取第三个数据
   let params = {
-  // td:val.selectedOptions.join(",")
-  dt:'bj'//测试数据
+  td:val.selectedOptions.join(",")
+  // dt:'bj'//测试数据
   }
   let res = await api.get('/estate/onsale',{params})
   let resdata = res.data.data
@@ -172,7 +172,7 @@ console.log('newData', newData)
 
 //第四个图
 const lineSeries4 = ref([])
-const checkboxApi4 = '/catergory_list'//左侧的选框接口
+const checkboxApi4 = '/list/city_register'//左侧的选框接口
 const linetimeChange4 = (val) => {
 if (!val) {
   return
@@ -182,8 +182,8 @@ getLineSeries4Data(val)
 }
 const  getLineSeries4Data = async(val) => {//获取第二个数据
   let params = {
-  // td:val.selectedOptions.join(",")
-  dt:'成都,北京,深圳'//测试数据
+  dt:val.selectedOptions.join(",")
+  // dt:'成都,北京,深圳'//测试数据
   }
   let res = await api.get('/estate/register',{params})
   let resdata = res.data.data.map(item=>{

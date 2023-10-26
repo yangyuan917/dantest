@@ -52,7 +52,7 @@
           <el-table-column label="分组" prop="归属资管计划/自主投资基金">
             <template #default="scope">
               <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetails(scope.row)">{{
-                scope.row.归属资管计划/自主投资基金 }}</span>
+               scope.row.symbol2}}</span>
             </template>
           </el-table-column>
         </el-table-column>

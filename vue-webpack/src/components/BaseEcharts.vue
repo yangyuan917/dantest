@@ -18,12 +18,16 @@ const props = defineProps({
 })
 
 watch(props.echartsOption, (newValue, oldValue) => {//监听父组件 -每当有参数传进时改变时
- myOption.value = props.echartsOption
+ myOption.value = newValue
   // myChart.setOption(baseOption, {
   // })
+  console.log('echartsOption变化', newValue)
   myChart.setOption(myOption.value, {
+   notMerge: true, //不和之前的option合并
   })
-
+  // myChart.setOption(myOption, {
+  //     notMerge: true, //不和之前的option合并
+  //   });
 }, { deep: true });//深层次监听
 const myOption = ref({//基础配置相关
 

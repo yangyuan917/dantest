@@ -10,7 +10,7 @@
     <!-- <Barchart :mySeries="series" :xData="barXdata" :separate_name="separate_name" @timeChange="timeChange"></Barchart> -->
     <Linechart :mySeries="lineSeries1" :checkboxApi="checkboxApi1" @allParamChange="linetimeChange1"></Linechart>
     <Linechart :mySeries="lineSeries2" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange2"></Linechart>
-    <Linechart :mySeries="lineSeries3" :checkboxApi="checkboxApi3" @allParamChange="linetimeChange3"></Linechart>
+    <Linechart :mySeries="lineSeries3" :checkboxApi="checkboxApi3" :maxNum="1" @allParamChange="linetimeChange3"></Linechart>
     <Linechart :mySeries="lineSeries4" :checkboxApi="checkboxApi4" @allParamChange="linetimeChange4"></Linechart>
     <!-- <Barchart   :mySeries="Barchartseries" :xData="barXdata" @timeChange="BarcharttimeChange"></Barchart> -->
 
@@ -61,6 +61,9 @@ const  getLineSeries1Data = async(val) => {//获取第一个数据
   let resdata = res.data.data
   resdata.map(item=>{
   item.type= 'line',
+   item.smooth =  true,
+    item.symbol = '',
+
   item.data =convertDataForECharts(item.data)
   return item
 
@@ -131,7 +134,7 @@ getLineSeries3Data(val)
 }
 const  getLineSeries3Data = async(val) => {//获取第三个数据
   let params = {
-  td:val.selectedOptions.join(",")
+  dt:val.selectedOptions.join(",")
   // dt:'bj'//测试数据
   }
   let res = await api.get('/estate/onsale',{params})
@@ -161,11 +164,13 @@ let data = obj.series.data
   }
 console.log('newData', newData)
   // 返回转换后的数据
- return {
+ return [ {
       name:  obj.series.name,
       type: 'line',
+      symbol : '',
+      smooth: true,
       data: newData
-    };
+    }];
 
   // return newData;
 }
@@ -188,7 +193,14 @@ const  getLineSeries4Data = async(val) => {//获取第二个数据
   let res = await api.get('/estate/register',{params})
   let resdata = res.data.data.map(item=>{
   item.type='bar'
-  item.data[0] = new Date(item.data[0]).getTime();
+  item.barMaxWidth  = 40
+  // item.data[0] = new Date(item.data[0]).getTime();
+  item.data.map(k=>{
+
+  k[0] = new Date(k[0]).getTime();
+  return k
+
+  })
   return item
   })
   console.log('resdata4', resdata)

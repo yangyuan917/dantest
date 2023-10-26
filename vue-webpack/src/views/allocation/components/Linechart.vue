@@ -56,6 +56,10 @@ checkboxApi:{//获取选框接口用的api
   type: String,
     default: '/catergory_list'
 },
+maxNum:{//最大选中个数
+type: Number,
+  default: 4
+},
   father_start_date: {//父组件下拉框的开始时间值
     type: String,
     default: ''
@@ -86,7 +90,7 @@ const getCheckboxOptions = async () => {
     }
     checkboxOptions.value.push(obj)
   })
-  selectedOptions.value = res.data.data.slice(0, 4)
+  selectedOptions.value = res.data.data.slice(0,props.maxNum)
   allobj.selectedOptions = selectedOptions.value
   emit('allParamChange', allobj)
 
@@ -220,10 +224,12 @@ const myOption = ref({
 watch(
   () => props.mySeries,
   (newVal, oldVal) => {
-    myOption.value.legend.data = [...selectedOptions.value]
+    console.log('newVal变化1111111111',newVal)
+
+    myOption.value.legend.data =newVal.map(obj => obj.name);//补上
     myOption.value.series = newVal
 
-  }
+  },{ deep: true }
 )
 </script>
 

@@ -11,7 +11,7 @@
             <el-date-picker v-model="formInline.end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
               style="max-width: 200px" placeholder="请选择结束日期" />
           </el-form-item>
-          <el-form-item label="是否内部交易">
+          <el-form-item label="">
            <el-select v-model="formInline.inter_trade" placeholder="是否内部交易" style="width: 80px; ">
           <el-option label="否" :value="0"></el-option>
           <el-option label="是" :value="1"></el-option>
@@ -29,7 +29,9 @@
     </el-row>
     <el-row>
       <el-col :span="24">
-       <el-table :data="tableData" height="490" border>
+      <div class="table-box">
+
+  <el-table :data="tableData" height="490" border>
         <el-table-column label="">
           <el-table-column label="分组" prop="类别1">
             <template #default="scope">
@@ -38,24 +40,25 @@
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="总计 " align="center">
-          <el-table-column label="交易笔数" prop="symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="市值(元)"></el-table-column>
+           <el-table-column label="总计 " align="center">
+          <el-table-column label="交易笔数" align="right" prop="symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="市值(元)"></el-table-column>
         </el-table-column>
         <el-table-column label="加仓 " align="center">
-          <el-table-column label="交易笔数" prop="加仓_symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="加仓_市值(元)"></el-table-column>
+          <el-table-column label="交易笔数" align="right" prop="加仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="加仓_市值(元)"></el-table-column>
         </el-table-column>
         <el-table-column label="减仓 " align="center">
-          <el-table-column label="交易笔数" prop="减仓_symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="减仓_市值(元)"></el-table-column>
+          <el-table-column label="交易笔数" align="right" prop="减仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="减仓_市值(元)"></el-table-column>
         </el-table-column>
         <el-table-column label="到期 " align="center">
-          <el-table-column label="交易笔数" prop="到期_symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="到期_市值(元)"></el-table-column>
+          <el-table-column label="交易笔数" align="right" prop="到期_symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="到期_市值(元)"></el-table-column>
         </el-table-column>
-
       </el-table>
+      </div>
+
       </el-col>
     </el-row>
   </div>
@@ -93,4 +96,12 @@ console.log('formInline.value', formInline.value)
 onSubmit()
 </script>
 
-<style  scoped></style>
+<style  scoped>
+
+.table-box {
+  width: 66%;
+  height: 490px;
+  /* aspect-ratio: 16/9; */
+
+}
+</style>

@@ -6,8 +6,9 @@
       <Screenfull class="screenfull" />
       <el-dropdown class="avatar-container right-menu-item">
         <div class="avatar-wrapper">
-          <img :src="avatar ? avatar : '/img/logo.png'" class="user-avatar" />
-          <I name="CaretBottom" />
+          <!-- <img :src="avatar ? avatar : '/img/logo.png'" class="user-avatar" />
+          <I name="CaretBottom" /> -->
+        用户名:admin
         </div>
         <template #dropdown>
           <el-dropdown-menu>

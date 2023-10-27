@@ -3,7 +3,7 @@
     <div class="logo" @click="$router.push('/')">
       <img class="logo-img" :src="require('@img/logo.jpg')" alt="logo" />
       <transition name="el-zoom-in-center">
-        <h1 v-show="opened" class="logo-text">Vue Element Admin</h1>
+        <div v-show="opened" class="logo-text"> AssetAnalysis分析师 </div>
       </transition>
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
@@ -12,9 +12,7 @@
         :default-active="$route.path"
         :collapse="isCollapse"
         :show-timeout="200"
-        text-color="#fff"
-        background-color="#4a5a74"
-        active-text-color="#409EFF"
+
       >
         <SidebarItem v-for="item in routerList" :key="item.path" :index="item.path" :nav="item" />
       </el-menu>
@@ -176,7 +174,7 @@ const filterChildrens = (routers) => {
   align-items: center;
   width: 100%;
   height: 50px;
-  overflow: hidden;
+  // overflow: hidden;
   text-align: center;
   cursor: pointer;
   background-color: #2b2f3a;
@@ -189,8 +187,8 @@ const filterChildrens = (routers) => {
   .logo-text {
     display: inline-block;
     height: 50px;
-    margin-left: 12px;
-    font-size: 14px;
+    // margin-left: 12px;
+    font-size: 12px;
     line-height: 50px;
     color: #fff;
   }

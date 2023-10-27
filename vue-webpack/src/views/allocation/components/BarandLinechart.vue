@@ -257,7 +257,7 @@ watch(
   font-weight: bold;
   /* color: #262626; */
 
-  color: red;
+   color: #C52C2C;
 }
 
 .time-title {
@@ -280,7 +280,7 @@ watch(
 
 .left-item {
   width: 100px;
-  /* background-color: red; */
+  /* background- color: #C52C2C; */
   height: 100%;
   margin-left: 20px;
 }

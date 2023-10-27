@@ -268,7 +268,7 @@ getAllData()
   font-weight: bold;
   /* color: #262626; */
 
-  color: red;
+   color: #C52C2C;
 }
 
 .time-title {

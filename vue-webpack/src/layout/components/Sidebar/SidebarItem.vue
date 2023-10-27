@@ -1,5 +1,5 @@
 <template>
-  <div v-if="nav.meta && !nav.hide" class="menu-wrapper">
+  <div v-if="nav.meta && !nav.hide" >
     <!-- 一级菜单 -->
     <el-menu-item
       v-if="!nav.children || !nav.children.length"

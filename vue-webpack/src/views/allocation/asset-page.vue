@@ -1,11 +1,7 @@
 <template>
   <div class="all-page-flex">
     <div style="width: 100%;">
-      <el-select v-model="separate_name" placeholder="选择separate_name" style="width: 200px; margin-right: 10px;"
-        @change="selectedSeparateNameChange">
-        <el-option v-for="name in separateNames" :key="name" :label="name" :value="name">
-        </el-option>
-      </el-select>
+
       <el-date-picker v-model="father_start_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
         style="max-width: 240px" placeholder="请选择开始日期" />
       <el-date-picker v-model="father_end_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
@@ -19,28 +15,28 @@
     <div class="table-box">
       <el-table :data="tableData" height="490" border>
         <el-table-column label="">
-          <el-table-column label="分组" prop="类别1">
+          <el-table-column label="分组" align="center" prop="类别1">
             <template #default="scope">
-              <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetails(scope.row)">{{
-                scope.row.归属资管计划 }}</span>
+              <div style="margin-left: 10px;color: #409EFF; cursor: pointer;" class="text-title" @click="goDetails(scope.row)">{{
+                scope.row.归属资管计划 }}</div>
             </template>
           </el-table-column>
         </el-table-column>
         <el-table-column label="总计 " align="center">
-          <el-table-column label="交易笔数" prop="symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="市值(元)"></el-table-column>
+          <el-table-column label="交易笔数" align="right" prop="symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="市值(元)"></el-table-column>
         </el-table-column>
         <el-table-column label="加仓 " align="center">
-          <el-table-column label="交易笔数" prop="加仓_symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="加仓_市值(元)"></el-table-column>
+          <el-table-column label="交易笔数" align="right" prop="加仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="加仓_市值(元)"></el-table-column>
         </el-table-column>
         <el-table-column label="减仓 " align="center">
-          <el-table-column label="交易笔数" prop="减仓_symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="减仓_市值(元)"></el-table-column>
+          <el-table-column label="交易笔数" align="right" prop="减仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="减仓_市值(元)"></el-table-column>
         </el-table-column>
         <el-table-column label="到期 " align="center">
-          <el-table-column label="交易笔数" prop="到期_symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="到期_市值(元)"></el-table-column>
+          <el-table-column label="交易笔数" align="right" prop="到期_symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="到期_市值(元)"></el-table-column>
         </el-table-column>
 
       </el-table>
@@ -49,7 +45,7 @@
         <div class="table-box">
       <el-table :data="tableData1" height="490" border>
         <el-table-column label="">
-          <el-table-column label="分组" prop="归属资管计划/自主投资基金">
+          <el-table-column label="分组" prop="归属资管计划/自主投资基金" width="130">
             <template #default="scope">
               <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetailstow(scope.row)">{{
                scope.row.归属资管计划}}</span>
@@ -57,20 +53,20 @@
           </el-table-column>
         </el-table-column>
         <el-table-column label="总计 " align="center">
-          <el-table-column label="交易笔数" prop="symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="市值(元)"></el-table-column>
+          <el-table-column label="交易笔数" align="right" prop="symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="市值(元)"></el-table-column>
         </el-table-column>
         <el-table-column label="加仓 " align="center">
-          <el-table-column label="交易笔数" prop="加仓_symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="加仓_市值(元)"></el-table-column>
+          <el-table-column label="交易笔数" align="right" prop="加仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="加仓_市值(元)"></el-table-column>
         </el-table-column>
         <el-table-column label="减仓 " align="center">
-          <el-table-column label="交易笔数" prop="减仓_symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="减仓_市值(元)"></el-table-column>
+          <el-table-column label="交易笔数" align="right" prop="减仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="减仓_市值(元)"></el-table-column>
         </el-table-column>
         <el-table-column label="到期 " align="center">
-          <el-table-column label="交易笔数" prop="到期_symbol2"></el-table-column>
-          <el-table-column label="交易金额" prop="到期_市值(元)"></el-table-column>
+          <el-table-column label="交易笔数" align="right" prop="到期_symbol2"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="到期_市值(元)"></el-table-column>
         </el-table-column>
 
       </el-table>
@@ -130,8 +126,20 @@ const onSubmit = async () => {
   }
   let res = await api.get('/txn/atp', { params: params })
   let res1 = await api.get('/txn/atp2', { params: params })
-  tableData.value = res.data.data
-  tableData1.value = res1.data.data
+  tableData.value = res.data.data.map(item=>{
+  item['市值(元)'] = item['市值(元)'].toFixed(1)
+  item['加仓_市值(元)'] = item['加仓_市值(元)'].toFixed(1)
+  item['减仓_市值(元)'] = item['减仓_市值(元)'].toFixed(1)
+  item['到期_市值(元)'] = item['到期_市值(元)'].toFixed(1)
+return item
+  })
+  tableData1.value = res1.data.data.map(item=>{
+  item['市值(元)'] = item['市值(元)'].toFixed(1)
+  item['加仓_市值(元)'] = item['加仓_市值(元)'].toFixed(1)
+  item['减仓_市值(元)'] = item['减仓_市值(元)'].toFixed(1)
+  item['到期_市值(元)'] = item['到期_市值(元)'].toFixed(1)
+return item
+  })
 }
 onSubmit()
 
@@ -383,6 +391,15 @@ const series = ref([
   width: 66%;
   height: 490px;
   /* aspect-ratio: 16/9; */
+
+}
+
+.text-title{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+
 
 }
 </style>

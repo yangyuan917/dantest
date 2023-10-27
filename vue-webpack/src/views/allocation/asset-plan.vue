@@ -387,7 +387,7 @@ const getLineData = async (val, target) => {
   let catergory = val.selectedOptions;
   let params = {
     separate_name: separate_name.value,
-    catergory: catergory.join("','")
+    catergory: catergory.join(",")
     // separate_name:separate_name.value,
   }
   if (target) {
@@ -444,7 +444,7 @@ const getLineData2 = async (val, target) => {
   console.log('indicator :>> ', indicator)
   let params = {
     separate_name: separate_name.value,
-    catergory: catergory.join("','"),
+    catergory: catergory.join(","),
     indicator: indicator
     // separate_name:separate_name.value,
   }

@@ -73,7 +73,7 @@ console.log('route', route)
 const formInline = ref({
   start_date: "",
   end_date: "",
-  // separate_name:'',
+  sep_name:'',
   inter_trade:'',
   cat: ""
 })
@@ -82,7 +82,7 @@ let query =route.query
 formInline.value.start_date = query.start_date
 formInline.value.end_date = query.end_date
 formInline.value.cat = query.cat
-formInline.value.separate_name = query.separate_name
+formInline.value.sep_name = query.sep_name
 formInline.value.inter_trade = query.inter_trade
 
 const tableData = ref([])
@@ -91,7 +91,13 @@ const onSubmit = async () => {
 console.log('formInline.value', formInline.value)
 
   let res = await api.get('/txn/atp', { params: formInline.value })
-  tableData.value = res.data.data
+  tableData.value = res.data.data.map(item=>{
+  item['市值(元)'] = item['市值(元)'].toFixed(1)
+  item['加仓_市值(元)'] = item['加仓_市值(元)'].toFixed(1)
+  item['减仓_市值(元)'] = item['减仓_市值(元)'].toFixed(1)
+  item['到期_市值(元)'] = item['到期_市值(元)'].toFixed(1)
+return item
+  })
 }
 onSubmit()
 </script>

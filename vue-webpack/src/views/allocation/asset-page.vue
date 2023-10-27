@@ -150,7 +150,7 @@ const goDetails = (row) => {
     query: {
       start_date: father_start_date.value,
       end_date: father_end_date.value,
-      separate_name: '',
+      sep_name: '',
       cat: row.归属资管计划,
       inter_trade: inter_trade.value,
     }
@@ -163,7 +163,7 @@ const goDetailstow = (row) => {
     query: {
       start_date: father_start_date.value,
       end_date: father_end_date.value,
-      separate_name: separate_name.value,
+      sep_name: row.归属资管计划,
       cat: '',
       inter_trade: inter_trade.value,
     }

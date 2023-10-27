@@ -29,15 +29,33 @@
     </el-row>
     <el-row>
       <el-col :span="24">
-        <el-table :data="tableData" border>
-          <el-table-column label="分组" prop="index">
+       <el-table :data="tableData" height="490" border>
+        <el-table-column label="">
+          <el-table-column label="分组" prop="类别1">
             <template #default="scope">
-              <span style="margin-left: 10px">{{ scope.row.index }}</span>
+              <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetails(scope.row)">{{
+                scope.row.归属资管计划 }}</span>
             </template>
           </el-table-column>
+        </el-table-column>
+        <el-table-column label="总计 " align="center">
           <el-table-column label="交易笔数" prop="symbol2"></el-table-column>
           <el-table-column label="交易金额" prop="市值(元)"></el-table-column>
-        </el-table>
+        </el-table-column>
+        <el-table-column label="加仓 " align="center">
+          <el-table-column label="交易笔数" prop="加仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="加仓_市值(元)"></el-table-column>
+        </el-table-column>
+        <el-table-column label="减仓 " align="center">
+          <el-table-column label="交易笔数" prop="减仓_symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="减仓_市值(元)"></el-table-column>
+        </el-table-column>
+        <el-table-column label="到期 " align="center">
+          <el-table-column label="交易笔数" prop="到期_symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="到期_市值(元)"></el-table-column>
+        </el-table-column>
+
+      </el-table>
       </el-col>
     </el-row>
   </div>
@@ -61,7 +79,7 @@ let query =route.query
 formInline.value.start_date = query.start_date
 formInline.value.end_date = query.end_date
 formInline.value.cat = query.cat
-// formInline.value.separate_name = query.separate_name
+formInline.value.separate_name = query.separate_name
 formInline.value.inter_trade = query.inter_trade
 
 const tableData = ref([])

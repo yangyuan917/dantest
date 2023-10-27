@@ -22,7 +22,7 @@
           <el-table-column label="分组" prop="类别1">
             <template #default="scope">
               <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetails(scope.row)">{{
-                scope.row.类别1 }}</span>
+                scope.row.归属资管计划 }}</span>
             </template>
           </el-table-column>
         </el-table-column>
@@ -47,12 +47,12 @@
     </div>
     <BarandLinechart :mySeries="lineSeries" @allParamChange="allChange" :showTarget="true"></BarandLinechart>
         <div class="table-box">
-      <el-table :data="tableData" height="490" border>
+      <el-table :data="tableData1" height="490" border>
         <el-table-column label="">
           <el-table-column label="分组" prop="归属资管计划/自主投资基金">
             <template #default="scope">
-              <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetails(scope.row)">{{
-               scope.row.symbol2}}</span>
+              <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetailstow(scope.row)">{{
+               scope.row.归属资管计划}}</span>
             </template>
           </el-table-column>
         </el-table-column>
@@ -99,7 +99,7 @@ const router = useRouter()
 const separate_name = ref("中信证券增盈1号集合资产管理计划")
 const separateNames = ref([]);
 const getSeparateNames = async () => {
-  const response = await api.get('/separate_list');
+  const response = await api.get('/list/sep');
   separateNames.value = response.data.data; // 调整这里以匹配你的API响应结构
 }
 getSeparateNames()
@@ -143,7 +143,20 @@ const goDetails = (row) => {
       start_date: father_start_date.value,
       end_date: father_end_date.value,
       separate_name: separate_name.value,
-      cat: row.index,
+      cat: row.归属资管计划,
+      inter_trade: inter_trade.value,
+    }
+  })
+}
+const goDetailstow = (row) => {
+  console.log(row)
+  router.push({
+    path: "/table-details",
+    query: {
+      start_date: father_start_date.value,
+      end_date: father_end_date.value,
+      separate_name: separate_name.value,
+      cat: '',
       inter_trade: inter_trade.value,
     }
   })

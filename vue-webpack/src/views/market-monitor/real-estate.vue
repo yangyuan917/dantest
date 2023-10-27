@@ -108,8 +108,12 @@ function convertToEChartsFormat(data) {
     return new Date(dateStr).getTime();
   });
   let seriesData = data.series.map(function(series) {
+    if (series.tag=='降') {
+      series.data = series.data.map((num) => -num);
+    }
     return {
       name: series.name,
+      stack: series.name,
       type: 'bar',
       data: series.data.map(function(value, index) {
         return [xAxisData[index], value];

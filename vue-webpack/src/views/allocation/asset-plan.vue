@@ -66,13 +66,13 @@ const father_date_Chage = (val) => {
   father_date.value.father_end_date = father_end_date.value
 }
 
-const checkboxApi1=  '/catergory_list'
-const checkboxApi2=  '/industry_list'
+const checkboxApi1=  '/list/indus'
+const checkboxApi2=  '/list/cat'
 
 onMounted(async () => {
   try {
 
-    const response = await api.get('/separate_list');
+    const response = await api.get('/list/sep');
     console.log('catergory_list :>> ', response.data)
     separateNames.value = response.data.data; // 调整这里以匹配你的API响应结构
   } catch (error) {
@@ -99,7 +99,7 @@ let series3_1 = ref([])
 let barXdata3_1 = ref([])
 
 // const getXdata = async () => {
-//   let res = await api.get('/catergory_list') //这边写获取x轴坐标的数据
+//   let res = await api.get('/list/cat') //这边写获取x轴坐标的数据
 //   barXdata.value = res.data.data // x 轴的数据
 // }
 
@@ -127,8 +127,8 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
   const data2_2 = res2_2.data.data
   const data3_1 = res3_1.data.data
   const orderedData = {};
-  const catergory_list = await api.get('/catergory_list') //这边写获取x轴坐标的数据
-  const industry_list = await api.get('/industry_list') //这边写获取x轴坐标的数据
+  const catergory_list = await api.get('/list/cat') //这边写获取x轴坐标的数据
+  const industry_list = await api.get('/list/indus') //这边写获取x轴坐标的数据
   const index_list = await api.get('/index_list') //这边写获取x轴坐标的数据
 
   // Loop through each date in the received data
@@ -631,7 +631,7 @@ const getLineData4 = async (val, target) => {
 
 
 const getCatergoryList = async () => {
-  let res = await api.get('/catergory_list')
+  let res = await api.get('/list/cat')
   console.log('类别res :>> ', res)
 }
 getCatergoryList()

@@ -51,8 +51,8 @@ const father_date_Chage = (val) => {
 }
 // checkboxApi
 
-const checkboxApi1 = '/catergory_list'
-const checkboxApi2 = '/industry_list'
+const checkboxApi1 = '/list/cat'
+const checkboxApi2 = '/list/indus'
 
 // const CheckboxApi
 
@@ -234,8 +234,8 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
   const data2_2 = res2_2.data.data
   const data3_1 = res3_1.data.data
   const orderedData = {};
-  const catergory_list = await api.get('/catergory_list') //这边写获取x轴坐标的数据
-  const industry_list = await api.get('/industry_list') //这边写获取x轴坐标的数据
+  const catergory_list = await api.get('/list/cat') //这边写获取x轴坐标的数据
+  const industry_list = await api.get('/list/indus') //这边写获取x轴坐标的数据
   const index_list = await api.get('/index_list') //这边写获取x轴坐标的数据
 
   // Loop through each date in the received data
@@ -665,7 +665,7 @@ const getLineData4 = async (val, target) => {
 
 
 const getCatergoryList = async () => {
-  let res = await api.get('/catergory_list')
+  let res = await api.get('/list/cat')
   console.log('类别res :>> ', res)
 }
 getCatergoryList()

@@ -126,7 +126,7 @@ const targetList = ref([]) // 初始化为一个空数组
 
 const getTargetList = async () => {
   try {
-    const response = await api.get('/industry_list') // 使用你的API端点
+    const response = await api.get('/list/indus') // 使用你的API端点
     targetList.value = response.data.data.map(item => ({
       label: item, // 使用你的字段名
       value: item  // 使用你的字段名

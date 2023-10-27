@@ -54,7 +54,7 @@ const props = defineProps({
   },
 checkboxApi:{//获取选框接口用的api
   type: String,
-    default: '/catergory_list'
+    default: '/list/cat'
 },
 maxNum:{//最大选中个数
 type: Number,
@@ -81,7 +81,7 @@ const checkboxOptions = ref([
 ])
 const getCheckboxOptions = async () => {
   let res = await api.get(props.checkboxApi)
-  //  let res = await api.get('/industry_list')
+  //  let res = await api.get('/list/indus')
   checkboxOptions.value = []
   // checkboxOptions.value = res.data.data //这里获取数据
   res.data.data.map(item => {

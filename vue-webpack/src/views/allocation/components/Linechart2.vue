@@ -70,8 +70,8 @@ const selectedOptions = ref([]) // 保存被选中的选项的数组
 const checkboxOptions = ref([
 ])
 const getCheckboxOptions = async () => {
-  // let res = await api.get('/catergory_list')
-   let res = await api.get('/industry_list')
+  // let res = await api.get('/list/cat')
+   let res = await api.get('/list/indus')
   checkboxOptions.value = []
   // checkboxOptions.value = res.data.data //这里获取数据
   res.data.data.map(item => {

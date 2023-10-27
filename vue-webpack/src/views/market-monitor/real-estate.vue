@@ -82,6 +82,24 @@ function convertDataForECharts(data) {
   return result;
 }
 
+  let darkcolor = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae',]
+let shoalcolor= ['#f69c94', '#6d8e92', '#a3d6dc', '#edae9f', '#c6e4d8',]
+const getColor = (() => {
+  let darkIndex = 0;
+  let shoalIndex = 0;
+
+  return (tag) => {
+    let color;
+    if (tag === '涨') {
+      color = darkcolor[darkIndex];
+      darkIndex = (darkIndex + 1) % darkcolor.length;
+    } else if (tag === '降') {
+      color = shoalcolor[shoalIndex];
+      shoalIndex = (shoalIndex + 1) % shoalcolor.length;
+    }
+    return color;
+  };
+})();
 //第二个图
 const lineSeries2 = ref([])
 const checkboxApi2 = '/list/city_price'//左侧的选框接口
@@ -115,6 +133,9 @@ function convertToEChartsFormat(data) {
       name: series.name,
       stack: series.name,
       type: 'bar',
+       itemStyle: {
+          color: getColor(series.tag)
+        },
       data: series.data.map(function(value, index) {
         return [xAxisData[index], value];
       })

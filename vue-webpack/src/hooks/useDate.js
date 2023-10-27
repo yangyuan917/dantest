@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import {getTodayTime} from '@/utils/util'
 
 export default function useDate() {
-  const father_start_date = ref('2023-09-02')
+  const father_start_date = ref('2023-10-13')
   const father_end_date = ref('')
 father_end_date.value = getTodayTime()
 

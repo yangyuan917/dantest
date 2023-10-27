@@ -14,21 +14,15 @@ import { reactive, ref,provide } from 'vue'
 import Scatterchart from './components/Scatterchart.vue'
 import {getTodayTime} from '@/utils/util'
 import {api} from '@/utils/api'
+import useDate from '@/hooks/useDate'
 
-//父组件时间
-const father_start_date = ref('2023-09-02')
-const father_end_date = ref('')
-father_end_date.value = getTodayTime()
-const father_date = ref({
-  father_start_date: father_start_date.value,
-  father_end_date: father_end_date.value
-
-})
-provide('father_date', father_date);
-const father_date_Chage = (val) => {
-  father_date.value.father_start_date = father_start_date.value
-  father_date.value.father_end_date = father_end_date.value
-}
+const {
+  father_start_date,
+    father_end_date,
+    father_date,
+    father_date_Chage
+} = useDate()//父组件时间hooks
+provide('father_date',father_date)
 
 
 

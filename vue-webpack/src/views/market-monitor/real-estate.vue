@@ -37,7 +37,6 @@ const {
     father_date,
     father_date_Chage
 } = useDate()//父组件时间hooks
-console.log('father_date', father_date)
 provide('father_date',father_date)
 
 
@@ -82,8 +81,8 @@ function convertDataForECharts(data) {
   return result;
 }
 
-  let darkcolor = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae',]
-let shoalcolor= ['#f69c94', '#6d8e92', '#a3d6dc', '#edae9f', '#c6e4d8',]
+  let darkcolor = ['#91CC75', '#FAC858', '#EE6666' ]
+let shoalcolor= ['#C8EBAE', '#FDE4AC', '#F0B3B3']
 const getColor = (() => {
   let darkIndex = 0;
   let shoalIndex = 0;

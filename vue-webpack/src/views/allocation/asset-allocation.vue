@@ -236,7 +236,7 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
   const orderedData = {};
   const catergory_list = await api.get('/list/cat') //这边写获取x轴坐标的数据
   const industry_list = await api.get('/list/indus') //这边写获取x轴坐标的数据
-  const index_list = await api.get('/index_list') //这边写获取x轴坐标的数据
+  const index_list = await api.get('/list/index') //这边写获取x轴坐标的数据
 
   // Loop through each date in the received data
   Object.keys(data).forEach(date => {
@@ -471,7 +471,7 @@ const linetimeChange = async (val) => {
 const getLineData = async (val, target) => {
   let catergory = val.selectedOptions;
   let params = {
-    catergory: catergory.join("','")
+    catergory: catergory.join(",")
   }
   if (target) {
     params.target = target
@@ -528,7 +528,7 @@ const getLineData2 = async (val, target) => {
   let indicator = val.target
   console.log('indicator :>> ', indicator)
   let params = {
-    catergory: catergory.join("','"),
+    catergory: catergory.join(","),
     indicator: indicator
   }
   if (target) {
@@ -596,7 +596,7 @@ const linetimeChange2 = async (val) => {
 const getLineData3 = async (val, target) => {
   let sector = val.selectedOptions;
   let params = {
-    sector: sector.join("','")
+    sector: sector.join(",")
   }
   if (target) {
     params.target = target
@@ -643,7 +643,7 @@ const linetimeChange3 = async (val) => {
 const getLineData4 = async (val, target) => {
   let sector = val.selectedOptions;
   let params = {
-    sector: sector.join("','")
+    sector: sector.join(",")
   }
   if (target) {
     params.target = target

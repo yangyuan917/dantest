@@ -12,8 +12,8 @@
     <Linechart :mySeries="lineSeriestow" :checkboxApi="checkboxApi1" @allParamChange="linetimeChangetow"
       :showTarget="true"></Linechart>
     <!-- 第二排 -->
-    <Linechart :mySeries="series3_3" title="折线图" checkboxApi="/list/city_price" @allParamChange="linetimeChange4"></Linechart>
     <BarchartLast title="柱状图" api_url="/asset_citybond1" ></BarchartLast>
+    <Linechart :mySeries="series3_3" title="折线图" checkboxApi="" @allParamChange="linetimeChange4"></Linechart>
 
     <!-- <Linechart :mySeries="series3_3" title="折线图" checkboxApi="/list/city_price" @allParamChange="linetimeChange4"></Linechart>
     <Barchart title="折线图" :mySeries="series4_1" :xData="barXdata4_1" @timeChange="timeChange4_1"></Barchart> -->

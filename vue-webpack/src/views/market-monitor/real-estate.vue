@@ -191,7 +191,7 @@ console.log('newData', newData)
  return [ {
       name:  obj.series.name,
       type: 'line',
-      symbol : '',
+      symbol : '',//曲线无点
       smooth: true,
       data: newData
     }];

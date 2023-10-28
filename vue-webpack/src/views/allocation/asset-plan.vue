@@ -29,7 +29,10 @@
     <Barchart :mySeries="series3_1" :xData="barXdata3_1" :separate_name="separate_name" @timeChange="timeChange">
     </Barchart>
     <Linechart :mySeries="series3_2" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange3"></Linechart>
-    <Linechart :mySeries="series3_3" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange4"></Linechart>
+    <!-- <Linechart :mySeries="series3_3" title="折线图" checkboxApi="/list/city_price" @allParamChange="linetimeChange4"></Linechart> -->
+    <!-- 第四排 -->
+    <!-- <Barchart title="折线图" :mySeries="series4_1" :xData="barXdata4_1" @timeChange="timeChange4_1"></Barchart> -->
+
 
 
 
@@ -92,12 +95,31 @@ let series2_2 = ref([])
 let series3_1 = ref([])
 let barXdata3_1 = ref([])
 
-// const getXdata = async () => {
-//   let res = await api.get('/list/cat') //这边写获取x轴坐标的数据
-//   barXdata.value = res.data.data // x 轴的数据
-// }
 
-// getXdata()
+const series4_1 = ref([])
+const barXdata4_1 = ref([])
+
+const timeChange4_1 = (val) => {
+console.log('val', val)
+  getBarchartData4_1(val.start_date, val.end_date)
+}
+const getBarchartData4_1 = async(start_date, end_date)=>{
+let params = {
+start_date, end_date
+
+}
+let res = await api.get('/asset_citybond1',{params})
+let data  =res.data.data
+series4_1.value = data.series.map(item=>{
+item.type = 'bar'
+item.barWidth = '30%'
+return item
+
+})
+barXdata4_1.value = data.xaxis
+console.log('res柱状图zzzzzzzzzzz', res)
+
+}
 
 const resultFmoadata = ref([]) //处理过后的数据
 
@@ -546,16 +568,11 @@ const series3_3 = ref([//
 
 
 const  linetimeChange4 = async (val)=>{
-
-
-  console.log('父组件val :>> ', val)
   let selectedOptions = val.selectedOptions
-  console.log('selectedOptions :>> ', selectedOptions)
-
   let arr = []
   let target = ''
   arr = await getLineData5(val, target)
-  console.log('arr111 :>> ', arr);
+
   series3_3.value = arr
 
 }
@@ -563,7 +580,7 @@ const  linetimeChange4 = async (val)=>{
 const getLineData5 = async (val, target) => {
   let sector = val.selectedOptions;
   let params = {
-    dt:'北京,上海'//这个从哪里来
+    dt:sector.join(",")
 
   }
    let res = await api.get('/asset_citybond_timeseries', { params })
@@ -571,6 +588,8 @@ const getLineData5 = async (val, target) => {
     let resultArr =convertArray(data)
     return resultArr
   }
+
+
 function convertArray(arr) {
  const result = [];
 
@@ -579,6 +598,8 @@ function convertArray(arr) {
    result.push({
      name: item.name,
      type: 'line',
+     symbol : '',//曲线无点
+      smooth: true,
      data,
    });
  });

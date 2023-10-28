@@ -12,6 +12,11 @@
     <Linechart :mySeries="lineSeriestow" :checkboxApi="checkboxApi1" @allParamChange="linetimeChangetow"
       :showTarget="true"></Linechart>
     <!-- 第二排 -->
+    <Linechart :mySeries="series3_3" title="折线图" checkboxApi="/list/city_price" @allParamChange="linetimeChange4"></Linechart>
+    <BarchartLast title="柱状图" api_url="/asset_citybond1" ></BarchartLast>
+
+    <!-- <Linechart :mySeries="series3_3" title="折线图" checkboxApi="/list/city_price" @allParamChange="linetimeChange4"></Linechart>
+    <Barchart title="折线图" :mySeries="series4_1" :xData="barXdata4_1" @timeChange="timeChange4_1"></Barchart> -->
 
     <Barchart :mySeries="series2_1" :xData="barXdata2_1" @timeChange="timeChange"></Barchart>
     <Barchart :mySeries="series2_2" :xData="barXdata2_2" @timeChange="timeChange"></Barchart>
@@ -20,7 +25,6 @@
 
     <Barchart :mySeries="series3_1" :xData="barXdata3_1" @timeChange="timeChange"></Barchart>
     <Linechart :mySeries="series3_2" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange3"></Linechart>
-    <!-- <Barchart :mySeries="series3_3" :xData="barXdata3_3" @timeChange="timeChange"></Barchart> -->
     <BarchartLast api_url="/asset_citybond1" ></BarchartLast>
 
   </div>
@@ -61,10 +65,46 @@ let series2_2 = ref([])
 let series3_1 = ref([])
 let barXdata3_1 = ref([])
 
+const  series3_3 = ref([])
+const  linetimeChange4 = async (val)=>{
+  let arr = []
+  let target = ''
+  arr = await getLineData5(val, target)
+
+  series3_3.value = arr
+
+}
+
+const getLineData5 = async (val, target) => {
+  let sector = val.selectedOptions;
+  let params = {
+    dt:sector.join(",")
+
+  }
+   let res = await api.get('/asset_citybond_timeseries', { params })
+  let data = res.data.data
+    let resultArr =convertArray(data)
+    return resultArr
+  }
+
+function convertArray(arr) {
+ const result = [];
+
+ arr.forEach((item) => {
+   const data = item.data.map((value, index) => [item.xaxis[index], value]);
+   result.push({
+     name: item.name,
+     type: 'line',
+     symbol : '',//曲线无点
+      smooth: true,
+     data,
+   });
+ });
+
+ return result;
+}
 
 
-
-let series3_3 = ref([])
 let barXdata3_3 = ref([]
 )
 

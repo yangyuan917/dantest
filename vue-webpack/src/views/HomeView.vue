@@ -290,6 +290,7 @@ export default {
     async getData0() { //获取对应的数据
       let data = await api.get('/maro_rate')
       data = data.data;
+      console.log("maro_rate_data: ", data.data)
       const formattedData = Object.keys(data.data).map(key => {
         if (key === 'update_time' || key == 'trade_date' || key == '指标ID') {
           // 如果key等于'update_time'，直接返回null，跳过这个key

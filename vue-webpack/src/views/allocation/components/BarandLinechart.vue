@@ -44,6 +44,7 @@ import {lastMonthDay} from '@/utils/util'
 import * as echarts from 'echarts'
 import { api } from '@/utils/api';
 
+
 const emit = defineEmits(['timeChange', 'allParamChange'])
 const props = defineProps({
   myStyle: {
@@ -74,18 +75,39 @@ const props = defineProps({
   // },
 })
 const selectedOptions = ref(['同业存单']) // 保存被选中的选项的数组
-const checkboxOptions = ref([
-  { label: '金融债', value: '金融债' },
-  { label: '债券型基金', value: '债券型基金' },
-  { label: '非标', value: '非标' },
-  { label: '货币市场工具', value: '货币市场工具' },
-  { label: '货币市场型基金', value: '货币市场型基金' },
-  { label: '同业存单', value: '同业存单' },
-  { label: '选项7', value: '选项7' },
-  { label: '选项8', value: 'option8' },
-  { label: '选项9', value: 'option9' },
-  { label: '选项10', value: 'option10' }
-])
+// const checkboxOptions = ref([
+//   { label: '金融债', value: '金融债' },
+//   { label: '债券型基金', value: '债券型基金' },
+//   { label: '非标', value: '非标' },
+//   { label: '货币市场工具', value: '货币市场工具' },
+//   { label: '货币市场型基金', value: '货币市场型基金' },
+//   { label: '同业存单', value: '同业存单' },
+//   { label: '选项7', value: '选项7' },
+//   { label: '选项8', value: 'option8' },
+//   { label: '选项9', value: 'option9' },
+//   { label: '选项10', value: 'option10' }
+// ])
+
+const checkboxOptions = ref([{ label: '金融债', value: '金融债' }]);
+
+// let res = await api.get('//list/cat')
+
+const fetchOptions = () => {
+  api.get('/list/cat')
+    .then(response => {
+      console.log('response.data.data :>> ', response.data.data);
+      checkboxOptions.value = response.data.data.map(option => ({
+        label: option,
+        value: option
+      }));
+      console.log('checkboxOptions after fetch :>> ', checkboxOptions);
+    })
+    .catch(error => {
+      console.error('获取数据失败', error);
+    });
+};
+
+fetchOptions();
 
 const checkChange = (val) => {
   allobj.selectedOptions = val
@@ -147,11 +169,11 @@ const targetList = ref([
   },
   {
     label: '债券修正久期',
-    value: 'duaration'
+    value: 'duration'
   },
   {
     label: '基金久期',
-    value: 'fund_duaration'
+    value: 'fund_duration'
   }
 ])
 const targetChange = (val) => {

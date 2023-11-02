@@ -13,7 +13,7 @@
       :showTarget="true"></Linechart>
     <!-- 第二排 -->
     <BarchartLast title="柱状图" api_url="/asset_citybond1" ></BarchartLast>
-    <Linechart :mySeries="series3_3" title="折线图" checkboxApi="" @allParamChange="linetimeChange4"></Linechart>
+    <Linechart :mySeries="series3_3" title="折线图" :checkboxApi="checkboxApi3" @allParamChange="linetimeChange4"></Linechart>
 
     <!-- <Linechart :mySeries="series3_3" title="折线图" checkboxApi="/list/city_price" @allParamChange="linetimeChange4"></Linechart>
     <Barchart title="折线图" :mySeries="series4_1" :xData="barXdata4_1" @timeChange="timeChange4_1"></Barchart> -->
@@ -51,6 +51,7 @@ provide('father_date',father_date)
 
 const checkboxApi1 = '/list/cat'
 const checkboxApi2 = '/list/indus'
+const checkboxApi3 = '/list/province'
 
 // const CheckboxApi
 

@@ -201,8 +201,10 @@ const myOption = ref({
   ],
   xAxis: {
     type: 'time',
-    //   min:'Thu, 02 Jan 2020 00:00:00 GMT',
-    //   max:"Tue, 01 Sep 2020 00:00:00 GMT",
+      // min:'Thu, 02 Jan 2020 00:00:00 GMT',
+      // max:"Tue, 01 Sep 2020 00:00:00 GMT",
+      // min:'dataMin',
+      // max:'dataMax',
     min: new Date(start_date.value.replace(/-/g, '/')),
     max: new Date(end_date.value.replace(/-/g, '/')),
     axisLabel: {

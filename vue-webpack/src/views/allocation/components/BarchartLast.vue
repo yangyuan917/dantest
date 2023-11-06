@@ -116,7 +116,7 @@ getAllData()
 .echarts-box {
   background-color: #ffffff;
   border-radius: 8px;
-  width: 33.3%;
+  /* width: 33.3% */;
 }
 
 .title-box {

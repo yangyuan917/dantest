@@ -75,18 +75,7 @@ const props = defineProps({
   // },
 })
 const selectedOptions = ref(['同业存单']) // 保存被选中的选项的数组
-// const checkboxOptions = ref([
-//   { label: '金融债', value: '金融债' },
-//   { label: '债券型基金', value: '债券型基金' },
-//   { label: '非标', value: '非标' },
-//   { label: '货币市场工具', value: '货币市场工具' },
-//   { label: '货币市场型基金', value: '货币市场型基金' },
-//   { label: '同业存单', value: '同业存单' },
-//   { label: '选项7', value: '选项7' },
-//   { label: '选项8', value: 'option8' },
-//   { label: '选项9', value: 'option9' },
-//   { label: '选项10', value: 'option10' }
-// ])
+
 
 const checkboxOptions = ref([{ label: '金融债', value: '金融债' }]);
 
@@ -209,7 +198,19 @@ const myOption = ref({
   ],
 
   tooltip: {
-    trigger: 'axis'
+    trigger: 'axis',
+    //保留一位小数
+    formatter: function (params) {
+    console.log('params', params)
+      return  params[0].seriesName + ':' + params[0].value[1].toFixed(1) + '<br/>'
+       +  params[1].seriesName + ':' + params[1].value[1].toFixed(1)
+    }
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
   },
   legend: {
     data: ['柱状图', '折线图']
@@ -225,11 +226,17 @@ const myOption = ref({
   yAxis: [
     {
       type: 'value',
-      name: '1'
+        axisLine: {
+        onZero: true
+      },
+      name: 'yield'
     },
     {
       type: 'value',
-      name: '2'
+       axisLine: {
+        onZero: true
+      },
+      name: ' 市值'
     }
   ],
   series: props.mySeries
@@ -267,7 +274,6 @@ watch(
 .echarts-box {
   background-color: #ffffff;
   border-radius: 8px;
-  width: 33.3%;
 }
 
 .title-box {
@@ -303,6 +309,9 @@ watch(
 .left-item {
   width: 100px;
   /* background- color: #C52C2C; */
+   max-height: 360px;
+  overflow-y: scroll;
+  overflow-x: hidden;
   height: 100%;
   margin-left: 20px;
 }

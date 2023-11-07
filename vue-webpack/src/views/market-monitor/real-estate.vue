@@ -12,6 +12,7 @@
     <Linechart :mySeries="lineSeries2" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange2"></Linechart>
     <Linechart :mySeries="lineSeries3" :checkboxApi="checkboxApi3" :maxNum="1" @allParamChange="linetimeChange3"></Linechart>
     <Linechart :mySeries="lineSeries4" :checkboxApi="checkboxApi4" @allParamChange="linetimeChange4"></Linechart>
+    <Linechart :mySeries="lineSeries5" :checkboxApi="checkboxApi5" @allParamChange="linetimeChange5"></Linechart>
     <!-- <Barchart   :mySeries="Barchartseries" :xData="barXdata" @timeChange="BarcharttimeChange"></Barchart> -->
 
 
@@ -60,10 +61,11 @@ const  getLineSeries1Data = async(val) => {//获取第一个数据
   let resdata = res.data.data
   resdata.map(item=>{
   item.type= 'line',
-   item.smooth =  true,
-    item.symbol = '',
-
+  item.smooth =  true,
+  item.symbol = '',
+  console.log("Before: item.data", item.data)
   item.data =convertDataForECharts(item.data)
+  console.log("After: item.data", item.data)
   return item
 
   })
@@ -230,6 +232,47 @@ const  getLineSeries4Data = async(val) => {//获取第二个数据
   console.log('resdata4', resdata)
   lineSeries4.value = resdata
   // lineSeries3.value = convertToEChartsFormat(resdata)
+}
+
+//第5个图
+const lineSeries5 = ref([])
+const checkboxApi5 = '/list/city_price'//左侧的选框接口
+const linetimeChange5 = (val) => {
+console.log('val1', val)
+if (!val) {
+  return
+}
+getLineSeries5Data(val)
+
+}
+const  getLineSeries5Data = async(val) => {//获取第一个数据
+  let params = {
+  dt:val.selectedOptions.join(",")
+  // dt:'通州,大运'//测试数据
+  }
+  let res = await api.get('/estate/onsale_price',{params})
+  let resdata = res.data.data
+  resdata.map(item=>{
+  item.type= 'line',
+   item.smooth =  true,
+    item.symbol = '',
+
+  item.data =convertDataForECharts5(item.data)
+  return item
+
+  })
+  lineSeries5.value = [...resdata]
+}
+function convertDataForECharts5(data) {
+  let result = [];
+  for (let i = 0; i < data.length; i++) {
+    let item = data[i];
+    let date = new Date(item['业务日期']);
+    let downPct = item['unitprice1'];
+    result.push([date.getTime(), downPct]);
+  }
+
+  return result;
 }
 </script>
 

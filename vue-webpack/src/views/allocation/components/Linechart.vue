@@ -226,7 +226,7 @@ const myOption = ref({
 watch(
   () => props.mySeries,
   (newVal, oldVal) => {
-    console.log('newVal变化1111111111',newVal)
+
 
     myOption.value.legend.data =newVal.map(obj => obj.name);//补上
     myOption.value.series = newVal

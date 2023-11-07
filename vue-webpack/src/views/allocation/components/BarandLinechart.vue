@@ -212,6 +212,14 @@ const myOption = ref({
     bottom: '3%',
     containLabel: true
   },
+  // grid: [
+  //      {
+  //          bottom: '55%'
+  //      },
+  //      {
+  //          top: '55%'
+  //      }
+  //  ],
   legend: {
     data: ['柱状图', '折线图']
   },
@@ -229,6 +237,8 @@ const myOption = ref({
         axisLine: {
         onZero: true
       },
+       min: 0,
+            max: 10000,
       name: 'yield'
     },
     {
@@ -236,6 +246,8 @@ const myOption = ref({
        axisLine: {
         onZero: true
       },
+       min: 0,
+            max: 10000,
       name: ' 市值'
     }
   ],

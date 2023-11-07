@@ -1,28 +1,18 @@
 <template>
   <div id="tags-view-container">
     <ScrollPane ref="scrollPane" class="tags-view-wrapper" @scroll="handleScroll">
-      <router-link
-        v-for="tag in visitedViews"
-        :key="tag.path"
-        :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-        :class="isActive(tag) ? 'active' : ''"
-        class="tags-view-item"
-        @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
-        @contextmenu.prevent="openMenu(tag, $event)"
-      >
+      <router-link v-for="tag in visitedViews" :key="tag.path"
+        :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }" :class="isActive(tag) ? 'active' : ''"
+        class="tags-view-item" @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
+        @contextmenu.prevent="openMenu(tag, $event)">
         {{ tag.title }}
-        <I
-          v-if="!isAffix(tag)"
-          name="Close"
-          :size="10"
-          @click.prevent.stop="closeSelectedTag(tag)"
-        />
+        <I v-if="!isAffix(tag)" name="Close" :size="10" @click.prevent.stop="closeSelectedTag(tag)" />
       </router-link>
     </ScrollPane>
     <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
-      <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">Close</li>
-      <li @click="closeOthersTags">Close Others</li>
-      <li @click="closeAllTags(selectedTag)">Close All</li>
+      <li @click="closeSelectedTag(selectedTag)"> 关闭 </li>
+      <li @click="closeOthersTags"> 关闭其他</li>
+      <li @click="closeAllTags(selectedTag)"> 关闭所有 </li>
     </ul>
   </div>
 </template>

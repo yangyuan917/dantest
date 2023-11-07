@@ -8,12 +8,16 @@
 .all-page-flex{
   display: flex;
   flex-wrap: wrap;
-  padding: 20px;
+  /* padding: 20px; */
   padding-top: 4px;
-  gap: 8px;
+  /* gap: 8px; */
   background-color: #EFF1F6;
 
 }
 
+.echarts-box{
+ width: calc(33.33% - 20px);
+margin: 10px;
 
+}
 </style>

@@ -52,7 +52,6 @@ const linetimeChange1 = (val) => {
     return
   }
   getLineSeries1Data(val)
-
 }
 const getLineSeries1Data = async (val) => {//获取第一个数据
   let params = {
@@ -61,24 +60,12 @@ const getLineSeries1Data = async (val) => {//获取第一个数据
   }
   let res = await api.get('/estate/listp2', { params })
   let resdata = res.data.data
-<<<<<<< HEAD
-  resdata.map(item=>{
-  item.type= 'line',
-  item.smooth =  true,
-  item.symbol = '',
-  console.log("Before: item.data", item.data)
-  item.data =convertDataForECharts(item.data)
-  console.log("After: item.data", item.data)
-  return item
-=======
   resdata.map(item => {
     item.type = 'line',
       item.smooth = true,
       item.symbol = '',
-
       item.data = convertDataForECharts(item.data)
     return item
->>>>>>> zc_dev_tmp
 
   })
   lineSeries1.value = [...resdata]

@@ -78,7 +78,7 @@ function convertDataForECharts(data) {
     let downPct = item['down_pct'];
     // result.push([date.getTime(), downPct]);
     result.push([dayjs(date).startOf('day').format('YYYY-MM-DD'),
-      , downPct]);
+       downPct]);
   }
 
   return result;

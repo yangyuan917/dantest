@@ -17,7 +17,7 @@
         <el-table-column label="">
           <el-table-column label="分组" align="center" prop="类别1">
             <template #default="scope">
-              <div style="margin-left: 10px;color: #409EFF; cursor: pointer;" class="text-title" @click="goDetails(scope.row)">{{
+              <div style="margin-left: 10px;color: #409EFF; cursor: pointer; " class="text-title" @click="goDetails(scope.row)">{{
                 scope.row.归属资管计划 }}</div>
             </template>
           </el-table-column>
@@ -45,9 +45,9 @@
         <div class="table-box">
       <el-table :data="tableData1" height="490" border>
         <el-table-column label="">
-          <el-table-column label="分组" prop="归属资管计划/自主投资基金" width="130">
+          <el-table-column label="分组" prop="归属资管计划/自主投资基金" >
             <template #default="scope">
-              <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" @click="goDetailstow(scope.row)">{{
+              <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" class="text-title1" @click="goDetailstow(scope.row)">{{
                scope.row.归属资管计划}}</span>
             </template>
           </el-table-column>
@@ -167,27 +167,27 @@ const goDetailstow = (row) => {
 
 let lineSeries = ref([
   {
-    name: '柱状图',
+    name: 'yieid',
     type: 'bar',
     data: [
-      ['2023-09-01', 20],
-      ['2023-09-02', 30],
-      ['2023-09-03', -20]
+      ['2023-09-21', 20000],
+      ['2023-09-22', 300000],
+      ['2023-09-23', -20000000]
     ], //
     yAxisIndex: 0 // 使用第一个 y 轴坐标
   },
   {
-    name: '折线图',
+    name: '市值',
     type: 'line',
     lineStyle: {
       color: 'transparent' // 设置折线的颜色为透明
     },
     data: [
-      ['2023-09-01', 10],
-      ['2023-09-02', 40],
-      ['2023-09-04', 80],
-      ['2023-09-05', 80],
-      ['2023-09-06', 80]
+      ['2023-09-21', 10],
+      ['2023-09-22', 40],
+      ['2023-09-24', 80],
+      ['2023-09-25', 80],
+      ['2023-09-26', 80]
     ], //
     yAxisIndex: 1 // 使用第二个 y 轴坐标
   }
@@ -198,7 +198,7 @@ const allChange = async (val) => {
   let arr = []
   let target = ''
   arr = await getLineData2(val, target)
-  lineSeries.value = arr
+  // lineSeries.value = arr
 }
 
 const getLineData2 = async (val, target) => {
@@ -390,11 +390,19 @@ const series = ref([
 }
 
 .text-title{
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: -webkit-box;
+ -webkit-line-clamp: 2;
+ -webkit-box-orient: vertical;
+ overflow: hidden;
+ text-overflow: ellipsis;
 
-
+}
+.text-title1{
+  display: -webkit-box;
+ -webkit-line-clamp: 1;
+ -webkit-box-orient: vertical;
+ overflow: hidden;
+ text-overflow: ellipsis;
 
 }
 </style>

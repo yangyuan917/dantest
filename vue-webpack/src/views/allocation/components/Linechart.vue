@@ -229,7 +229,13 @@ watch(
 
 
     myOption.value.legend.data =newVal.map(obj => obj.name);//补上
-    myOption.value.series = newVal
+    myOption.value.series = newVal.map(item=>{
+      if (item.type == 'line') {
+          item.symbol  =  ''//曲线无点
+      item.smooth= true
+      }
+    return item
+    })
 
   },{ deep: true }
 )

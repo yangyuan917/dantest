@@ -7,25 +7,26 @@
         style="max-width: 240px" placeholder="请选择结束日期" />
     </div>
     <!-- 第一排 -->
-    <Barchart title="自定义标题" :mySeries="series" :xData="barXdata" @timeChange="timeChange"></Barchart>
+    <Barchart title="自定义标题" :mySeries="series" :xData="barXdata" @timeChange="timeChange1"></Barchart>
     <Linechart :mySeries="lineSeries" :checkboxApi="checkboxApi1" @allParamChange="linetimeChange"></Linechart>
     <Linechart :mySeries="lineSeriestow" :checkboxApi="checkboxApi1" @allParamChange="linetimeChangetow"
       :showTarget="true"></Linechart>
     <!-- 第二排 -->
-    <BarchartLast title="柱状图" api_url="/asset_citybond1" ></BarchartLast>
-    <Linechart :mySeries="series3_3" title="折线图" :checkboxApi="checkboxApi3" @allParamChange="linetimeChange4"></Linechart>
+    <BarchartLast title="柱状图" api_url="/asset_citybond1"></BarchartLast>
+    <Linechart :mySeries="series3_3" title="折线图" :checkboxApi="checkboxApi3" @allParamChange="linetimeChange4">
+    </Linechart>
 
     <!-- <Linechart :mySeries="series3_3" title="折线图" checkboxApi="/list/city_price" @allParamChange="linetimeChange4"></Linechart>
     <Barchart title="折线图" :mySeries="series4_1" :xData="barXdata4_1" @timeChange="timeChange4_1"></Barchart> -->
 
-    <Barchart :mySeries="series2_1" :xData="barXdata2_1" @timeChange="timeChange"></Barchart>
-    <Barchart :mySeries="series2_2" :xData="barXdata2_2" @timeChange="timeChange"></Barchart>
+    <Barchart :mySeries="series2_1" :xData="barXdata2_1" @timeChange="timeChange2_1"></Barchart>
+    <Barchart :mySeries="series2_2" :xData="barXdata2_2" @timeChange="timeChange2_2"></Barchart>
     <Linechart :mySeries="series2_3" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange2"></Linechart>
     <!-- 第三排 -->
 
-    <Barchart :mySeries="series3_1" :xData="barXdata3_1" @timeChange="timeChange"></Barchart>
+    <Barchart :mySeries="series3_1" :xData="barXdata3_1" @timeChange="timeChange3_1"></Barchart>
     <Linechart :mySeries="series3_2" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange3"></Linechart>
-    <BarchartLast api_url="/asset_citybond1" ></BarchartLast>
+    <BarchartLast api_url="/asset_citybond1"></BarchartLast>
 
   </div>
 </template>
@@ -42,11 +43,11 @@ import useDate from '@/hooks/useDate'
 //父组件时间
 const {
   father_start_date,
-    father_end_date,
-    father_date,
-    father_date_Chage
+  father_end_date,
+  father_date,
+  father_date_Chage
 } = useDate()//父组件时间hooks
-provide('father_date',father_date)
+provide('father_date', father_date)
 // checkboxApi
 
 const checkboxApi1 = '/list/cat'
@@ -66,8 +67,8 @@ let series2_2 = ref([])
 let series3_1 = ref([])
 let barXdata3_1 = ref([])
 
-const  series3_3 = ref([])
-const  linetimeChange4 = async (val)=>{
+const series3_3 = ref([])
+const linetimeChange4 = async (val) => {
   let arr = []
   let target = ''
   arr = await getLineData5(val, target)
@@ -79,30 +80,30 @@ const  linetimeChange4 = async (val)=>{
 const getLineData5 = async (val, target) => {
   let sector = val.selectedOptions;
   let params = {
-    dt:sector.join(",")
+    dt: sector.join(",")
 
   }
-   let res = await api.get('/asset_citybond_timeseries', { params })
+  let res = await api.get('/asset_citybond_timeseries', { params })
   let data = res.data.data
-    let resultArr =convertArray(data)
-    return resultArr
-  }
+  let resultArr = convertArray(data)
+  return resultArr
+}
 
 function convertArray(arr) {
- const result = [];
+  const result = [];
 
- arr.forEach((item) => {
-   const data = item.data.map((value, index) => [item.xaxis[index], value]);
-   result.push({
-     name: item.name,
-     type: 'line',
-     symbol : '',//曲线无点
+  arr.forEach((item) => {
+    const data = item.data.map((value, index) => [item.xaxis[index], value]);
+    result.push({
+      name: item.name,
+      type: 'line',
+      symbol: '',//曲线无点
       smooth: true,
-     data,
-   });
- });
+      data,
+    });
+  });
 
- return result;
+  return result;
 }
 
 
@@ -185,12 +186,12 @@ const getBarchartData3_3 = async (start_date, end_date) => {
       ]
     }
   }
-series3_3.value = res.data.series.map(item=>{
-item.type='bar'
-return item
+  series3_3.value = res.data.series.map(item => {
+    item.type = 'bar'
+    return item
 
-})
-barXdata3_3.value  =res.data.xaxis
+  })
+  barXdata3_3.value = res.data.xaxis
 
 
 }
@@ -199,7 +200,6 @@ getBarchartData3_3(father_start_date.value, father_end_date.value)
 const resultFmoadata = ref([]) //处理过后的数据
 
 const timeChange = (val) => {
-  console.log('val :>> ', val)
   getBarchartData(val.start_date, val.end_date)
 }
 const getBarchartData = async (start_date, end_date) => {//柱状图
@@ -216,54 +216,6 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
     series.value = {}
     return
   }
-
-  const processBarData = (res) => {
-    let start_date_data = res.data.data[`${start_date}`];
-    let end_date_data = res.data.data[`${end_date}`];
-    let valuesArray1 = [];
-    let valuesArray2 = [];
-    let series = ref([])
-    // let barXdata = ref([])
-
-    console.log('start_date_data: ', start_date_data);
-
-    if (start_date_data) {
-      // barXdata.value = Object.keys(start_date_data); // X 轴的值
-      valuesArray1 = Object.values(start_date_data);
-    }
-
-    if (end_date_data) {
-      valuesArray2 = Object.values(end_date_data);
-    }
-
-    series.value = [
-      {
-        name: start_date,
-        type: 'bar',
-        data: valuesArray1 // 蓝色柱状图的数据
-      },
-      {
-        name: end_date,
-        type: 'bar',
-        data: valuesArray2 // 蓝色柱状图的数据
-      }
-    ];
-    console.log('start_date_data: ', start_date_data);
-    console.log('end_date_data: ', end_date_data);
-    console.log('valuesArray1: ', valuesArray1);
-    console.log('valuesArray2: ', valuesArray2);
-    console.log('series: ', series.value);
-
-    return [series, barXdata]
-  };
-
-  // todo: 这个函数为什么不行
-  // [series2_1, barXdata2_1] = processBarData(res2_1);
-  // console.log('res2_1 :>> ', res2_1);
-  // console.log('series2_1 :>> ', series2_1);
-  // console.log('barXdata2_1 :>> ', barXdata2_1.value);
-
-  console.log('res :>> ', res);
   const data = res.data.data
   const data2_1 = res2_1.data.data
   const data2_2 = res2_2.data.data
@@ -319,10 +271,6 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
       data: valuesArray2 // 蓝色柱状图的数据
     }
   ]
-  console.log('111111111111series :>> ', series);
-  console.log('valuesArray1 :>> ', valuesArray1);
-  console.log('1111111111111barXdata :>> ', barXdata.value);
-
   // 第二排第一个图
   // Loop through each date in the received data
   console.log('industry_list :>> ', industry_list.data.data);
@@ -350,13 +298,9 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
     console.log('barXdata2_1 :>> ', barXdata2_1.value);
   }
 
-  console.log('44444 :>> ', 44444);
-
   if (end_date_data2_1) {
     barXdata2_1.value = Object.keys(end_date_data2_1);//轴的值
-
     valuesArray2_1_2 = Object.values(end_date_data2_1);
-
   }
   series2_1.value = [
     {
@@ -463,6 +407,208 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
   // let res = await api.get('/operation')
 }
 
+const timeChange1 = async (val) => {
+  let params = {
+    start_date: val.start_date,
+    end_date: val.end_date,
+  }
+  let res = await api.get('/asset_concentrate', { params })
+  if (!res.data.data) {
+    series.value = {}
+    return
+  }
+  const data = res.data.data
+  const orderedData = {};
+  const catergory_list = await api.get('/list/cat') //这边写获取x轴坐标的数据
+  Object.keys(data).forEach(date => {
+    orderedData[date] = {};
+    // Use the predefined order from catergory_list to order the data for this date
+    catergory_list.data.data.forEach(key => {
+      if (data[date].hasOwnProperty(key)) {
+        orderedData[date][key] = data[date][key];
+      }
+    });
+  });
+  let start_date_data1 = orderedData[`${start_date}`]
+  let end_date_data1 = orderedData[`${end_date}`]
+  let valuesArray1 = []
+  let valuesArray2 = []
+  if (start_date_data1) {
+    barXdata.value = Object.keys(start_date_data1);//轴的值
+    valuesArray1 = Object.values(start_date_data1);
+  }
+  if (end_date_data1) {
+    barXdata.value = Object.keys(end_date_data1);//轴的值
+    valuesArray2 = Object.values(end_date_data1);
+  }
+  series.value = [
+    {
+      name: start_date,
+      type: 'bar',
+      data: valuesArray1 // 蓝色柱状图的数据
+    },
+    {
+      name: end_date,
+      type: 'bar',
+      data: valuesArray2 // 蓝色柱状图的数据
+    }
+  ]
+}
+const timeChange2_1 = async (val) => {
+  let params = {
+    start_date: val.start_date,
+    end_date: val.end_date,
+  }
+  let res2_1 = await api.get('/prtindustry', { params })
+  const industry_list = await api.get('/list/indus') //这边写获取x轴坐标的数据
+  const data2_1 = res2_1.data.data
+  const orderedData2_1 = {};
+  Object.keys(data2_1).forEach(date => {
+
+    orderedData2_1[date] = {};
+
+    // Use the predefined order from catergory_list to order the data for this date
+    industry_list.data.data.forEach(key => {
+      if (data2_1[date].hasOwnProperty(key)) {
+        orderedData2_1[date][key] = data2_1[date][key];
+      }
+    });
+  });
+
+
+  let start_date_data2_1 = orderedData2_1[`${start_date}`]
+  let end_date_data2_1 = orderedData2_1[`${end_date}`]
+  let valuesArray2_1_1 = []
+  let valuesArray2_1_2 = []
+  if (start_date_data2_1) {
+    barXdata2_1.value = Object.keys(start_date_data2_1);//轴的值
+    valuesArray2_1_1 = Object.values(start_date_data2_1);
+    console.log('barXdata2_1 :>> ', barXdata2_1.value);
+  }
+
+  if (end_date_data2_1) {
+    barXdata2_1.value = Object.keys(end_date_data2_1);//轴的值
+    valuesArray2_1_2 = Object.values(end_date_data2_1);
+  }
+  series2_1.value = [
+    {
+      name: start_date,
+
+      type: 'bar',
+
+      data: valuesArray2_1_1 // 蓝色柱状图的数据
+    },
+    {
+      name: end_date,
+      type: 'bar',
+      data: valuesArray2_1_2 // 蓝色柱状图的数据
+    }
+  ]
+}
+const timeChange2_2 = async (val) => {
+  let params = {
+    start_date: val.start_date,
+    end_date: val.end_date,
+  }
+  let res2_2 = await api.get('/prtindex', { params })
+  const data2_2 = res2_2.data.data
+  const index_list = await api.get('/list/index') //这边写获取x轴坐标的数据
+  // 第二排第二个图
+  const orderedData2_2 = {};
+  Object.keys(data2_2).forEach(date => {
+
+    orderedData2_2[date] = {};
+
+    // Use the predefined order from catergory_list to order the data for this date
+    index_list.data.data.forEach(key => {
+      if (data2_2[date].hasOwnProperty(key)) {
+        orderedData2_2[date][key] = data2_2[date][key];
+      }
+    });
+  });
+
+  let start_date_data2_2 = orderedData2_2[`${start_date}`]
+  let end_date_data2_2 = orderedData2_2[`${end_date}`]
+  let valuesArray2_2_1 = []
+  let valuesArray2_2_2 = []
+  if (start_date_data2_2) {
+    barXdata2_2.value = Object.keys(start_date_data2_2);//轴的值
+    valuesArray2_2_1 = Object.values(start_date_data2_2);
+  }
+  if (end_date_data2_2) {
+    barXdata2_2.value = Object.keys(end_date_data2_2);//轴的值
+
+    valuesArray2_2_2 = Object.values(end_date_data2_2);
+
+  }
+  series2_2.value = [
+    {
+      name: start_date,
+
+      type: 'bar',
+
+      data: valuesArray2_2_1 // 蓝色柱状图的数据
+    },
+    {
+      name: end_date,
+      type: 'bar',
+      data: valuesArray2_2_2 // 蓝色柱状图的数据
+    }
+  ]
+
+}
+const timeChange3_1 = async (val) => {
+  let params = {
+    start_date: val.start_date,
+    end_date: val.end_date,
+  }
+  let res3_1 = await api.get('/fundprtindustry', { params })
+  const data3_1 = res3_1.data.data
+  const industry_list = await api.get('/list/indus') //这边写获取x轴坐标的数据
+  const orderedData3_1 = {};
+  Object.keys(data3_1).forEach(date => {
+
+    orderedData3_1[date] = {};
+
+    // Use the predefined order from catergory_list to order the data for this date
+    industry_list.data.data.forEach(key => {
+      if (data3_1[date].hasOwnProperty(key)) {
+        orderedData3_1[date][key] = data3_1[date][key];
+      }
+    });
+  });
+  let start_date_data3_1 = orderedData3_1[`${start_date}`]
+  let end_date_data3_1 = orderedData3_1[`${end_date}`]
+  let valuesArray3_1_1 = []
+  let valuesArray3_1_2 = []
+  if (start_date_data3_1) {
+    barXdata3_1.value = Object.keys(start_date_data3_1);//轴的值
+    valuesArray3_1_1 = Object.values(start_date_data3_1);
+  }
+  if (end_date_data3_1) {
+    barXdata3_1.value = Object.keys(end_date_data3_1);//轴的值
+
+    valuesArray3_1_2 = Object.values(end_date_data3_1);
+
+  }
+  series3_1.value = [
+    {
+      name: start_date,
+
+      type: 'bar',
+
+      data: valuesArray3_1_1 // 蓝色柱状图的数据
+    },
+    {
+      name: end_date,
+      type: 'bar',
+      data: valuesArray3_1_2 // 蓝色柱状图的数据
+    }
+  ]
+
+}
+
+
 
 
 //折线图1
@@ -485,21 +631,6 @@ const linetimeChange = async (val) => {
   let arr = []
   let target = ''
   arr = await getLineData(val, target)
-  console.log('arr111 :>> ', arr);
-  // selectedOptions.map((item, index) => {
-  //   let randomInt = Math.floor(Math.random() * 10) + index
-  //   let obj = {
-  //     name: '',
-  //     type: 'line',
-  //     data: [
-  //       ['2020-01-01', randomInt - 1],
-  //       ['2020-01-02', randomInt - 1],
-  //       ['2021-01-03', randomInt + 5]
-  //     ] //
-  //   }
-  //   obj.name = item
-  //   arr.push(obj)
-  // })
   lineSeries.value = arr
 }
 

@@ -133,11 +133,11 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
     end_date,
     separate_name: separate_name.value
   }
-  let res = await api.get('/asset_concentrate_separate', { params })
+  let res = await api.get('/separate/asset_concentrate', { params })
   console.log('res :>> ', res);
-  let res2_1 = await api.get('/separate_prtindustry', { params })
-  let res2_2 = await api.get('/separate_prtindex', { params })
-  let res3_1 = await api.get('/separate_fundprtindustry', { params })
+  let res2_1 = await api.get('/separate/prtindustry', { params })
+  let res2_2 = await api.get('/separate/prtindex', { params })
+  let res3_1 = await api.get('/separate/fundprtindustry', { params })
   const data = res.data.data
   const data2_1 = res2_1.data.data
   const data2_2 = res2_2.data.data
@@ -410,7 +410,7 @@ const getLineData = async (val, target) => {
     params.target = target
   }
 
-  let res = await api.get('/asset_concentrate_timeseries_separate', { params })
+  let res = await api.get('/separate/asset_concentrate_timeseries', { params })
   let data = res.data.data
 
   console.log('catergory :>> ', catergory);
@@ -467,8 +467,7 @@ const getLineData2 = async (val, target) => {
   if (target) {
     params.target = target
   }
-  let res = await api.get('/asset_indicator_separate', { params })
-  console.log('/asset_indicator_separate    res :>> ', res)
+  let res = await api.get('//separate/asset_indicator', { params })
   let data = res.data.data
   let arr = catergory.map(category => {
     const transformedObj = {
@@ -528,7 +527,7 @@ const getLineData3 = async (val, target) => {
     params.target = target
   }
 
-  let res = await api.get('/separate_prtindustry_timeseries', { params })
+  let res = await api.get('/separate/prtindustry_timeseries', { params })
   let data = res.data.data
 
   let arr = sector.map(sector => {
@@ -630,7 +629,7 @@ const getLineData4 = async (val, target) => {
     params.target = target
   }
 
-  let res = await api.get('/separate_fundprtindustry_timeseries', { params })
+  let res = await api.get('/separate/fundprtindustry_timeseries', { params })
   let data = res.data.data
 
   let arr = sector.map(sector => {
@@ -653,7 +652,7 @@ getCatergoryList()
 
 
 const getAssetConcentrate = async () => {//这是获取总数据的地方
-  let res = await api.get('/asset_indicator_separate')
+  let res = await api.get('//separate/asset_indicator')
   let data = res.data.data
 
   let result = transformData(data)

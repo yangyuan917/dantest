@@ -408,6 +408,8 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
 }
 
 const timeChange1 = async (val) => {
+let start_date =val.start_date
+let end_date =val.end_date
   let params = {
     start_date: val.start_date,
     end_date: val.end_date,
@@ -455,6 +457,8 @@ const timeChange1 = async (val) => {
   ]
 }
 const timeChange2_1 = async (val) => {
+let start_date =val.start_date
+let end_date =val.end_date
   let params = {
     start_date: val.start_date,
     end_date: val.end_date,
@@ -506,6 +510,8 @@ const timeChange2_1 = async (val) => {
   ]
 }
 const timeChange2_2 = async (val) => {
+let start_date =val.start_date
+let end_date =val.end_date
   let params = {
     start_date: val.start_date,
     end_date: val.end_date,
@@ -558,6 +564,8 @@ const timeChange2_2 = async (val) => {
 
 }
 const timeChange3_1 = async (val) => {
+let start_date =val.start_date
+let end_date =val.end_date
   let params = {
     start_date: val.start_date,
     end_date: val.end_date,

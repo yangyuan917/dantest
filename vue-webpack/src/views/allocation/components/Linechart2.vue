@@ -236,7 +236,7 @@ watch(
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C52C2C;
+   color: #C00000;
 }
 
 .time-title {
@@ -259,7 +259,7 @@ watch(
 
 .left-item {
   width: 120px;
-  /* background- color: #C52C2C; */
+  /* background- color: #C00000; */
   /* height: 100%; */
 
   max-height: 360px;

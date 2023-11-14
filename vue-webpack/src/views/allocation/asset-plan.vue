@@ -15,25 +15,25 @@
     </div>
     <!-- 置顶一排 -->
     <Barchart :mySeries="series" :xData="barXdata" :separate_name="separate_name" @timeChange="timeChange"></Barchart>
-    <Linechart :mySeries="lineSeries" :checkboxApi="checkboxApi1" @allParamChange="linetimeChange"></Linechart>
+    <Linechart :mySeries="lineSeries" :checkboxApi="checkboxApi1" :separate_name="separate_name" @allParamChange="linetimeChange"></Linechart>
     <Barchart ></Barchart>
-    
+
     <!-- 第一排 -->
     <Barchart :mySeries="series" :xData="barXdata" :separate_name="separate_name" @timeChange="timeChange"></Barchart>
-    <Linechart :mySeries="lineSeries" :checkboxApi="checkboxApi1" @allParamChange="linetimeChange"></Linechart>
-    <Linechart :mySeries="lineSeriestow" :checkboxApi="checkboxApi1" @allParamChange="linetimeChangetow" :showTarget="true"></Linechart>
+    <Linechart :mySeries="lineSeries" :checkboxApi="checkboxApi1" :separate_name="separate_name" @allParamChange="linetimeChange"></Linechart>
+    <Linechart :mySeries="lineSeriestow" :checkboxApi="checkboxApi3" :separate_name="separate_name" @allParamChange="linetimeChangetow" :showTarget="true"></Linechart>
     <!-- 第二排 -->
 
     <Barchart :mySeries="series2_1" :xData="barXdata2_1" :separate_name="separate_name" @timeChange="timeChange">
     </Barchart>
     <Barchart :mySeries="series2_2" :xData="barXdata2_2" :separate_name="separate_name" @timeChange="timeChange">
     </Barchart>
-    <Linechart :mySeries="series2_3" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange2"></Linechart>
+    <Linechart :mySeries="series2_3" :checkboxApi="checkboxApi2" :separate_name="separate_name" @allParamChange="linetimeChange2"></Linechart>
     <!-- 第三排 -->
 
     <Barchart :mySeries="series3_1" :xData="barXdata3_1" :separate_name="separate_name" @timeChange="timeChange">
     </Barchart>
-    <Linechart :mySeries="series3_2" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange3"></Linechart>
+    <Linechart :mySeries="series3_2" :checkboxApi="checkboxApi2" :separate_name="separate_name" @allParamChange="linetimeChange3"></Linechart>
     <!-- <Linechart :mySeries="series3_3" title="折线图" checkboxApi="/list/city_price" @allParamChange="linetimeChange4"></Linechart> -->
     <!-- 第四排 -->
     <!-- <Barchart title="折线图" :mySeries="series4_1" :xData="barXdata4_1" @timeChange="timeChange4_1"></Barchart> -->
@@ -68,9 +68,9 @@ const {
 } = useDate()//父组件时间hooks
 provide('father_date',father_date)
 
-const checkboxApi2=  '/list/indus'
 const checkboxApi1=  '/list/cat'
-
+const checkboxApi2=  '/list/indus'
+const checkboxApi3 = '/list/province'
 onMounted(async () => {
   try {
 

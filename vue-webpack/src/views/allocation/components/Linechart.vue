@@ -60,6 +60,10 @@ maxNum:{//最大选中个数
 type: Number,
   default: 4
 },
+  separate_name: {//父组件下拉框的值
+    type: String,
+    default: ''
+  },
   father_start_date: {//父组件下拉框的开始时间值
     type: String,
     default: ''
@@ -96,7 +100,13 @@ const getCheckboxOptions = async () => {
 
 }
 getCheckboxOptions()
+watch(//监听下拉框
+  () => props.separate_name,
+  (newVal, oldVal) => {
+    emit('allParamChange', allobj)
 
+  }
+)
 const checkChange = (val) => {
   allobj.selectedOptions = val
   emit('allParamChange', allobj)
@@ -258,7 +268,7 @@ watch(
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C52C2C;
+   color: #C00000;
 
 }
 
@@ -282,7 +292,7 @@ watch(
 
 .left-item {
   width: 120px;
-  /* background- color: #C52C2C; */
+  /* background- color: #C00000; */
   /* height: 100%; */
 
   max-height: 360px;

@@ -297,7 +297,7 @@ watch(
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C52C2C;
+   color: #C00000;
 }
 
 .time-title {
@@ -320,7 +320,7 @@ watch(
 
 .left-item {
   width: 100px;
-  /* background- color: #C52C2C; */
+  /* background- color: #C00000; */
    max-height: 360px;
   overflow-y: scroll;
   overflow-x: hidden;

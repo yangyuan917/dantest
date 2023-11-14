@@ -21,7 +21,7 @@
 
     <Barchart :mySeries="series2_1" :xData="barXdata2_1" @timeChange="timeChange2_1"></Barchart>
     <Barchart :mySeries="series2_2" :xData="barXdata2_2" @timeChange="timeChange2_2"></Barchart>
-    <Linechart :mySeries="series2_3" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange2"></Linechart>
+    <Linechart :mySeries="series2_3" :checkboxApi="checkboxApi3" @allParamChange="linetimeChange2"></Linechart>
     <!-- 第三排 -->
 
     <Barchart :mySeries="series3_1" :xData="barXdata3_1" @timeChange="timeChange3_1"></Barchart>

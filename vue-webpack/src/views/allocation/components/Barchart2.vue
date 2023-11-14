@@ -245,7 +245,7 @@ watch(
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C52C2C;
+   color: #C00000;
 }
 
 .time-title {

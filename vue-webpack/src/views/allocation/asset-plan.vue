@@ -13,6 +13,11 @@
       <!-- <TopTimePicker ref="TopTimePickerRef"  /> -->
 
     </div>
+    <!-- 置顶一排 -->
+    <Barchart :mySeries="series" :xData="barXdata" :separate_name="separate_name" @timeChange="timeChange"></Barchart>
+    <Linechart :mySeries="lineSeries" :checkboxApi="checkboxApi1" @allParamChange="linetimeChange"></Linechart>
+    <Barchart ></Barchart>
+    
     <!-- 第一排 -->
     <Barchart :mySeries="series" :xData="barXdata" :separate_name="separate_name" @timeChange="timeChange"></Barchart>
     <Linechart :mySeries="lineSeries" :checkboxApi="checkboxApi1" @allParamChange="linetimeChange"></Linechart>
@@ -63,8 +68,8 @@ const {
 } = useDate()//父组件时间hooks
 provide('father_date',father_date)
 
-const checkboxApi1=  '/list/indus'
-const checkboxApi2=  '/list/cat'
+const checkboxApi2=  '/list/indus'
+const checkboxApi1=  '/list/cat'
 
 onMounted(async () => {
   try {
@@ -145,7 +150,7 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
   const orderedData = {};
   const catergory_list = await api.get('/list/cat') //这边写获取x轴坐标的数据
   const industry_list = await api.get('/list/indus') //这边写获取x轴坐标的数据
-  const index_list = await api.get('/index_list') //这边写获取x轴坐标的数据
+  const index_list = await api.get('/list/index') //这边写获取x轴坐标的数据
 
   // Loop through each date in the received data
   Object.keys(data).forEach(date => {

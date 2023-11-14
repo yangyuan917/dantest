@@ -168,7 +168,7 @@ const getLineSeries3Data = async (val) => {//获取第三个数据
     // dt:'bj'//测试数据
   }
   let res = await api.get('/estate/onsale', { params })
-  let resdata = res.data.data
+  let resdata = res.data
   console.log('resdata', resdata)
   lineSeries3.value = convertToEChartsFormat3(resdata)
   console.log(' lineSeries3.value', lineSeries3.value)

@@ -163,7 +163,6 @@ watch(
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
-  border-radius: 8px;
   /* width: 32.5%; */;
 }
 

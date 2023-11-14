@@ -115,7 +115,7 @@ getAllData()
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
-  border-radius: 8px;
+ /* border-radius: 8px; */
   /* width: 33.3% */;
 }
 

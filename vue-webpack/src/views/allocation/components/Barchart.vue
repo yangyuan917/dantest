@@ -11,7 +11,7 @@
           <el-date-picker v-model="end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
             style="max-width: 200px" placeholder="请选择结束日期" />
         </div>
-      </div> 
+      </div>
       <div class="line"></div>
     </div>
     <!-- <div :id="uid" :style="myStyle" class="echarts"></div> -->
@@ -143,7 +143,7 @@ watch(
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
-  border-radius: 8px;
+ /* border-radius: 8px; */
 }
 
 .title-box {

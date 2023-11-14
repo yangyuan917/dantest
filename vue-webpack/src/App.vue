@@ -1,5 +1,5 @@
 <template>
-<keep-alive>
+<keep-alive  >
   <router-view />
 
 </keep-alive>
@@ -11,13 +11,16 @@
   /* padding: 20px; */
   padding-top: 4px;
   /* gap: 8px; */
-  background-color: #EFF1F6;
+  /* background-color: #EFF1F6; */
 
 }
 
 .echarts-box{
  width: calc(33.33% - 20px);
 margin: 10px;
+
+border-bottom: 1px solid black;
+
 
 }
 </style>

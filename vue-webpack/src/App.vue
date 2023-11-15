@@ -17,10 +17,17 @@
 
 .echarts-box{
  width: calc(33.33% - 20px);
-margin: 10px;
+margin: 0 10px;
 
-border-bottom: 1px solid black;
+/* border-bottom: 1px solid black; */
 
 
 }
+.line {
+  height: 1px;
+  background-color: #080808;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 </style>

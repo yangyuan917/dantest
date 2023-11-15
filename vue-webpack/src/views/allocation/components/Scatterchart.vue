@@ -11,6 +11,8 @@
     </div>
     <!-- <div :id="uid" :style="myStyle" class="echarts"></div> -->
     <BaseEcharts :echartsOption="myOption" />
+      <div class="line"></div>
+
   </div>
 </template>
 <script setup>
@@ -278,15 +280,10 @@ getAllData()
 }
 
 /* 一条灰色的线，高1px */
-.line {
-  height: 1px;
-  background-color: #e5e5e5;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+
 
 .echarts {
-  padding: 20px;
+  /* padding: 20px; */
   padding-bottom: 6px;
   box-sizing: border-box;
   text-align: center;

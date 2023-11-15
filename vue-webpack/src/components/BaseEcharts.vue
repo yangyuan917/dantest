@@ -1,4 +1,5 @@
 <template>
+
     <div :id="uid" :style="myStyle" class="echarts"></div>
 </template>
 
@@ -77,7 +78,8 @@ myChart =  echarts.init(document.getElementById(uid.value))
 <style  scoped>
 
 .echarts {
-  padding: 20px;
+  padding: 20px 20px;
+
   padding-bottom: 6px;
   box-sizing: border-box;
   text-align: center;
@@ -85,6 +87,7 @@ myChart =  echarts.init(document.getElementById(uid.value))
   flex: 1;
   height: auto;
   aspect-ratio: 16/12;
+
 }
 
 </style>

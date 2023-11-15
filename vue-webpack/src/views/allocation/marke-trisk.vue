@@ -4,12 +4,12 @@
       <el-col :span="24">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="">
-            <el-date-picker v-model="formInline.start_date" type="date" @change="startDateChange"
-              value-format="YYYY-MM-DD" style="max-width: 200px" placeholder="请选择开始日期" />
+            <el-date-picker size="mini" v-model="formInline.start_date" type="date" @change="startDateChange"
+              value-format="YYYY-MM-DD" style="max-width: 155px" placeholder="请选择开始日期" />
           </el-form-item>
           <el-form-item label="">
-            <el-date-picker v-model="formInline.end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
-              style="max-width: 200px" placeholder="请选择结束日期" />
+            <el-date-picker size="mini" v-model="formInline.end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
+              style="max-width: 155px" placeholder="请选择结束日期" />
           </el-form-item>
           <el-form-item label="是否内部交易">
             <el-input v-model="formInline.cat" placeholder="请输入"></el-input>

@@ -6,16 +6,21 @@
           {{ title }}
         </div>
         <div class="time">
-          <el-date-picker v-model="start_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
-            style="max-width: 200px" placeholder="请选择开始日期" />
-          <el-date-picker v-model="end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
-            style="max-width: 200px" placeholder="请选择结束日期" />
+          <el-date-picker size="mini" v-model="start_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 155px" placeholder="请选择开始日期" />
+          <el-date-picker size="mini" v-model="end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 155px" placeholder="请选择结束日期" />
         </div>
       </div>
       <div class="line"></div>
+
+      <BaseEcharts :echartsOption="myOption" />
+      <!-- <div class="line"></div> -->
+
     </div>
-    <!-- <div :id="uid" :style="myStyle" class="echarts"></div> -->
-    <BaseEcharts :echartsOption="myOption" />
+    <!-- <div class="line-bottom">
+  <div class="line "></div>
+    </div> -->
   </div>
 </template>
 <script setup>
@@ -47,17 +52,17 @@ const props = defineProps({
   },
 })
 
-const father_date = inject('father_date')||'' ;
+const father_date = inject('father_date') || '';
 watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
   start_date.value = father_date.value.father_start_date
   end_date.value = father_date.value.father_end_date
-changeDateTime()
+  changeDateTime()
 }, { deep: true });//深层次监听
 //时间控件相关
 const start_date = ref('')
-start_date.value = father_date.value.father_start_date||''
+start_date.value = father_date.value.father_start_date || ''
 const end_date = ref('')
-  end_date.value = father_date.value.father_end_date||''
+end_date.value = father_date.value.father_end_date || ''
 const changeDateTime = () => {
   //选择时间改变时，向父组件传事件
   let start_date_and_end_date = {
@@ -70,11 +75,11 @@ changeDateTime()
 
 
 
-const startDateChange = (val)=>{//开始时间改变
-    changeDateTime()
+const startDateChange = (val) => {//开始时间改变
+  changeDateTime()
 }
-const endDateChange = (val)=>{//结束时间改变
-    changeDateTime()
+const endDateChange = (val) => {//结束时间改变
+  changeDateTime()
 }
 watch(//监听下拉框
   () => props.separate_name,
@@ -101,7 +106,7 @@ const myOption = ref({
 
   xAxis: {
     type: 'category',
-    data:  props.xData, // x 轴的数据
+    data: props.xData, // x 轴的数据
     axisLabel: {
       rotate: 45
     }
@@ -117,9 +122,9 @@ watch(
   () => props.mySeries,
   (newVal, oldVal) => {
     myOption.value.legend.data = [start_date.value, end_date.value]
-    myOption.value.series = newVal.map(item=>{
-     item.barMaxWidth =  30
-     return item
+    myOption.value.series = newVal.map(item => {
+      item.barMaxWidth = 30
+      return item
 
     })
     myOption.value.xAxis.data = props.xData
@@ -143,7 +148,7 @@ watch(
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
- /* border-radius: 8px; */
+  /* border-radius: 8px; */
 }
 
 .title-box {
@@ -157,6 +162,7 @@ watch(
 
   /* color: #C00000; */
   color: #C00000;
+
 }
 
 .time-title {
@@ -166,15 +172,10 @@ watch(
 }
 
 /* 一条灰色的线，高1px */
-.line {
-  height: 1px;
-  background-color: #e5e5e5;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+
 
 .echarts {
-  padding: 20px;
+  /* padding: 20px; */
   padding-bottom: 6px;
   box-sizing: border-box;
   text-align: center;

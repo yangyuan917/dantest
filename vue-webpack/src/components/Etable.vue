@@ -56,18 +56,10 @@ const columns = ref([
 }
 
 /* 一条灰色的线，高1px */
-.line {
-  height: 1px;
-  background-color: #E5E5E5;
-  margin-top: 10px;
-  margin-bottom: 10px;
 
-
-
-}
 
 .echarts {
-  padding: 20px;
+  /* padding: 20px; */
   padding-bottom: 6px;
   box-sizing: border-box;
   text-align: center;

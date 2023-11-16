@@ -168,42 +168,58 @@ const getLineSeries3Data = async (val) => {//获取第三个数据
     // dt:'bj'//测试数据
   }
   let res = await api.get('/estate/onsale', { params })
-  let resdata = res.data
+  let resdata = res.data.data
   console.log('resdata', resdata)
-  lineSeries3.value = convertToEChartsFormat3(resdata)
-  console.log(' lineSeries3.value', lineSeries3.value)
+  // lineSeries3.value = convertToEChartsFormat3(resdata)
+  // console.log(' lineSeries3.value', lineSeries3.value)
 
-  // lineSeries3.value = convertToEChartsFormat(resdata)
+  lineSeries3.value = convertToEChartsFormat3(resdata)
+  console.log('lineSeries3.value', lineSeries3.value)
 }
 
+// todo：这是一个异步函数
 function convertToEChartsFormat3(obj) {
-  let xAxisData = obj.xaixs
-  let data = obj.series.data
-  // 创建一个新数组用于存储转换后的数据
-  let newData = [];
-  // 遍历原始数据数组
-  for (let i = 0; i < data.length; i++) {
-    // 将日期字符串转换为时间戳
-    let timestamp = dayjs(xAxisData[i]).startOf('day').format('YYYY-MM-DD') ;
-    // 创建一个包含时间戳和down_pct值的对象
-    let newDataPoint = {
-      value: [timestamp, data[i]]
+  let seriesData = obj.map(function (item) {
+    console.log('Processing item:', item);
+    console.log('Processing item.index:', Object.keys(item)[0]);
+    return {
+      name: Object.keys(item)[0],
+      stack: Object.keys(item)[0],
+      type: 'line',
+      data: Object.values(item)[0],
     };
-    // 将新数据点添加到新数组中
-    newData.push(newDataPoint);
-  }
-  console.log('newData', newData)
-  // 返回转换后的数据
-  return [{
-    name: obj.series.name,
-    type: 'line',
-    symbol: '',//曲线无点
-    smooth: true,
-    data: newData
-  }];
+  });
+  return seriesData
+}
+
+// function convertToEChartsFormat3(obj) {
+//   let xAxisData = obj.xaixs
+//   let data = obj.series.data
+//   // 创建一个新数组用于存储转换后的数据
+//   let newData = [];
+//   // 遍历原始数据数组
+//   for (let i = 0; i < data.length; i++) {
+//     // 将日期字符串转换为时间戳
+//     let timestamp = dayjs(xAxisData[i]).startOf('day').format('YYYY-MM-DD') ;
+//     // 创建一个包含时间戳和down_pct值的对象
+//     let newDataPoint = {
+//       value: [timestamp, data[i]]
+//     };
+//     // 将新数据点添加到新数组中
+//     newData.push(newDataPoint);
+//   }
+//   console.log('newData', newData)
+//   // 返回转换后的数据
+//   return [{
+//     name: obj.series.name,
+//     type: 'line',
+//     symbol: '',//曲线无点
+//     smooth: true,
+//     data: newData
+//   }];
 
   // return newData;
-}
+
 
 //第四个图
 const lineSeries4 = ref([])
@@ -272,6 +288,7 @@ function convertDataForECharts5(data) {
   for (let i = 0; i < data.length; i++) {
     let item = data[i];
     let date = new Date(item['业务日期']);
+    date.setHours(0, 0, 0, 0);
     let downPct = item['unitprice1'];
     result.push([date.getTime(), downPct]);
   }

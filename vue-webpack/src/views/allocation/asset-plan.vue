@@ -14,8 +14,8 @@
 
     </div>
     <!-- 置顶一排 -->
-    <Barchart :mySeries="series" :xData="barXdata" :separate_name="separate_name" @timeChange="timeChange"></Barchart>
-    <Linechart :mySeries="lineSeries" :checkboxApi="checkboxApi1" @allParamChange="linetimeChange"></Linechart>
+    <Barchart :mySeries="lineSeries_totalasset" :xData="lineXdata" :separate_name="separate_name" @timeChange="linetimeChange0000"></Barchart>
+    <Barchart :mySeries="lineSeries_totalasset1" :xData="lineXdata1" :separate_name="separate_name" :xDatatype="'time'" @timeChange="linetimeChange0001"></Barchart>
     <Barchart ></Barchart>
     
     <!-- 第一排 -->
@@ -88,6 +88,77 @@ onMounted(async () => {
 // separate_name.value  = val
 
 // }
+
+
+//置顶第1行第1个图
+const lineSeries_totalasset = ref([])
+const lineXdata = ref([])
+
+const linetimeChange0000 = (val) => {
+  console.log('val1', val)
+  if (!val) {
+    return
+  }
+  getLineSeries3Data0000(val)
+}
+const getLineSeries3Data0000 = async (val) => {
+  let params = {
+    separate_name: separate_name.value
+  }
+  let res = await api.get('/separate/total_asset', {params})
+  let resdata = res.data.data
+  console.log('resdata', resdata)
+  // const xData = Object.values(resdata['业务日期']);
+  console.log('xData_old', Object.values(resdata['业务日期']));
+  const xData = Object.values(resdata['业务日期']);
+  console.log('xData', xData);
+  const seriesData = Object.values(resdata['市值(元)']);
+  lineXdata.value = xData
+  lineSeries_totalasset.value = [
+      {
+        name: '规模',
+        type: 'line',
+        symbol : '',//曲线无点
+        smooth: true,
+        data: seriesData
+      }]
+      console.log('lineXdata.value', lineXdata.value);    
+}
+
+
+//置顶第1行第2个图
+const lineSeries_totalasset1 = ref([])
+const lineXdata1 = ref([])
+
+const linetimeChange0001 = (val) => {
+  console.log('val1', val)
+  if (!val) {
+    return
+  }
+  getLineSeries3Data0001(val)
+}
+const getLineSeries3Data0001 = async (val) => {
+  let params = {
+    separate_name: separate_name.value
+  }
+  let res = await api.get('/separate/total_asset1', {params})
+  const seriesData = res.data.data.map(row => {
+  let newRow = [...row]; // 复制原始行
+  newRow[0] = new Date(newRow[0]); // 将第一列的元素转换为日期对象
+  return newRow;});
+  console.log('seriesData', seriesData);
+  const xData = res.data.data.map(row => Date(row[0]));
+  console.log('xData', xData);
+  lineXdata1.value = xData
+  lineSeries_totalasset1.value = [
+      {
+        name: '规模',
+        type: 'line',
+        symbol : '',//曲线无点
+        smooth: true,
+        data: seriesData
+      }] 
+}
 
 
 //柱状图

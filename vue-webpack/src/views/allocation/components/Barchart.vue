@@ -45,6 +45,7 @@ const props = defineProps({
     default: () => ([]),
 
   },
+  xDatatype: String, // 新增 type prop
 })
 
 const father_date = inject('father_date')||'' ;
@@ -100,8 +101,10 @@ const myOption = ref({
   },
 
   xAxis: {
-    type: 'category',
+    type:  props.xDatatype || 'category',
     data:  props.xData, // x 轴的数据
+    // min: new Date('2023/9/1'),
+    // max: new Date('2023/11/30'),
     axisLabel: {
       rotate: 45
     }

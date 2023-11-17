@@ -20,9 +20,14 @@ const props = defineProps({
 
 watch(props.echartsOption, (newValue, oldValue) => {//监听父组件 -每当有参数传进时改变时
  myOption.value = newValue
-  // myChart.setOption(baseOption, {
-  // })
-  console.log('echartsOption变化', newValue)
+
+  //  myOption.value.series = myOption.value.series.map(item => {
+  //     if (item.type == 'line') {
+  //       item.symbol = ''//曲线无点
+  //       item.smooth = true
+  //     }
+  //     return item
+  //   })
   myChart.setOption(myOption.value, {
    notMerge: true, //不和之前的option合并
   })

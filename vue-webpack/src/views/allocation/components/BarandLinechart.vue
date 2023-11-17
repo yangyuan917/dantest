@@ -277,8 +277,14 @@ watch(
   () => props.mySeries,
   (newVal, oldVal) => {
     myOption.value.legend.data = [...selectedOptions.value]
-    myOption.value.series = newVal
-
+    // myOption.value.series = newVal
+  myOption.value.series = newVal.map(item => {
+      if (item.type == 'line') {
+        item.symbol = ''//曲线无点
+        item.smooth = true
+      }
+      return item
+    })
   }
 )
 </script>

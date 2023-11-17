@@ -72,18 +72,88 @@
 
       </el-table>
     </div>
-
+<Barchart2 :mySeries="series" :echartsLegend="echartsLegend" @allParamChange="barChange" :showTarget="true">
+    </Barchart2>
   </div>
 </template>
 <script setup>
 import { reactive, ref, provide } from 'vue'
 import { api } from '@/utils/api'
 import { useRouter } from 'vue-router'
+import Barchart2 from './components/Barchart2.vue'
+
 const router = useRouter()
 import useDate from '@/hooks/useDate'
 
+const echartsLegend = ref(['图例一', '图例二', '图例三', '图例四']) //这是图例，必须和series中的name一致
+const series = ref([
+
+])
+
+const barChange = async (obj) => {
+  //参数改变
+  console.log('参数改变obj :>> ', obj)
+  let params = {
+    sector1: obj.sector1.value,
+    sector2: obj.sector2.value,
+  }
+  let res = await api.get('/transaction_stock', { params })
+  let testObj = res.data.data
+
+  let list = [testObj.list1, testObj.list2]
+  let Legend1 = testObj.list1 ? Object.keys(testObj.list1) : []
+  let Legend2 = testObj.list2 ? Object.keys(testObj.list2) : []
+  echartsLegend.value = [...Legend1, ...Legend2]
+
+  let arr1 = resultFmoat(testObj.list1, 1)
+  let arr2 = resultFmoat(testObj.list2, 2)
+
+  series.value = [...arr1, ...arr2]
+
+}
+const resultFmoat = (inputObject, type) => {
+  const result = []
+  for (const key in inputObject) {
+    if (inputObject.hasOwnProperty(key)) {
+      const item = {
+        name: key,
+        type: 'bar',
+        stack: 'stack1',
+        itemStyle: {
+          color: '#8f9cc6'
+        },
+        data: Object.entries(inputObject[key]).map(([date, value]) => [date, value])
+      }
+      result.push(item)
+    }
+  }
+
+  if (type == 1) {
+    if (result[0]) {
+      result[0].stack = 'stack1'
+      result[0].itemStyle.color = '#8f9cc6'
+    }
+    if (result[1]) {
+      result[1].stack = 'stack1'
+      result[1].itemStyle.color = '#5470c6'
+    }
+  }
+
+  if (type == 2) {
+    if (result[0]) {
+      result[0].stack = 'stack2'
+      result[0].itemStyle.color = '#b7ccad'
+    }
+    if (result[1]) {
+      result[1].stack = 'stack2'
+      result[1].itemStyle.color = '#91CC75'
+    }
+  }
 
 
+
+  return result
+}
 
 //----------------获取下拉框--------------------
 const separate_name = ref("中信证券增盈1号集合资产管理计划")

@@ -127,6 +127,10 @@ watch(
     myOption.value.legend.data = [start_date.value, end_date.value]
     myOption.value.series = newVal.map(item => {
       item.barMaxWidth = 30
+ if (item.type == 'line') {
+        item.symbol = ''//曲线无点
+        item.smooth = true
+      }
       return item
 
     })

@@ -10,12 +10,12 @@
             style="max-width: 130px">
             <el-option v-for="item in targetList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-          <!-- <el-date-picker v-model="timeValue" type="daterange" @change="changeTime" value-format="YYYY-MM-DD"
+          <!-- <el-date-picker size="mini" v-model="timeValue" type="daterange" @change="changeTime" value-format="YYYY-MM-DD"
             range-separator="-" start-placeholder="请选择开始日" end-placeholder="请选择结束日" style="max-width: 240px" /> -->
-          <el-date-picker v-model="start_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
-            style="max-width: 200px" placeholder="请选择开始日期" />
-          <el-date-picker v-model="end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
-            style="max-width: 200px" placeholder="请选择结束日期" />
+          <el-date-picker size="mini" v-model="start_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 155px" placeholder="请选择开始日期" />
+          <el-date-picker size="mini" v-model="end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 155px" placeholder="请选择结束日期" />
 
         </div>
       </div>
@@ -32,6 +32,7 @@
       </div>
       <!-- <div :id="uid" :style="myStyle" class="echarts"></div> -->
       <BaseEcharts :echartsOption="myOption" />
+      <div class="line"></div>
 
     </div>
   </div>
@@ -285,7 +286,7 @@ watch(
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
-  border-radius: 8px;
+ /* border-radius: 8px; */
 }
 
 .title-box {
@@ -297,7 +298,7 @@ watch(
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C52C2C;
+   color: #C00000;
 }
 
 .time-title {
@@ -307,12 +308,7 @@ watch(
 }
 
 /* 一条灰色的线，高1px */
-.line {
-  height: 1px;
-  background-color: #e5e5e5;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+
 
 .all-box {
   display: flex;
@@ -320,7 +316,7 @@ watch(
 
 .left-item {
   width: 100px;
-  /* background- color: #C52C2C; */
+  /* background- color: #C00000; */
    max-height: 360px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -329,7 +325,7 @@ watch(
 }
 
 .echarts {
-  padding: 20px;
+  /* padding: 20px; */
   padding-bottom: 6px;
   box-sizing: border-box;
   text-align: center;

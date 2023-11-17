@@ -298,7 +298,6 @@ watch(
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
-  border-radius: 8px;
 
 }
 
@@ -316,7 +315,7 @@ watch(
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C52C2C;
+   color: #C00000;
 
 }
 
@@ -328,15 +327,7 @@ watch(
 }
 
 /* 一条灰色的线，高1px */
-.line {
-  height: 1px;
-  background-color: #E5E5E5;
-  margin-top: 10px;
-  margin-bottom: 10px;
 
-
-
-}
 
 .echarts {
   padding: 20px;

@@ -7,38 +7,42 @@
         </div>
         <div class="time">
           <div>
-            <el-select v-model="target" @change="targetChange" v-if="showTarget" placeholder="请选择指标"  style="max-width: 180px">
+            <el-select v-model="target" size="mini" @change="targetChange" v-if="showTarget" placeholder="请选择指标"
+              style="max-width: 180px">
               <el-option v-for="item in targetList" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </div>
-          <el-date-picker v-model="start_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
-            style="max-width: 200px" placeholder="请选择开始日期" />
-          <el-date-picker v-model="end_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
-            style="max-width: 200px" placeholder="请选择结束日期" />
+          <el-date-picker size="mini"  v-model="start_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 155px;"  placeholder="请选择开始日期" />
+          <el-date-picker size="mini"  v-model="end_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 155px; " placeholder="请选择结束日期" />
         </div>
       </div>
       <div class="line"></div>
-    </div>
-    <div class="all-box">
-      <div class="left-item">
-        <el-checkbox-group v-model="selectedOptions" @change="checkChange">
-          <el-checkbox v-for="option in checkboxOptions" :key="option.value" :label="option.value"
-            :disabled="selectedOptions.length === 5 && !selectedOptions.includes(option.value)">
-            {{ option.label }}
-          </el-checkbox>
-        </el-checkbox-group>
-      </div>
-      <!-- <div :id="uid" :style="myStyle" class="echarts"></div> -->
-    <BaseEcharts :echartsOption="myOption" />
+      <div class="all-box">
+        <div class="left-item">
+          <el-checkbox-group v-model="selectedOptions" @change="checkChange">
+            <el-checkbox v-for="option in checkboxOptions" :key="option.value" :label="option.value"
+              :disabled="selectedOptions.length === 5 && !selectedOptions.includes(option.value)">
+              {{ option.label }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+        <!-- <div :id="uid" :style="myStyle" class="echarts"></div> -->
+        <BaseEcharts :echartsOption="myOption" />
 
+      </div>
+      <!-- <div class="line"></div> -->
     </div>
+
+
   </div>
 </template>
 <script setup>
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch, inject } from 'vue'
 import * as echarts from 'echarts'
 import { api } from '@/utils/api';
-import {lastMonthDay} from '@/utils/util'
+import { lastMonthDay } from '@/utils/util'
 import BaseEcharts from '@/components/BaseEcharts.vue'
 import { dayjs } from 'element-plus'
 
@@ -52,14 +56,18 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-checkboxApi:{//获取选框接口用的api
-  type: String,
+  checkboxApi: {//获取选框接口用的api
+    type: String,
     default: '/list/cat'
-},
-maxNum:{//最大选中个数
-type: Number,
-  default: 4
-},
+  },
+  maxNum: {//最大选中个数
+    type: Number,
+    default: 4
+  },
+  separate_name: {//父组件下拉框的值
+    type: String,
+    default: ''
+  },
   father_start_date: {//父组件下拉框的开始时间值
     type: String,
     default: ''
@@ -90,30 +98,36 @@ const getCheckboxOptions = async () => {
     }
     checkboxOptions.value.push(obj)
   })
-  selectedOptions.value = res.data.data.slice(0,props.maxNum)
+  selectedOptions.value = res.data.data.slice(0, props.maxNum)
   allobj.selectedOptions = selectedOptions.value
   emit('allParamChange', allobj)
 
 }
 getCheckboxOptions()
+watch(//监听下拉框
+  () => props.separate_name,
+  (newVal, oldVal) => {
+    emit('allParamChange', allobj)
 
+  }
+)
 const checkChange = (val) => {
   allobj.selectedOptions = val
   emit('allParamChange', allobj)
 }
 
 //时间控件相关
-const startDateChange = (val)=>{//开始时间改变
+const startDateChange = (val) => {//开始时间改变
   timeChangeResize()
 
 }
-const endDateChange = (val)=>{//结束时间改变
+const endDateChange = (val) => {//结束时间改变
   timeChangeResize()
 
 }
 const father_date = inject('father_date');
 watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
-  start_date.value =  lastMonthDay(father_date.value.father_start_date)
+  start_date.value = lastMonthDay(father_date.value.father_start_date)
   // console.log('start_date.value :>> ', start_date.value);
   end_date.value = father_date.value.father_end_date
   // changeDateTime()
@@ -122,7 +136,7 @@ watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
 }, { deep: true });//深层次监听
 
 const start_date = ref('')
-start_date.value =  lastMonthDay(father_date.value.father_start_date)||''
+start_date.value = lastMonthDay(father_date.value.father_start_date) || ''
 const end_date = ref('')
 end_date.value = father_date.value.father_end_date
 const changeDateTime = () => {
@@ -132,8 +146,8 @@ const changeDateTime = () => {
 changeDateTime()
 
 
-const timeChangeResize = ()=>{//时间改变时，重置x轴的时间控件
-   let stime = start_date.value
+const timeChangeResize = () => {//时间改变时，重置x轴的时间控件
+  let stime = start_date.value
   let etime = end_date.value
   let myOptions = myOption.value
   myOptions.xAxis.min = new Date(stime.replace(/-/g, '/'))
@@ -201,10 +215,10 @@ const myOption = ref({
   ],
   xAxis: {
     type: 'time',
-      // min:'Thu, 02 Jan 2020 00:00:00 GMT',
-      // max:"Tue, 01 Sep 2020 00:00:00 GMT",
-      // min:'dataMin',
-      // max:'dataMax',
+    // min:'Thu, 02 Jan 2020 00:00:00 GMT',
+    // max:"Tue, 01 Sep 2020 00:00:00 GMT",
+    // min:'dataMin',
+    // max:'dataMax',
     min: new Date(start_date.value.replace(/-/g, '/')),
     max: new Date(end_date.value.replace(/-/g, '/')),
     axisLabel: {
@@ -228,24 +242,25 @@ watch(
   (newVal, oldVal) => {
 
 
-    myOption.value.legend.data =newVal.map(obj => obj.name);//补上
-    myOption.value.series = newVal.map(item=>{
+    myOption.value.legend.data = newVal.map(obj => obj.name);//补上
+    myOption.value.series = newVal.map(item => {
       if (item.type == 'line') {
-          item.symbol  =  ''//曲线无点
-      item.smooth= true
+        item.symbol = ''//曲线无点
+        item.smooth = true
       }
-    return item
+      return item
     })
 
-  },{ deep: true }
+  }, { deep: true }
 )
 </script>
 
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
-  border-radius: 8px;
-  /* width: 32.5%; */;
+  /* border-radius: 8px; */
+  /* width: 32.5%; */
+  ;
 
 }
 
@@ -258,7 +273,7 @@ watch(
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C52C2C;
+  color: #C00000;
 
 }
 
@@ -269,12 +284,7 @@ watch(
 }
 
 /* 一条灰色的线，高1px */
-.line {
-  height: 1px;
-  background-color: #e5e5e5;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+
 
 .all-box {
   display: flex;
@@ -282,17 +292,17 @@ watch(
 
 .left-item {
   width: 120px;
-  /* background- color: #C52C2C; */
+  /* background- color: #C00000; */
   /* height: 100%; */
 
-  max-height: 360px;
+  max-height: 280px;
   overflow-y: scroll;
   overflow-x: hidden;
   margin-left: 20px;
 }
 
 .echarts {
-  padding: 20px;
+  /* padding: 20px; */
   padding-bottom: 6px;
   box-sizing: border-box;
   text-align: center;

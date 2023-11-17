@@ -11,6 +11,8 @@
     </div>
     <!-- <div :id="uid" :style="myStyle" class="echarts"></div> -->
     <BaseEcharts :echartsOption="myOption" />
+      <div class="line"></div>
+
   </div>
 </template>
 <script setup>
@@ -255,7 +257,7 @@ getAllData()
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
-  border-radius: 8px;
+ /* border-radius: 8px; */
   width: 100%;
 }
 
@@ -268,7 +270,7 @@ getAllData()
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C52C2C;
+   color: #C00000;
 }
 
 .time-title {
@@ -278,15 +280,10 @@ getAllData()
 }
 
 /* 一条灰色的线，高1px */
-.line {
-  height: 1px;
-  background-color: #e5e5e5;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+
 
 .echarts {
-  padding: 20px;
+  /* padding: 20px; */
   padding-bottom: 6px;
   box-sizing: border-box;
   text-align: center;

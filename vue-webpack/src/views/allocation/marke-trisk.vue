@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div class="all-page-flex">
     <div style="width: 100%;">
       <el-date-picker v-model="father_start_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
@@ -9,6 +10,44 @@
     <!-- 第一排 -->
     <Barchart title="自定义标题" :mySeries="Series_pricechg" :xData="Xdata" @timeChange="linetimeChange"></Barchart>
     
+=======
+  <div class="">
+    <el-row>
+      <el-col :span="24">
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item label="">
+            <el-date-picker size="mini" v-model="formInline.start_date" type="date" @change="startDateChange"
+              value-format="YYYY-MM-DD" style="max-width: 155px" placeholder="请选择开始日期" />
+          </el-form-item>
+          <el-form-item label="">
+            <el-date-picker size="mini" v-model="formInline.end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
+              style="max-width: 155px" placeholder="请选择结束日期" />
+          </el-form-item>
+          <el-form-item label="是否内部交易">
+            <el-input v-model="formInline.cat" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-form-item>
+        </el-form>
+
+      </el-col>
+
+    </el-row>
+    <el-row>
+      <el-col :span="24">
+        <el-table :data="tableData" border>
+          <el-table-column label="分组" prop="index">
+            <template #default="scope">
+              <span style="margin-left: 10px">{{ scope.row.index }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="交易笔数" prop="symbol2"></el-table-column>
+          <el-table-column label="交易金额" prop="市值(元)"></el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
+>>>>>>> zc_dev001
   </div>
 </template>
 <script setup>

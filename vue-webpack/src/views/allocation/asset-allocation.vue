@@ -1,9 +1,9 @@
 <template>
   <div class="all-page-flex">
     <div style="width: 100%;">
-      <el-date-picker v-model="father_start_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
+      <el-date-picker size="mini" v-model="father_start_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
         style="max-width: 240px" placeholder="请选择开始日期" />
-      <el-date-picker v-model="father_end_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
+      <el-date-picker size="mini" v-model="father_end_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
         style="max-width: 240px" placeholder="请选择结束日期" />
     </div>
     <!-- 第一排 -->
@@ -21,7 +21,7 @@
 
     <Barchart :mySeries="series2_1" :xData="barXdata2_1" @timeChange="timeChange2_1"></Barchart>
     <Barchart :mySeries="series2_2" :xData="barXdata2_2" @timeChange="timeChange2_2"></Barchart>
-    <Linechart :mySeries="series2_3" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange2"></Linechart>
+    <Linechart :mySeries="series2_3" :checkboxApi="checkboxApi3" @allParamChange="linetimeChange2"></Linechart>
     <!-- 第三排 -->
 
     <Barchart :mySeries="series3_1" :xData="barXdata3_1" @timeChange="timeChange3_1"></Barchart>

@@ -6,18 +6,18 @@
           {{ title }}
         </div>
         <div class="time" v-if="timeType=='daterange'">
-          <el-date-picker v-model="timeValue" type="daterange" @change="changeTime" value-format="YYYY-MM-DD"
+          <el-date-picker size="mini" v-model="timeValue" type="daterange" @change="changeTime" value-format="YYYY-MM-DD"
             range-separator="-" start-placeholder="请选择开始日" end-placeholder="请选择结束日" style="max-width: 240px;" />
         </div>
         <!-- <div class="time" v-if="timeType=='date'">
-          <el-date-picker v-model="datetimeValue" type="date"  @change="changeDateTime" value-format="YYYY-MM-DD" placeholder="请选择日期"  />
+          <el-date-picker size="mini" v-model="datetimeValue" type="date"  @change="changeDateTime" value-format="YYYY-MM-DD" placeholder="请选择日期"  />
         </div> -->
       <div class="time" v-if="timeType=='date'">
         <el-select v-model="selectedTarget" class="m-2" placeholder="Select" @change="changeSelectedTarget" style="max-width: 120px;">
           <el-option value="600036.SH">600036.SH</el-option>
           <el-option value="NDX.GI">NDX.GI</el-option>
         </el-select>
-        <el-date-picker v-model="start_date" type="date" @change="changeDateTime" value-format="YYYY-MM-DD" style="max-width: 240px;"
+        <el-date-picker size="mini" v-model="start_date" type="date" @change="changeDateTime" value-format="YYYY-MM-DD" style="max-width: 155px;"
           placeholder="请选择日期" />
       </div>
       </div>
@@ -163,7 +163,6 @@ watch(
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
-  border-radius: 8px;
   /* width: 32.5%; */;
 }
 
@@ -176,7 +175,7 @@ watch(
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C52C2C;
+   color: #C00000;
 
 }
 
@@ -188,18 +187,10 @@ watch(
 }
 
 /* 一条灰色的线，高1px */
-.line {
-  height: 1px;
-  background-color: #E5E5E5;
-  margin-top: 10px;
-  margin-bottom: 10px;
 
-
-
-}
 
 .echarts {
-  padding: 20px;
+  /* padding: 20px; */
   padding-bottom: 6px;
   box-sizing: border-box;
   text-align: center;

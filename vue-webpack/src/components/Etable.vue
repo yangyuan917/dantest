@@ -30,7 +30,7 @@ const columns = ref([
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
-  border-radius: 8px;
+ /* border-radius: 8px; */
   /* width: 33.3% */;
   aspect-ratio: 16/9;
 }
@@ -44,7 +44,7 @@ const columns = ref([
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C52C2C;
+   color: #C00000;
 
 }
 
@@ -56,18 +56,10 @@ const columns = ref([
 }
 
 /* 一条灰色的线，高1px */
-.line {
-  height: 1px;
-  background-color: #E5E5E5;
-  margin-top: 10px;
-  margin-bottom: 10px;
 
-
-
-}
 
 .echarts {
-  padding: 20px;
+  /* padding: 20px; */
   padding-bottom: 6px;
   box-sizing: border-box;
   text-align: center;

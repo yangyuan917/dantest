@@ -1,9 +1,9 @@
 <template>
   <div class="all-page-flex">
     <div style="width: 100%;">
-      <el-date-picker v-model="father_start_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
+      <el-date-picker size="mini" v-model="father_start_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
         style="max-width: 240px" placeholder="请选择开始日期" />
-      <el-date-picker v-model="father_end_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
+      <el-date-picker size="mini" v-model="father_end_date" @change="father_date_Chage" type="date" value-format="YYYY-MM-DD"
         style="max-width: 240px" placeholder="请选择结束日期" />
     </div>
     <!-- 第一排 -->

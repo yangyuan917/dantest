@@ -6,16 +6,18 @@
           {{ title }}
         </div>
         <div class="time">
-          <el-date-picker v-model="start_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
-            style="max-width: 200px" placeholder="请选择开始日期" />
-          <el-date-picker v-model="end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
-            style="max-width: 200px" placeholder="请选择结束日期" />
+          <el-date-picker size="mini" v-model="start_date" type="date" @change="startDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 155px" placeholder="请选择开始日期" />
+          <el-date-picker size="mini" v-model="end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
+            style="max-width: 155px" placeholder="请选择结束日期" />
         </div>
       </div>
       <div class="line"></div>
     </div>
     <!-- <div :id="uid" :style="myStyle" class="echarts"></div> -->
     <BaseEcharts :echartsOption="myOption" />
+      <div class="line"></div>
+
   </div>
 </template>
 <script setup>
@@ -115,7 +117,7 @@ getAllData()
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
-  border-radius: 8px;
+ /* border-radius: 8px; */
   /* width: 33.3% */;
 }
 
@@ -128,7 +130,7 @@ getAllData()
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C52C2C;
+   color: #C00000;
 }
 
 .time-title {
@@ -138,15 +140,9 @@ getAllData()
 }
 
 /* 一条灰色的线，高1px */
-.line {
-  height: 1px;
-  background-color: #e5e5e5;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
 
 .echarts {
-  padding: 20px;
+  /* padding: 20px; */
   padding-bottom: 6px;
   box-sizing: border-box;
   text-align: center;

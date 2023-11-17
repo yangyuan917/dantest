@@ -26,7 +26,7 @@
             <el-option v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select> -->
           <!-- <div style="width: 220px; margin-left: 12px;">
-                    <el-date-picker v-model="timeValue" type="daterange" range-separator="To" start-placeholder="开始时间"
+                    <el-date-picker size="mini" v-model="timeValue" type="daterange" range-separator="To" start-placeholder="开始时间"
             end-placeholder="结束时间" style="width: 220px;" />
           </div> -->
 

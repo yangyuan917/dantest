@@ -238,6 +238,8 @@ const getLineData3 = async (val, target) => {
       data: Object.entries(rawData[indicator]).map(([date, value]) => [date, value])
     }
   })
+  console.log('arr', arr)
+
   return arr
 }
 const getLineData2 = async (val, target) => {

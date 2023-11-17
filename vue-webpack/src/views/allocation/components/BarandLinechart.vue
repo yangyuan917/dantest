@@ -85,15 +85,12 @@ const checkboxOptions = ref([{ label: '金融债', value: '金融债' }]);
 const fetchOptions = () => {
   api.get('/list/cat')
     .then(response => {
-      console.log('response.data.data :>> ', response.data.data);
       checkboxOptions.value = response.data.data.map(option => ({
         label: option,
         value: option
       }));
-      console.log('checkboxOptions after fetch :>> ', checkboxOptions);
     })
     .catch(error => {
-      console.error('获取数据失败', error);
     });
 };
 
@@ -102,7 +99,6 @@ fetchOptions();
 const checkChange = (val) => {
   allobj.selectedOptions = val
   emit('allParamChange', allobj)
-  console.log('selectedOptions :>> ', selectedOptions.value)
 }
 
 
@@ -202,7 +198,6 @@ const myOption = ref({
     trigger: 'axis',
     //保留一位小数
     formatter: function (params) {
-    console.log('params', params)
       return  params[0].seriesName + ':' + params[0].value[1].toFixed(1) + '<br/>'
        +  params[1].seriesName + ':' + params[1].value[1].toFixed(1)
     }

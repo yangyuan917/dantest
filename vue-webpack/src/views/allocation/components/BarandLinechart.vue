@@ -237,18 +237,18 @@ const myOption = ref({
         axisLine: {
         onZero: true
       },
-       min: 0,
-            max: 10000,
-      name: 'yield'
+      min: 0,
+      // scale: true,
+      name: '市值'
     },
     {
       type: 'value',
        axisLine: {
         onZero: true
       },
-       min: 0,
-            max: 10000,
-      name: ' 市值'
+      min: 0,
+      // scale: true,
+      name: 'yield'
     }
   ],
   series: props.mySeries

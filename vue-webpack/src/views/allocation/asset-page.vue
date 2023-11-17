@@ -170,11 +170,11 @@ let lineSeries = ref([
     name: 'yieid',
     type: 'bar',
     data: [
-      ['2023-09-21', 20000],
-      ['2023-09-22', 300000],
-      ['2023-09-23', -20000000]
+      ['2023-09-21', 3.5],
+      ['2023-09-22', 3.2],
+      ['2023-09-23', 3.6]
     ], //
-    yAxisIndex: 0 // 使用第一个 y 轴坐标
+    yAxisIndex: 1 // 使用第一个 y 轴坐标
   },
   {
     name: '市值',
@@ -183,13 +183,13 @@ let lineSeries = ref([
       color: 'transparent' // 设置折线的颜色为透明
     },
     data: [
-      ['2023-09-21', 10],
-      ['2023-09-22', 40],
-      ['2023-09-24', 80],
-      ['2023-09-25', 80],
-      ['2023-09-26', 80]
+      ['2023-09-21', 1000],
+      ['2023-09-22', 4000],
+      ['2023-09-24', 8000],
+      ['2023-09-25', 8000],
+      ['2023-09-26', 8000]
     ], //
-    yAxisIndex: 1 // 使用第二个 y 轴坐标
+    yAxisIndex: 0 // 使用第二个 y 轴坐标
   }
 ])
 
@@ -198,7 +198,7 @@ const allChange = async (val) => {
   let arr = []
   let target = ''
   arr = await getLineData2(val, target)
-  // lineSeries.value = arr
+  lineSeries.value = arr
 }
 
 const getLineData2 = async (val, target) => {
@@ -215,6 +215,7 @@ const getLineData2 = async (val, target) => {
   }
   let res = await api.get('/transaction_bondfund', { params })
   let rawData = res.data.data
+  console.log('res.data.data :>> ', res.data.data)
   const arr = Object.keys(rawData).map((indicator) => {
     return {
       name: indicator,
@@ -223,6 +224,7 @@ const getLineData2 = async (val, target) => {
       data: Object.entries(rawData[indicator]).map(([date, value]) => [date, value])
     }
   })
+  console.log('arr :>> ', arr)
   return arr
 }
 

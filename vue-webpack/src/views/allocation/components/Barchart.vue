@@ -106,15 +106,10 @@ const myOption = ref({
   },
 
   xAxis: {
-<<<<<<< HEAD
     type:  props.xDatatype || 'category',
     data:  props.xData, // x 轴的数据
     // min: new Date('2023/9/1'),
     // max: new Date('2023/11/30'),
-=======
-    type: 'category',
-    data: props.xData, // x 轴的数据
->>>>>>> zc_dev001
     axisLabel: {
       rotate: 45
     }

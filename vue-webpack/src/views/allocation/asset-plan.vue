@@ -122,7 +122,7 @@ const getLineSeries3Data0000 = async (val) => {
         smooth: true,
         data: seriesData
       }]
-      console.log('lineXdata.value', lineXdata.value);    
+      console.log('lineXdata.value', lineXdata.value);
 }
 
 
@@ -157,7 +157,7 @@ const getLineSeries3Data0001 = async (val) => {
         symbol : '',//曲线无点
         smooth: true,
         data: seriesData
-      }] 
+      }]
 }
 
 
@@ -439,15 +439,7 @@ const getBarchartData = async (start_date, end_date) => {//柱状图
 
 //折线图1
 const lineSeries = ref([
-  {
-    name: '线段1',
-    type: 'line',
-    data: [
-      ['2020-01-01', 20],
-      ['2020-01-02', 40],
-      ['2021-01-03', 50]
-    ] //
-  }
+
 ])
 const linetimeChange = async (val) => {
   console.log('父组件val :>> ', val)
@@ -511,15 +503,7 @@ const getLineData = async (val, target) => {
 }
 //折线图2
 const lineSeriestow = ref([
-  {
-    name: '线段1',
-    type: 'line',
-    data: [
-      ['2020-01-01', 20],
-      ['2020-01-02', 40],
-      ['2021-01-03', 50]
-    ] //
-  }
+
 ])
 
 
@@ -570,15 +554,7 @@ const getLineData2 = async (val, target) => {
 
 
 const series2_3 = ref([
-  {
-    name: '线段1',
-    type: 'line',
-    data: [
-      ['2023-09-01', 20],
-      ['2023-09-02', 40],
-      ['2023-09-03', 50]
-    ] //
-  }
+
 ])
 const linetimeChange2 = async (val) => {
   console.log('父组件val :>> ', val)
@@ -619,26 +595,10 @@ const getLineData3 = async (val, target) => {
 
 
 const series3_2 = ref([
-  {
-    name: '线段1',
-    type: 'line',
-    data: [
-      ['2023-09-01', 20],
-      ['2023-09-02', 40],
-      ['2023-09-03', 50]
-    ] //
-  }
+
 ])
 const series3_3 = ref([//
-  {
-    name: '线段1',
-    type: 'line',
-    data: [
-      ['2023-09-01', 20],
-      ['2023-09-02', 40],
-      ['2023-09-03', 50]
-    ] //
-  }
+
 ])
 
 

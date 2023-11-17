@@ -7,13 +7,7 @@
       </transition>
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu
-        :router="true"
-        :default-active="$route.path"
-        :collapse="isCollapse"
-        :show-timeout="200"
-
-      >
+      <el-menu :router="true" :default-active="$route.path" :collapse="isCollapse" :show-timeout="200">
         <SidebarItem v-for="item in routerList" :key="item.path" :index="item.path" :nav="item" />
       </el-menu>
     </el-scrollbar>
@@ -32,85 +26,108 @@ const store = useStore()
 const routerList = reactive([
 
 
-      {
-        path: '/asset-allocation',
-        component: () => import('@/views/allocation/asset-allocation.vue'),
-        name: 'assetAllocation',
-        meta: { title: '大类资产配置', icon: '', affix: true }
-      },
-      {
-        path: '/asset-plan',
-        component: () => import('@/views/allocation/asset-plan.vue'),
-        name: 'assetPlan',
-        meta: { title: '资管计划', icon: '', affix: true }
-      },
+  {
+    path: '/asset-allocation',
+    component: () => import('@/views/allocation/asset-allocation.vue'),
+    name: 'assetAllocation',
+    meta: { title: '大类资产配置', icon: '', affix: true }
+  },
+  {
+    path: '/asset-plan',
+    component: () => import('@/views/allocation/asset-plan.vue'),
+    name: 'assetPlan',
+    meta: { title: '资管计划', icon: '', affix: true }
+  },
+  {
+    path: '/asset-page',
+    component: () => import('@/views/allocation/asset-page.vue'),
+    name: 'asset-page',
+    meta: { title: '交易监测', icon: '', affix: true },
+
+    children: [
       {
         path: '/asset-page',
         component: () => import('@/views/allocation/asset-page.vue'),
-        name: 'asset-page',
-        meta: { title: '页面三', icon: '', affix: true }
+        name: '/asset-page',
+        meta: { title: '大类资产', icon: '', affix: true }
       },
+      {
+        path: '/stock',
+        component: () => import('@/views/allocation/stock.vue'),
+        name: 'stock',
+        meta: { title: ' 股票', icon: '', affix: true }
+      },
+      {
+        path: '/foundation',
+        component: () => import('@/views/allocation/foundation.vue'),
+        name: 'foundation',
+        meta: { title: ' 基金', icon: '', affix: true }
+      },
+    ]
 
-          {
-            path: '/fixed-income',
-            component: () => import('@/views/allocation/fixed-income.vue'),
-            name: 'fixed-income',
-            meta: { title: '固定收益', icon: '', affix: true }
-          },
+
+  },
+
+  {
+    path: '/fixed-income',
+    component: () => import('@/views/allocation/fixed-income.vue'),
+    name: 'fixed-income',
+    meta: { title: '固定收益', icon: '', affix: true }
+  },
+  {
+    path: '/price-monitor',
+    component: () => import('@/views/price-monitor/index.vue'),
+    name: 'price-monitor',
+    meta: { title: '价格监测', icon: '', affix: true },
+    redirect: '/fixed-income',
+    children: [
       {
-        path: '/price-monitor',
-        component: () => import('@/views/price-monitor/index.vue'),
-        name: 'price-monitor',
-        meta: { title: '价格监测', icon: '', affix: true },
-         redirect: '/fixed-income',
-        children: [
-          {
-            path: '/fixed-income',
-            component: () => import('@/views/allocation/fixed-income.vue'),
-            name: 'fixed-income',
-            meta: { title: '固定收益', icon: '', affix: true }
-          },
-          {
-            path: '/marke-trisk',
-            component: () => import('@/views/allocation/marke-trisk.vue'),
-            name: 'marke-trisk',
-            meta: { title: ' 市场风险', icon: '', affix: true }
-          }
-        ]
+        path: '/fixed-income',
+        component: () => import('@/views/allocation/fixed-income.vue'),
+        name: 'fixed-income',
+        meta: { title: '固定收益', icon: '', affix: true }
       },
       {
-        path: '/amarket-monitor',
-        component: () => import('@/views/market-monitor/index.vue'),
-        name: 'amarket-monitor',
-        meta: { title: '市场监测', icon: '', roles: ['admin', 'editor'], affix: true },
-        redirect: '/macro-interest-rate',
-        children: [
-          {
-            path: '/macro-interest-rate',
-            component: () => import('@/views/market-monitor/macro-interest-rate.vue'),
-            name: 'macro-interest-rate',
-            meta: { title: '宏观利率', icon: '', affix: true }
-          },
-          {
-            path: '/capital-flow',
-            component: () => import('@/views/market-monitor/capital-flow.vue'),
-            name: 'capital-flow',
-            meta: { title: ' 资金流向', icon: '', affix: true }
-          },
-          {
-            path: '/real-estate',
-            component: () => import('@/views/market-monitor/real-estate.vue'),
-            name: 'real-estate',
-            meta: { title: '房地产', icon: '', affix: true }
-          },
-          {
-            path: '/monitor-target-tank',
-            component: () => import('@/views/market-monitor/monitor-target-tank.vue'),
-            name: 'assetPage',
-            meta: { title: ' 标的池', icon: '', affix: true }
-          }
-        ]
+        path: '/marke-trisk',
+        component: () => import('@/views/allocation/marke-trisk.vue'),
+        name: 'marke-trisk',
+        meta: { title: ' 市场风险', icon: '', affix: true }
       }
+    ]
+  },
+  {
+    path: '/amarket-monitor',
+    component: () => import('@/views/market-monitor/index.vue'),
+    name: 'amarket-monitor',
+    meta: { title: '市场监测', icon: '', roles: ['admin', 'editor'], affix: true },
+    redirect: '/macro-interest-rate',
+    children: [
+      {
+        path: '/macro-interest-rate',
+        component: () => import('@/views/market-monitor/macro-interest-rate.vue'),
+        name: 'macro-interest-rate',
+        meta: { title: '宏观利率', icon: '', affix: true }
+      },
+      {
+        path: '/capital-flow',
+        component: () => import('@/views/market-monitor/capital-flow.vue'),
+        name: 'capital-flow',
+        meta: { title: ' 资金流向', icon: '', affix: true }
+      },
+      {
+        path: '/real-estate',
+        component: () => import('@/views/market-monitor/real-estate.vue'),
+        name: 'real-estate',
+        meta: { title: '房地产', icon: '', affix: true }
+      },
+      {
+        path: '/monitor-target-tank',
+        component: () => import('@/views/market-monitor/monitor-target-tank.vue'),
+        name: 'assetPage',
+        meta: { title: ' 标的池', icon: '', affix: true }
+      }
+    ]
+  }
 
 ])
 
@@ -130,7 +147,7 @@ const filterRoutes = () => {
       // routerList.push(...item.children)
     }
   })
-//下面是过滤权限用的，后面用到可以解开
+  //下面是过滤权限用的，后面用到可以解开
   // for (let i = 0; i < routerList.length; i++) {
   //   if (
   //     routerList[i].meta &&

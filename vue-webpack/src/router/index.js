@@ -43,13 +43,41 @@ export const constantRoutes = [
         path: '/asset-page',
         component: () => import('@/views/allocation/asset-page.vue'),
         name: 'asset-page',
-        meta: { title: '页面三', icon: '', affix: true }
+        meta: { title: '大类资产', icon: '', affix: true }
       },
+      {
+        path: '/stock',
+        component: () => import('@/views/allocation/stock.vue'),
+        name: 'stock',
+        meta: { title: '股票', icon: '', affix: true }
+      },
+      {
+        path: '/foundation',
+        component: () => import('@/views/allocation/foundation.vue'),
+        name: 'foundation',
+        meta: { title: '基金', icon: '', affix: true }
+      },
+
+
+
+
       {
         path: '/table-details',
         component: () => import('@/views/allocation/table-details.vue'),
         name: 'table-details',
         meta: { title: '表格详情', icon: '', affix: true }
+      },
+      {
+        path: '/stock-table-details',
+        component: () => import('@/views/allocation/stock-table-details.vue'),
+        name: 'stock-table-details',
+        meta: { title: '股票表格详情', icon: '', affix: true }
+      },
+      {
+        path: '/foundation-table-details',
+        component: () => import('@/views/allocation/foundation-table-details.vue'),
+        name: 'foundation-table-details',
+        meta: { title: '基金表格详情', icon: '', affix: true }
       },
           {
             path: '/fixed-income',

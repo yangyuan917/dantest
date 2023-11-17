@@ -114,78 +114,11 @@ const getBarchartData3_3 = async (start_date, end_date) => {
 
 
   let params = {
-    start_date: '2023-10-10',
-    end_date: '2023-10-12',
+    start_date: start_date,
+    end_date: end_date,
   }
-  // let res = await api.get("/asset_citybond1", { params })//解开这个注释就行
-  let res = {}
-  res = {
-    "code": 200,
-    "data": {
-      "series": [
-        {
-          "data": [
-            0.291755,
-            0.274528,
-            0.033864,
-            0.879404,
-            0.41137,
-            0.023718,
-            0.791575,
-            0.76622,
-            0.351986,
-            0.051498,
-            0.78058,
-            0.786922,
-            0.857404,
-            0.57595,
-            0.840691,
-            0.947402
-          ],
-          "name": "2023-10-10"
-        },
-        {
-          "data": [
-            0.099295,
-            0.089537,
-            0.623497,
-            0.174646,
-            0.379318,
-            0.536166,
-            0.931625,
-            0.385132,
-            0.926775,
-            0.279418,
-            0.934767,
-            0.65284,
-            0.082294,
-            0.227716,
-            0.330444,
-            0.554052
-          ],
-          "name": "2023-10-12"
-        }
-      ],
-      "xaxis": [
-        "上海",
-        "北京",
-        "四川省",
-        "安徽省",
-        "山东省",
-        "山西省",
-        "广东省",
-        "广西壮族自治区",
-        "江苏省",
-        "江西省",
-        "河南省",
-        "浙江省",
-        "湖北省",
-        "湖南省",
-        "福建省",
-        "重庆"
-      ]
-    }
-  }
+  let res = await api.get("/asset_citybond1", { params })//解开这个注释就行
+
   series3_3.value = res.data.series.map(item => {
     item.type = 'bar'
     return item
@@ -621,15 +554,7 @@ let end_date =val.end_date
 
 //折线图1
 const lineSeries = ref([
-  {
-    name: '线段1',
-    type: 'line',
-    data: [
-      ['2020-01-01', 20],
-      ['2020-01-02', 40],
-      ['2021-01-03', 50]
-    ] //
-  }
+
 ])
 const linetimeChange = async (val) => {
   console.log('父组件val :>> ', val)
@@ -676,15 +601,7 @@ const getLineData = async (val, target) => {
 }
 //折线图2
 const lineSeriestow = ref([
-  {
-    name: '线段1',
-    type: 'line',
-    data: [
-      ['2020-01-01', 20],
-      ['2020-01-02', 40],
-      ['2021-01-03', 50]
-    ] //
-  }
+
 ])
 
 
@@ -745,15 +662,7 @@ const getLineData2 = async (val, target) => {
 
 
 const series2_3 = ref([
-  {
-    name: '线段1',
-    type: 'line',
-    data: [
-      ['2023-09-01', 20],
-      ['2023-09-02', 40],
-      ['2023-09-03', 50]
-    ] //
-  }
+
 ])
 const linetimeChange2 = async (val) => {
   console.log('父组件val :>> ', val)
@@ -792,15 +701,7 @@ const getLineData3 = async (val, target) => {
 
 
 const series3_2 = ref([
-  {
-    name: '线段1',
-    type: 'line',
-    data: [
-      ['2023-09-01', 20],
-      ['2023-09-02', 40],
-      ['2023-09-03', 50]
-    ] //
-  }
+
 ])
 const linetimeChange3 = async (val) => {
   console.log('父组件val :>> ', val)

@@ -1,0 +1,186 @@
+<template>
+  <div class="">
+    <el-row>
+      <el-col :span="24">
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item label="">
+            <el-date-picker size="mini" v-model="formInline.start_date" type="date" @change="startDateChange"
+              value-format="YYYY-MM-DD" style="max-width: 155px" placeholder="请选择开始日期" />
+          </el-form-item>
+          <el-form-item label="">
+            <el-date-picker size="mini" v-model="formInline.end_date" type="date" @change="endDateChange" value-format="YYYY-MM-DD"
+              style="max-width: 155px" placeholder="请选择结束日期" />
+          </el-form-item>
+          <el-form-item label="">
+            <el-select v-model="formInline.sep_name" placeholder="是否内部交易" style="width: 80px; ">
+              <el-option label="否" :value="0"></el-option>
+              <el-option label="是" :value="1"></el-option>
+            </el-select>
+
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-form-item>
+        </el-form>
+
+      </el-col>
+
+    </el-row>
+    <el-row>
+      <el-col :span="24">
+    <div class="table-box">
+      <el-table :data="tableData" height="490" border>
+        <el-table-column label="">
+          <el-table-column label="分组" align="center" prop="类别1">
+            <template #default="scope">
+              <div style="margin-left: 10px;color: #409EFF; cursor: pointer; " class="text-title"
+                @click="goDetails(scope.row)">{{
+                  scope.row.行业名称 }}</div>
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column label="总计 " align="center">
+          <el-table-column label="交易笔数" align="right" prop="归属资管计划"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="holding_w"></el-table-column>
+        </el-table-column>
+        <el-table-column label="加仓 " align="center">
+          <el-table-column label="交易笔数" align="right" prop="加仓_归属资管计划"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="加仓_holding_w"></el-table-column>
+        </el-table-column>
+        <el-table-column label="减仓 " align="center">
+          <el-table-column label="交易笔数" align="right" prop="减仓_归属资管计划"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="减仓_holding_w"></el-table-column>
+        </el-table-column>
+        <el-table-column label="到期 " align="center">
+          <el-table-column label="交易笔数" align="right" prop="到期_归属资管计划"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="到期_holding_w"></el-table-column>
+        </el-table-column>
+
+      </el-table>
+    </div>
+    <div class="table-box">
+      <el-table :data="tableData1" height="490" border>
+        <el-table-column label="">
+          <el-table-column label="分组" prop="归属资管计划/自主投资基金">
+            <template #default="scope">
+              <span style="margin-left: 10px;color: #409EFF; cursor: pointer;" class="text-title1"
+                @click="goDetailstow(scope.row)">{{
+                  scope.row.归属资管计划 }}</span>
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column label="总计 " align="center">
+          <el-table-column label="交易笔数" align="right" prop="行业名称"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="holding_w"></el-table-column>
+        </el-table-column>
+        <el-table-column label="加仓 " align="center">
+          <el-table-column label="交易笔数" align="right" prop="加仓_行业名称"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="加仓_holding_w"></el-table-column>
+        </el-table-column>
+        <el-table-column label="减仓 " align="center">
+          <el-table-column label="交易笔数" align="right" prop="减仓_行业名称"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="减仓_holding_w"></el-table-column>
+        </el-table-column>
+        <el-table-column label="到期 " align="center">
+          <el-table-column label="交易笔数" align="right" prop="到期_行业名称"></el-table-column>
+          <el-table-column label="交易金额" align="right" prop="到期_holding_w"></el-table-column>
+        </el-table-column>
+
+      </el-table>
+    </div>
+
+      </el-col>
+    </el-row>
+  </div>
+</template>
+
+<script  setup>
+import { reactive, ref, onActivated, onDeactivated } from "vue"
+import { api } from '@/utils/api';
+import { useRoute } from 'vue-router'
+const route = useRoute()
+console.log('route', route)
+const formInline = ref({
+  start_date: "",
+  end_date: "",
+  sep_name: '',
+  sep_name: '',
+  cat: ""
+})
+
+const showCatTable = ref(false)
+
+onActivated(() => {
+  // 调用时机为首次挂载
+  // 以及每次从缓存中被重新插入时
+  let query = route.query
+  console.log('query', query)
+  formInline.value.start_date = query.start_date
+  formInline.value.end_date = query.end_date
+  formInline.value.cat = query.cat
+
+if (query.cat) {
+  showCatTable.value = false
+}else{
+  showCatTable.value = true
+
+}
+
+  formInline.value.sep_name = query.sep_name
+  onSubmit()
+})
+
+const tableData = ref([])
+const tableData1 = ref([])
+
+const onSubmit = async () => {
+  let res = await api.get('/txn/fund_prt', { params: formInline.value })
+  // let res1 = await api.get('/txn/stock_prt', { params: formInline.value })
+let query = route.query
+if (query.cat) {
+  // showCatTable.value = false
+  tableData.value = []
+   tableData1.value = res1.data.data.map(item => {
+
+
+    item['holding_w'] = item['holding_w'].toFixed(1)
+    item['加仓_holding_w'] = item['加仓_holding_w'].toFixed(1)
+    item['加仓_行业名称'] = item['加仓_行业名称'].toFixed(1)
+    item['减仓_holding_w'] = item['减仓_holding_w'].toFixed(1)
+    item['减仓_行业名称'] = item['减仓_行业名称'].toFixed(1)
+    item['到期_holding_w'] = item['到期_holding_w'].toFixed(1)
+    item['到期_行业名称'] = item['到期_行业名称'].toFixed(1)
+    item['归属资管计划'] = item['归属资管计划/自主投资基金']
+    return item
+  })
+}else{
+  // showCatTable.value = true
+   tableData1.value = []
+  tableData.value = res.data.data.map(item => {
+    item['holding_w'] = item['holding_w'].toFixed(1)
+    item['加仓_holding_w'] = item['加仓_holding_w'].toFixed(1)
+    item['加仓_归属资管计划'] = item['加仓_归属资管计划/自主投资基金'].toFixed(1)
+    item['减仓_holding_w'] = item['减仓_holding_w'].toFixed(1)
+    item['减仓_归属资管计划'] = item['减仓_归属资管计划/自主投资基金'].toFixed(1)
+    item['到期_holding_w'] = item['到期_holding_w'].toFixed(1)
+    item['到期_归属资管计划'] = item['到期_归属资管计划/自主投资基金'].toFixed(1)
+    item['归属资管计划'] = item['归属资管计划/自主投资基金']
+    return item
+  })
+}
+
+
+
+}
+// onSubmit()
+</script>
+
+<style  scoped>
+.table-box {
+  width: 66%;
+  height: 490px;
+  /* aspect-ratio: 16/9; */
+
+}
+</style>

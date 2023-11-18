@@ -21,7 +21,7 @@
     <!-- 第一排 -->
     <Barchart :mySeries="series" :xData="barXdata" :separate_name="separate_name" @timeChange="timeChange"></Barchart>
     <Linechart :mySeries="lineSeries" :checkboxApi="checkboxApi1" :separate_name="separate_name" @allParamChange="linetimeChange"></Linechart>
-    <Linechart :mySeries="lineSeriestow" :checkboxApi="checkboxApi3" :separate_name="separate_name" @allParamChange="linetimeChangetow" :showTarget="true"></Linechart>
+    <Linechart :mySeries="lineSeriestow" :checkboxApi="checkboxApi1" :separate_name="separate_name" @allParamChange="linetimeChangetow" :showTarget="true"></Linechart>
     <!-- 第二排 -->
 
     <Barchart :mySeries="series2_1" :xData="barXdata2_1" :separate_name="separate_name" @timeChange="timeChange">

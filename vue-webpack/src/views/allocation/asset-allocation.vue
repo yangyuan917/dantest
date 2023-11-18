@@ -13,20 +13,20 @@
       :showTarget="true"></Linechart>
     <!-- 第二排 -->
     <BarchartLast title="柱状图" api_url="/asset_citybond1"></BarchartLast>
-    <Linechart :mySeries="series3_3" title="折线图" :checkboxApi="checkboxApi3" @allParamChange="linetimeChange4">
-    </Linechart>
+    <Linechart :mySeries="series3_3" title="折线图" :checkboxApi="checkboxApi3" @allParamChange="linetimeChange4"></Linechart>
+    <Barchart></Barchart>
 
     <!-- <Linechart :mySeries="series3_3" title="折线图" checkboxApi="/list/city_price" @allParamChange="linetimeChange4"></Linechart>
     <Barchart title="折线图" :mySeries="series4_1" :xData="barXdata4_1" @timeChange="timeChange4_1"></Barchart> -->
 
     <Barchart :mySeries="series2_1" :xData="barXdata2_1" @timeChange="timeChange2_1"></Barchart>
     <Barchart :mySeries="series2_2" :xData="barXdata2_2" @timeChange="timeChange2_2"></Barchart>
-    <Linechart :mySeries="series2_3" :checkboxApi="checkboxApi3" @allParamChange="linetimeChange2"></Linechart>
+    <Linechart :mySeries="series2_3" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange2"></Linechart>
     <!-- 第三排 -->
 
     <Barchart :mySeries="series3_1" :xData="barXdata3_1" @timeChange="timeChange3_1"></Barchart>
     <Linechart :mySeries="series3_2" :checkboxApi="checkboxApi2" @allParamChange="linetimeChange3"></Linechart>
-    <BarchartLast api_url="/asset_citybond1"></BarchartLast>
+    <!-- <BarchartLast api_url="/asset_citybond1"></BarchartLast> -->
 
   </div>
 </template>

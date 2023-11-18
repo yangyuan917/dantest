@@ -146,6 +146,7 @@ function convertToEChartsFormat(data) {
       })
     };
   });
+  console.log('seriesData', seriesData)
   return seriesData
 }
 

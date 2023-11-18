@@ -211,7 +211,23 @@ const allChange1 = async (val) => {
   arr = await getLineData3(val, target)
   lineSeries1.value = arr
 }
-
+let darkcolor = ['#91CC75', '#FAC858', '#EE6666']
+let shoalcolor = ['#C8EBAE', '#FDE4AC', '#F0B3B3']
+const getColor = (() => {
+  let darkIndex = 0;
+  let shoalIndex = 0;
+  return (tag) => {
+    let color;
+    if (tag === '加仓') {
+      color = darkcolor[darkIndex];
+      darkIndex = (darkIndex + 1) % darkcolor.length;
+    } else if (tag === '减仓') {
+      color = shoalcolor[shoalIndex];
+      shoalIndex = (shoalIndex + 1) % shoalcolor.length;
+    }
+    return color;
+  };
+})();
 const getLineData3 = async (val, target) => {
   let catergory = val.selectedOptions[0]
   let indicator = val.target
@@ -228,17 +244,119 @@ const getLineData3 = async (val, target) => {
   }
   let res = await api.get('/transaction_bondfund', { params })
   let rawData = res.data.data
-  console.log('res.data.data1111111111', res.data.data)
-  const arr = Object.keys(rawData).map((indicator) => {
-    return {
-      name: indicator,
-
-      type: indicator == '市值(元)' ? 'bar' : 'line',
-      yAxisIndex: indicator == '市值(元)' ? 0 : 1,
-      data: Object.entries(rawData[indicator]).map(([date, value]) => [date, value])
+rawData =  [
+    {
+        "data": [
+            [
+                "2023-09-19",
+                0.114348
+            ],
+            [
+                "2023-09-20",
+                0.002107
+            ],
+            [
+                "2023-09-21",
+                0.219095
+            ],
+            [
+                "2023-09-22",
+                0.447038
+            ]
+        ],
+        "name": "市值(元)",
+        "tag": "加仓"
+    },
+    {
+        "data": [
+            [
+                "2023-09-19",
+                2.566522
+            ],
+            [
+                "2023-09-20",
+                2.551834
+            ],
+            [
+                "2023-09-21",
+                2.393694
+            ],
+            [
+                "2023-09-22",
+                2.364913
+            ]
+        ],
+        "name": "yield",
+        "tag": "加仓"
+    },
+    {
+        "data": [
+            [
+                "2023-09-20",
+                5.907867
+            ],
+            [
+                "2023-09-21",
+                6.475748
+            ],
+            [
+                "2023-09-22",
+                1.922721
+            ]
+        ],
+        "name": "市值(元)",
+        "tag": "减仓"
+    },
+    {
+        "data": [
+            [
+                "2023-09-20",
+                0
+            ],
+            [
+                "2023-09-21",
+                0
+            ],
+            [
+                "2023-09-22",
+                0
+            ]
+        ],
+        "name": "yield",
+        "tag": "减仓"
     }
-  })
-  console.log('arr', arr)
+]
+rawData.map(item=>{
+ if (item.tag == '减仓') {
+      item.data = item.data.map((num) => {
+      num[1] = -num[1]
+      return num
+      });
+    }
+if(item.name=='yield'){
+item.type='line'
+item.yAxisIndex=1
+item.itemStyle =  {
+        color: getColor(item.tag)
+      }
+}else{
+item.type='bar'
+item.yAxisIndex=0
+  item.itemStyle =  {
+        color: getColor(item.tag)
+      }
+item.stack = item.name
+
+}
+
+
+item.name = item.name+' '+item.tag
+return item
+})
+console.log('rawData', rawData)
+let arr = []
+arr = rawData
+
 
   return arr
 }
@@ -265,6 +383,7 @@ const getLineData2 = async (val, target) => {
       data: Object.entries(rawData[indicator]).map(([date, value]) => [date, value])
     }
   })
+  console.log('arr', arr)
   return arr
 }
 

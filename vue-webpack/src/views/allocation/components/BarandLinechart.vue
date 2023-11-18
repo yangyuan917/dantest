@@ -197,10 +197,10 @@ const myOption = ref({
   tooltip: {
     trigger: 'axis',
     //保留一位小数
-    formatter: function (params) {
-      return  params[0].seriesName + ':' + params[0].value[1].toFixed(1) + '<br/>'
-       +  params[1].seriesName + ':' + params[1].value[1].toFixed(1)
-    }
+    // formatter: function (params) {
+    //   return  params[0].seriesName + ':' + params[0].value[1].toFixed(1) + '<br/>'
+    //    +  params[1].seriesName + ':' + params[1].value[1].toFixed(1)
+    // }
   },
   grid: {
     left: '3%',
@@ -230,19 +230,15 @@ const myOption = ref({
   yAxis: [
     {
       type: 'value',
-        axisLine: {
-        onZero: true
-      },
-      min: 0,
+
+      // min: 0,
       // scale: true,
       name: '市值'
     },
     {
       type: 'value',
-       axisLine: {
-        onZero: true
-      },
-      min: 0,
+
+      // min: 0,
       // scale: true,
       name: 'yield'
     }

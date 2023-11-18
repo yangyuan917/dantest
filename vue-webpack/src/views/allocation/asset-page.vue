@@ -71,8 +71,12 @@
 
       </el-table>
     </div>
-    <Barchart2 :mySeries="series" :echartsLegend="echartsLegend" @allParamChange="barChange" :showTarget="true">
-    </Barchart2>
+    <!-- <Barchart2 :mySeries="series" :echartsLegend="echartsLegend" @allParamChange="barChange" :showTarget="true">
+    </Barchart2> -->
+
+    <BarandLinechart :mySeries="lineSeries1" @allParamChange="allChange1" :showTarget="true"></BarandLinechart>
+
+
   </div>
 </template>
 <script setup>
@@ -192,7 +196,7 @@ let lineSeries = ref([
     yAxisIndex: 0 // 使用第二个 y 轴坐标
   }
 ])
-
+let lineSeries1 = ref([])
 const allChange = async (val) => {
   //参数改变
   let arr = []
@@ -200,7 +204,44 @@ const allChange = async (val) => {
   arr = await getLineData2(val, target)
   lineSeries.value = arr
 }
+const allChange1 = async (val) => {
+  //参数改变
+  let arr = []
+  let target = ''
+  arr = await getLineData3(val, target)
+  lineSeries1.value = arr
+}
 
+const getLineData3 = async (val, target) => {
+  let catergory = val.selectedOptions[0]
+  let indicator = val.target
+  let params = {
+    // separate_name: separate_name.value,
+    catergory: catergory,
+    indicator: indicator,
+        separate_buy_sell:1
+
+    // separate_name:separate_name.value,
+  }
+  if (target) {
+    params.target = target
+  }
+  let res = await api.get('/transaction_bondfund', { params })
+  let rawData = res.data.data
+  console.log('res.data.data1111111111', res.data.data)
+  const arr = Object.keys(rawData).map((indicator) => {
+    return {
+      name: indicator,
+
+      type: indicator == '市值(元)' ? 'bar' : 'line',
+      yAxisIndex: indicator == '市值(元)' ? 0 : 1,
+      data: Object.entries(rawData[indicator]).map(([date, value]) => [date, value])
+    }
+  })
+  console.log('arr', arr)
+
+  return arr
+}
 const getLineData2 = async (val, target) => {
   let catergory = val.selectedOptions[0]
   let indicator = val.target
@@ -215,7 +256,6 @@ const getLineData2 = async (val, target) => {
   }
   let res = await api.get('/transaction_bondfund', { params })
   let rawData = res.data.data
-  console.log('res.data.data :>> ', res.data.data)
   const arr = Object.keys(rawData).map((indicator) => {
     return {
       name: indicator,
@@ -225,7 +265,6 @@ const getLineData2 = async (val, target) => {
       data: Object.entries(rawData[indicator]).map(([date, value]) => [date, value])
     }
   })
-  console.log('arr :>> ', arr)
   return arr
 }
 
@@ -235,7 +274,6 @@ const barChange = async (obj) => {
   let params = {
     sector1: obj.sector1.value,
     sector2: obj.sector2.value,
-    separate_buy_sell:1
 
   }
   let res = await api.get('/transaction_stock', { params })

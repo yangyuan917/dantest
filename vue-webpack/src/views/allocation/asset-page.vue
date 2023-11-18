@@ -244,107 +244,41 @@ const getLineData3 = async (val, target) => {
   }
   let res = await api.get('/transaction_bondfund', { params })
   let rawData = res.data.data
-rawData =  [
-    {
-        "data": [
-            [
-                "2023-09-19",
-                0.114348
-            ],
-            [
-                "2023-09-20",
-                0.002107
-            ],
-            [
-                "2023-09-21",
-                0.219095
-            ],
-            [
-                "2023-09-22",
-                0.447038
-            ]
-        ],
-        "name": "市值(元)",
-        "tag": "加仓"
-    },
-    {
-        "data": [
-            [
-                "2023-09-19",
-                2.566522
-            ],
-            [
-                "2023-09-20",
-                2.551834
-            ],
-            [
-                "2023-09-21",
-                2.393694
-            ],
-            [
-                "2023-09-22",
-                2.364913
-            ]
-        ],
-        "name": "yield",
-        "tag": "加仓"
-    },
-    {
-        "data": [
-            [
-                "2023-09-20",
-                5.907867
-            ],
-            [
-                "2023-09-21",
-                6.475748
-            ],
-            [
-                "2023-09-22",
-                1.922721
-            ]
-        ],
-        "name": "市值(元)",
-        "tag": "减仓"
-    },
-    {
-        "data": [
-            [
-                "2023-09-20",
-                0
-            ],
-            [
-                "2023-09-21",
-                0
-            ],
-            [
-                "2023-09-22",
-                0
-            ]
-        ],
-        "name": "yield",
-        "tag": "减仓"
-    }
-]
 rawData.map(item=>{
+item.itemStyle = {color:''}
  if (item.tag == '减仓') {
       item.data = item.data.map((num) => {
       num[1] = -num[1]
       return num
       });
+  if (item.name=='yield') {
+    item.itemStyle.color ='#C8EBAE'
+  }else{
+    item.itemStyle.color ='#FDE4AC'
+  }
+
     }
+
+if (item.tag == '加仓') {
+   if (item.name=='市值(元)') {
+    item.itemStyle.color ='#FAC858 '
+  }else{
+    item.itemStyle.color ='#91CC75'
+  }
+}
+
 if(item.name=='yield'){
 item.type='line'
 item.yAxisIndex=1
-item.itemStyle =  {
-        color: getColor(item.tag)
-      }
+// item.itemStyle =  {
+//         color: getColor(item.tag)
+//       }
 }else{
 item.type='bar'
 item.yAxisIndex=0
-  item.itemStyle =  {
-        color: getColor(item.tag)
-      }
+  // item.itemStyle =  {
+  //       color: getColor(item.tag)
+  //     }
 item.stack = item.name
 
 }

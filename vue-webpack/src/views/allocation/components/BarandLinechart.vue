@@ -238,15 +238,15 @@ const myOption = ref({
       name: '市值',
       //      min: 'dataMin', // 根据数据动态计算最小值
       // max: 'dataMax', // 根据数据动态计算最大值
-      min: minValue.value - (maxValue.value - minValue.value) * 0.05, //
-      max: maxValue.value + (maxValue.value - minValue.value) * 0.05, //
+      min:-10,//这里不用管，后面会重新赋值的
+      max:10
     },
     {
       type: 'value',
       //  min: 'dataMin', // 根据数据动态计算最小值
       //   max: 'dataMax', // 根据数据动态计算最大值
-      min: minValue - (maxValue - minValue) * 0.05, //
-      max: maxValue + (maxValue - minValue) * 0.05, //
+      min:-10,
+      max:10,
       // min: 0,
       // scale: true,
       name: 'yield'
@@ -278,20 +278,45 @@ watch(
   (newVal, oldVal) => {
     myOption.value.legend.data = [...selectedOptions.value]
     console.log('newVal111111', newVal)
-    let maxVal = Math.max(...newVal.map(item => item.data[1][1]));
-    let minVal = Math.min(...newVal.map(item => item.data[1][1]))
-let min =  (minVal - (maxVal - minVal) * 0.05).toFixed(2)
-let max =  (maxVal + (maxVal - minVal) * 0.05).toFixed(2)
-    // maxValue.value = maxVal
-    // minValue.value = minVal
-    myOption.value.yAxis[0].min =min
-    myOption.value.yAxis[0].max = max
-    myOption.value.yAxis[1].min =min
-    myOption.value.yAxis[1].max = max
+//     let maxVal = [];
+// let minVal = [];
+//     newVal.forEach(item => {
+//  if (item.yAxisIndex === 0) {
+//    let max = Math.max(...item.data.map(d => d[1]));
+//    let min = Math.min(...item.data.map(d => d[1]));
+//    maxVal.push(max);
+//    minVal.push(min);
+//  }
+// });
+let arr0 = []
+let arr1 = []
+newVal.map(item=>{
+if (item.yAxisIndex === 0) {
+arr0.push(item)
+}
+if (item.yAxisIndex === 1) {
+arr1.push(item)
+}
 
 
-    console.log('maxVal', maxVal)
-    console.log('minVal', minVal)
+})
+
+    let maxVal0 = Math.max(...arr0.map(item => Math.abs(item.data[1][1])) );
+    let minVal0 = Math.min(...arr0.map(item =>  Math.abs(item.data[1][1])) )
+    let maxVal1 = Math.max(...arr1.map(item =>  Math.abs(item.data[1][1])));
+    let minVal1 = Math.min(...arr1.map(item => Math.abs(item.data[1][1])))
+let min0 =  (minVal0 - (maxVal0 - minVal0) * 0.05).toFixed(2)
+let max0 =  (maxVal0 + (maxVal0 - minVal0) * 0.05).toFixed(2)
+let min1 =  (minVal1 - (maxVal1 - minVal1) * 0.05).toFixed(2)
+let max1 =  (maxVal1 + (maxVal1 - minVal1) * 0.05).toFixed(2)
+
+    myOption.value.yAxis[0].min =min0
+    myOption.value.yAxis[0].max = max0
+    myOption.value.yAxis[1].min =min1
+    myOption.value.yAxis[1].max = max1
+
+
+
     console.log('myOption.value', myOption.value.yAxis)
     // myOption.value.series = newVal
     myOption.value.series = newVal.map(item => {

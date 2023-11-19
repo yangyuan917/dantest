@@ -238,15 +238,15 @@ const myOption = ref({
       name: '市值',
       //      min: 'dataMin', // 根据数据动态计算最小值
       // max: 'dataMax', // 根据数据动态计算最大值
-      min:-10,//这里不用管，后面会重新赋值的
-      max:10
+      // min:-10,//这里不用管，后面会重新赋值的
+      // max:10
     },
     {
       type: 'value',
       //  min: 'dataMin', // 根据数据动态计算最小值
       //   max: 'dataMax', // 根据数据动态计算最大值
-      min:-10,
-      max:10,
+      // min:-10,
+      // max:10,
       // min: 0,
       // scale: true,
       name: 'yield'
@@ -270,7 +270,24 @@ const changeTime = (value) => {
 
 // 因为是封装的组件，会多次调用，id不能重复，要在初始化之前写，不然会报错dom为定义
 
+function findMinMax(arr) {
+console.log('arr2222222', arr)
+  let min = arr[0].data[0][1];
+  let max = arr[0].data[0][1];
 
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr[i].data.length; j++) {
+      if (arr[i].data[j][1] < min) {
+        min = arr[i].data[j][1];
+      }
+      if (arr[i].data[j][1] > max) {
+        max = arr[i].data[j][1];
+      }
+    }
+  }
+
+  return { min, max };
+}
 
 //监听props中myOption的变化，变化的话重新渲染echarts
 watch(
@@ -291,6 +308,7 @@ watch(
 let arr0 = []
 let arr1 = []
 newVal.map(item=>{
+
 if (item.yAxisIndex === 0) {
 arr0.push(item)
 }
@@ -301,19 +319,19 @@ arr1.push(item)
 
 })
 
-    let maxVal0 = Math.max(...arr0.map(item => Math.abs(item.data[1][1])) );
-    let minVal0 = Math.min(...arr0.map(item =>  Math.abs(item.data[1][1])) )
-    let maxVal1 = Math.max(...arr1.map(item =>  Math.abs(item.data[1][1])));
-    let minVal1 = Math.min(...arr1.map(item => Math.abs(item.data[1][1])))
-let min0 =  (minVal0 - (maxVal0 - minVal0) * 0.05).toFixed(2)
-let max0 =  (maxVal0 + (maxVal0 - minVal0) * 0.05).toFixed(2)
-let min1 =  (minVal1 - (maxVal1 - minVal1) * 0.05).toFixed(2)
-let max1 =  (maxVal1 + (maxVal1 - minVal1) * 0.05).toFixed(2)
+//     let maxVal0 = findMinMax(arr0).max;
+//     let minVal0 =- findMinMax(arr0).min
+//     let maxVal1 = findMinMax(arr1).max;
+//     let minVal1 =- findMinMax(arr1).min;
+// let min0 =  (minVal0 - (maxVal0 -  minVal0 ) * 0.05).toFixed(2)
+// let max0 =  (maxVal0 + (maxVal0 - minVal0 ) * 0.05).toFixed(2)
+// let min1 =  (minVal1 - (maxVal1 - minVal1  ) * 0.05).toFixed(2)
+// let max1 =  (maxVal1 + (maxVal1 - minVal1 ) * 0.05).toFixed(2)
 
-    myOption.value.yAxis[0].min =min0
-    myOption.value.yAxis[0].max = max0
-    myOption.value.yAxis[1].min =min1
-    myOption.value.yAxis[1].max = max1
+    // myOption.value.yAxis[0].min =min0
+    // myOption.value.yAxis[0].max = max0
+    // myOption.value.yAxis[1].min =min1
+    // myOption.value.yAxis[1].max = max1
 
 
 

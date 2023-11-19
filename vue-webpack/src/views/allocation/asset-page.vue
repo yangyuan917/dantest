@@ -170,31 +170,7 @@ const goDetailstow = (row) => {
 }
 
 let lineSeries = ref([
-  {
-    name: 'yieid',
-    type: 'bar',
-    data: [
-      ['2023-09-21', 3.5],
-      ['2023-09-22', 3.2],
-      ['2023-09-23', 3.6]
-    ], //
-    yAxisIndex: 1 // 使用第一个 y 轴坐标
-  },
-  {
-    name: '市值',
-    type: 'line',
-    lineStyle: {
-      color: 'transparent' // 设置折线的颜色为透明
-    },
-    data: [
-      ['2023-09-21', 1000],
-      ['2023-09-22', 4000],
-      ['2023-09-24', 8000],
-      ['2023-09-25', 8000],
-      ['2023-09-26', 8000]
-    ], //
-    yAxisIndex: 0 // 使用第二个 y 轴坐标
-  }
+
 ])
 let lineSeries1 = ref([])
 const allChange = async (val) => {

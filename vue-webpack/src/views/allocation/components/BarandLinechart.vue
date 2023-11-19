@@ -40,7 +40,7 @@
 <script setup>
 import { onMounted, onBeforeMount, ref, onBeforeUnmount, onUnmounted, watch, inject } from 'vue'
 import BaseEcharts from '@/components/BaseEcharts.vue'
-import {lastMonthDay} from '@/utils/util'
+import { lastMonthDay } from '@/utils/util'
 
 import * as echarts from 'echarts'
 import { api } from '@/utils/api';
@@ -113,7 +113,7 @@ watch(father_date, (newValue, oldValue) => {//监听父组件-时间控件改变
 }, { deep: true });//深层次监听
 //时间控件相关
 const start_date = ref('')
-start_date.value = lastMonthDay(father_date.value.father_start_date)||''
+start_date.value = lastMonthDay(father_date.value.father_start_date) || ''
 const end_date = ref('')
 end_date.value = father_date.value.father_end_date || ''
 const changeDateTime = () => {
@@ -176,6 +176,8 @@ let allobj = {
 }
 
 emit('allParamChange', allobj)
+let minValue = ref(-10)
+let maxValue = ref(10)
 //配置
 const myOption = ref({
   // color: ['#c0504d', '#4f81bd'], //
@@ -233,11 +235,18 @@ const myOption = ref({
 
       // min: 0,
       // scale: true,
-      name: '市值'
+      name: '市值',
+      //      min: 'dataMin', // 根据数据动态计算最小值
+      // max: 'dataMax', // 根据数据动态计算最大值
+      min: minValue.value - (maxValue.value - minValue.value) * 0.05, //
+      max: maxValue.value + (maxValue.value - minValue.value) * 0.05, //
     },
     {
       type: 'value',
-
+      //  min: 'dataMin', // 根据数据动态计算最小值
+      //   max: 'dataMax', // 根据数据动态计算最大值
+      min: minValue - (maxValue - minValue) * 0.05, //
+      max: maxValue + (maxValue - minValue) * 0.05, //
       // min: 0,
       // scale: true,
       name: 'yield'
@@ -268,8 +277,24 @@ watch(
   () => props.mySeries,
   (newVal, oldVal) => {
     myOption.value.legend.data = [...selectedOptions.value]
+    console.log('newVal111111', newVal)
+    let maxVal = Math.max(...newVal.map(item => item.data[1][1]));
+    let minVal = Math.min(...newVal.map(item => item.data[1][1]))
+let min =  (minVal - (maxVal - minVal) * 0.05).toFixed(2)
+let max =  (maxVal + (maxVal - minVal) * 0.05).toFixed(2)
+    // maxValue.value = maxVal
+    // minValue.value = minVal
+    myOption.value.yAxis[0].min =min
+    myOption.value.yAxis[0].max = max
+    myOption.value.yAxis[1].min =min
+    myOption.value.yAxis[1].max = max
+
+
+    console.log('maxVal', maxVal)
+    console.log('minVal', minVal)
+    console.log('myOption.value', myOption.value.yAxis)
     // myOption.value.series = newVal
-  myOption.value.series = newVal.map(item => {
+    myOption.value.series = newVal.map(item => {
       if (item.type == 'line') {
         item.symbol = ''//曲线无点
         item.smooth = true
@@ -283,7 +308,7 @@ watch(
 <style scoped>
 .echarts-box {
   background-color: #ffffff;
- /* border-radius: 8px; */
+  /* border-radius: 8px; */
 }
 
 .title-box {
@@ -295,7 +320,7 @@ watch(
   font-weight: bold;
   /* color: #262626; */
 
-   color: #C00000;
+  color: #C00000;
 }
 
 .time-title {
@@ -314,7 +339,7 @@ watch(
 .left-item {
   width: 100px;
   /* background- color: #C00000; */
-   max-height: 360px;
+  max-height: 360px;
   overflow-y: scroll;
   overflow-x: hidden;
   height: 100%;

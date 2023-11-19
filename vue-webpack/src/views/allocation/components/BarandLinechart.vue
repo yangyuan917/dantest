@@ -231,14 +231,19 @@ const myOption = ref({
     {
       type: 'value',
 
-      // min: 0,
+      // axisLine: {
+      //   onZero: true
+      // },
       // scale: true,
       name: '市值'
     },
     {
       type: 'value',
-
-      // min: 0,
+      // axisLine: {
+      //   onZero: true
+      // },
+      // min: min - (max - min) * 0.05,
+      // max: max + (max - min) * 0.05,
       // scale: true,
       name: 'yield'
     }
